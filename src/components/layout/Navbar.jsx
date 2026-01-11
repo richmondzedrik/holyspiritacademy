@@ -1,7 +1,8 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User, LogOut, ChevronDown, Settings, ChevronRight } from 'lucide-react';
+import { Menu, X, User, LogOut, ChevronDown, Settings, ChevronRight, Sun, Moon } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import logo from '../../assets/logo.png';
 
 const Navbar = () => {
@@ -9,6 +10,7 @@ const Navbar = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState({}); // Track expanded mobile menus
   const { currentUser, userData, logout, isAdmin } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const userMenuRef = useRef(null);
@@ -45,15 +47,15 @@ const Navbar = () => {
   };
 
   const navLinks = [
-    { name: 'Home', path: '/#home' },
+    { name: 'Home', path: '/' },
     { 
       name: 'About Us', 
-      path: '/#about',
+      path: '/school-profile',
       children: [
-        { name: 'School Profile', path: '/#about' },
-        { name: 'Vision & Mission', path: '/#vision-mission' },
-        { name: 'Facilities', path: '/#facilities' },
-        { name: 'Administrators', path: '/#administrators' },
+        { name: 'School Profile', path: '/school-profile' },
+        { name: 'Vision & Mission', path: '/vision-mission' },
+        { name: 'Facilities', path: '/facilities' },
+        { name: 'Administrators', path: '/administrators' },
       ]
     },
     { 
@@ -65,31 +67,14 @@ const Navbar = () => {
          { name: 'Student Portal', path: '/login' },
       ]
     },
-    { name: 'Announcements', path: '/#announcements' },
-    { name: 'Contact', path: '/#contact' },
+    { name: 'Announcements', path: '/announcements' },
+    { name: 'Contact', path: '/contact' },
   ];
 
-  // Helper to handle scrolling
+  // Helper to handle navigation
   const handleNavClick = (path) => {
     setIsOpen(false);
-    
-    // If it's a hash link
-    if (path.includes('#')) {
-      const [pathname, hash] = path.split('#');
-      
-      // If we are already on the home page
-      if (location.pathname === '/' || location.pathname === '') {
-        const element = document.getElementById(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      } else {
-        // If we are on another page, navigate to home with hash
-        navigate(path);
-      }
-    } else {
-      navigate(path);
-    }
+    navigate(path);
   };
 
   const toggleMobileMenu = (name) => {
@@ -99,12 +84,16 @@ const Navbar = () => {
     }));
   };
 
-  const navBackground = isHome && !isScrolled ? 'bg-transparent shadow-none border-transparent' : 'bg-white shadow-md border-b border-gray-100';
-  const linkColor = isHome && !isScrolled ? 'text-white hover:text-blue-200 hover:bg-white/10' : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50';
-  const dropdownTextColor = 'text-gray-700 hover:text-blue-600';
-  const logoTitleColor = isHome && !isScrolled ? 'text-white' : 'text-gray-900';
-  const logoSubtitleColor = isHome && !isScrolled ? 'text-blue-200' : 'text-blue-600';
-  const mobileMenuButtonColor = isHome && !isScrolled ? 'text-white hover:bg-white/10' : 'text-gray-700 hover:bg-gray-100';
+  const navBackground = isHome && !isScrolled 
+    ? 'bg-transparent shadow-none border-transparent dark:bg-transparent' 
+    : 'bg-white dark:bg-slate-800 shadow-md border-b border-gray-100 dark:border-slate-700';
+  const linkColor = isHome && !isScrolled 
+    ? 'text-white hover:text-blue-200 hover:bg-white/10' 
+    : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700';
+  const dropdownTextColor = 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400';
+  const logoTitleColor = isHome && !isScrolled ? 'text-white' : 'text-gray-900 dark:text-white';
+  const logoSubtitleColor = isHome && !isScrolled ? 'text-blue-200' : 'text-blue-600 dark:text-blue-400';
+  const mobileMenuButtonColor = isHome && !isScrolled ? 'text-white hover:bg-white/10' : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700';
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${navBackground}`}>
@@ -144,13 +133,13 @@ const Navbar = () => {
 
                   {/* Desktop Dropdown */}
                   {link.children && (
-                    <div className="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-left z-50">
+                    <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-gray-100 dark:border-slate-700 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-left z-50">
                       <div className="py-2">
                         {link.children.map((child) => (
                           <button
                             key={child.name}
                             onClick={() => handleNavClick(child.path)}
-                            className={`block w-full text-left px-4 py-2 text-sm ${dropdownTextColor} hover:bg-blue-50 transition-colors`}
+                            className={`block w-full text-left px-4 py-2 text-sm ${dropdownTextColor} hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors`}
                           >
                             {child.name}
                           </button>
@@ -165,6 +154,19 @@ const Navbar = () => {
 
           {/* Desktop User Menu */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className={`p-2 rounded-lg transition-all ${
+                isHome && !isScrolled
+                  ? 'text-white hover:bg-white/10'
+                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700'
+              }`}
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+            
             {currentUser ? (
               <div className="relative" ref={userMenuRef}>
                 <button 
@@ -172,7 +174,7 @@ const Navbar = () => {
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all border shadow-sm ${
                     isHome && !isScrolled 
                       ? 'border-white/20 hover:bg-white/10 text-white' 
-                      : 'border-gray-200 hover:bg-gray-50 text-gray-700 hover:border-blue-300'
+                      : 'border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 hover:border-blue-300 dark:hover:border-blue-500'
                   }`}
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
@@ -183,40 +185,40 @@ const Navbar = () => {
                     )}
                   </div>
                   <div className="text-left hidden xl:block">
-                    <div className={`text-sm font-semibold ${isHome && !isScrolled ? 'text-white' : 'text-gray-900'}`}>{userData?.fullName || 'User'}</div>
-                    <div className={`text-xs font-medium ${isHome && !isScrolled ? 'text-blue-200' : 'text-blue-600'}`}>{isAdmin ? 'Administrator' : 'Student'}</div>
+                    <div className={`text-sm font-semibold ${isHome && !isScrolled ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{userData?.fullName || 'User'}</div>
+                    <div className={`text-xs font-medium ${isHome && !isScrolled ? 'text-blue-200' : 'text-blue-600 dark:text-blue-400'}`}>{isAdmin ? 'Administrator' : 'Student'}</div>
                   </div>
-                  <ChevronDown size={16} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''} ${isHome && !isScrolled ? 'text-white' : 'text-gray-600'}`} />
+                  <ChevronDown size={16} className={`transition-transform ${isUserMenuOpen ? 'rotate-180' : ''} ${isHome && !isScrolled ? 'text-white' : 'text-gray-600 dark:text-gray-300'}`} />
                 </button>
 
                 {/* Dropdown Menu */}
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 py-2 text-gray-800 animate-fade-in z-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-gray-200 dark:border-slate-700 py-2 text-gray-800 dark:text-gray-200 animate-fade-in z-50">
                     <Link 
                       to="/account" 
                       onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors mx-2 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors mx-2 rounded-lg"
                     >
-                      <User size={18} className="text-blue-600" />
+                      <User size={18} className="text-blue-600 dark:text-blue-400" />
                       <span className="text-sm font-medium">My Account</span>
                     </Link>
                     {isAdmin && (
                       <Link 
                         to="/admin" 
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 transition-colors border-t border-gray-100 mx-2 rounded-lg"
+                        className="flex items-center gap-3 px-4 py-3 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors border-t border-gray-100 dark:border-slate-700 mx-2 rounded-lg"
                       >
-                        <Settings size={18} className="text-blue-600" />
+                        <Settings size={18} className="text-blue-600 dark:text-blue-400" />
                         <span className="text-sm font-medium">Admin Panel</span>
                       </Link>
                     )}
-                    <div className="border-t border-gray-100 my-1"></div>
+                    <div className="border-t border-gray-100 dark:border-slate-700 my-1"></div>
                     <button 
                       onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-colors w-full text-left mx-2 rounded-lg"
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full text-left mx-2 rounded-lg"
                     >
-                      <LogOut size={18} className="text-red-600" />
-                      <span className="text-sm font-medium text-red-600">Logout</span>
+                      <LogOut size={18} className="text-red-600 dark:text-red-400" />
+                      <span className="text-sm font-medium text-red-600 dark:text-red-400">Logout</span>
                     </button>
                   </div>
                 )}
@@ -228,7 +230,7 @@ const Navbar = () => {
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
                     isHome && !isScrolled 
                       ? 'text-white hover:text-blue-200 hover:bg-white/10' 
-                      : 'text-gray-700 hover:text-blue-600'
+                      : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'
                   }`}
                 >
                   Login
@@ -257,8 +259,17 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-200 shadow-lg animate-fade-in max-h-[80vh] overflow-y-auto">
+        <div className="lg:hidden bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 shadow-lg animate-fade-in max-h-[80vh] overflow-y-auto">
           <div className="px-4 pt-2 pb-4 space-y-1">
+            {/* Theme Toggle Mobile */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-3 w-full text-left text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 px-4 py-3 rounded-lg text-base font-semibold transition-colors"
+            >
+              {isDark ? <Sun size={20} /> : <Moon size={20} />}
+              {isDark ? 'Light Mode' : 'Dark Mode'}
+            </button>
+            <div className="border-t border-gray-200 dark:border-slate-700 my-1"></div>
             {/* Navigation Links */}
             {navLinks.map((link) => (
               <div key={link.name}>
@@ -266,7 +277,7 @@ const Navbar = () => {
                   <>
                     <button
                       onClick={() => toggleMobileMenu(link.name)}
-                      className="flex items-center justify-between w-full text-left text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-lg text-base font-semibold transition-colors"
+                      className="flex items-center justify-between w-full text-left text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 px-4 py-3 rounded-lg text-base font-semibold transition-colors"
                     >
                       {link.name}
                       <ChevronRight size={20} className={`transform transition-transform ${mobileExpanded[link.name] ? 'rotate-90' : ''}`} />
@@ -277,7 +288,7 @@ const Navbar = () => {
                           <button
                             key={child.name}
                             onClick={() => handleNavClick(child.path)}
-                            className="block w-full text-left text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                            className="block w-full text-left text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                           >
                             {child.name}
                           </button>
@@ -288,7 +299,7 @@ const Navbar = () => {
                 ) : (
                   <button
                     onClick={() => handleNavClick(link.path)}
-                    className="block w-full text-left text-gray-700 hover:text-blue-600 hover:bg-blue-50 px-4 py-3 rounded-lg text-base font-semibold transition-colors"
+                    className="block w-full text-left text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 px-4 py-3 rounded-lg text-base font-semibold transition-colors"
                   >
                     {link.name}
                   </button>
@@ -298,13 +309,13 @@ const Navbar = () => {
 
             {/* User Section */}
             {currentUser ? (
-              <div className="pt-4 mt-4 border-t border-gray-200 space-y-1">
-                <div className="px-4 py-2 text-sm text-gray-600">
-                  Signed in as <span className="font-bold text-gray-900">{userData?.fullName}</span>
+              <div className="pt-4 mt-4 border-t border-gray-200 dark:border-slate-700 space-y-1">
+                <div className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400">
+                  Signed in as <span className="font-bold text-gray-900 dark:text-white">{userData?.fullName}</span>
                 </div>
                 <Link 
                   to="/account" 
-                  className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                  className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   <User size={18} />
@@ -313,7 +324,7 @@ const Navbar = () => {
                 {isAdmin && (
                   <Link 
                     to="/admin" 
-                    className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
+                    className="flex items-center gap-3 px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-colors"
                     onClick={() => setIsOpen(false)}
                   >
                     <Settings size={18} />
@@ -322,17 +333,17 @@ const Navbar = () => {
                 )}
                 <button 
                   onClick={() => { setIsOpen(false); handleLogout(); }}
-                  className="flex items-center gap-3 w-full text-left px-4 py-3 text-base font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="flex items-center gap-3 w-full text-left px-4 py-3 text-base font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                 >
                   <LogOut size={18} />
                   Logout
                 </button>
               </div>
             ) : (
-              <div className="pt-4 mt-4 border-t border-gray-200 space-y-2">
+              <div className="pt-4 mt-4 border-t border-gray-200 dark:border-slate-700 space-y-2">
                 <Link 
                   to="/login" 
-                  className="block px-4 py-3 text-base font-semibold text-center text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="block px-4 py-3 text-base font-semibold text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   Login

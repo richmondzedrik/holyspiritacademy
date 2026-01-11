@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getPosts } from '../services/postService';
 import AnnouncementCard from '../components/common/AnnouncementCard';
 import ContactForm from '../components/common/ContactForm';
 import HeroSlider from '../components/common/HeroSlider';
 import FadeIn from '../components/common/FadeIn';
+import SEO from '../components/common/SEO';
 import { PostSkeleton } from '../components/common/Skeletons';
-import { Bell, BookOpen, Users, Building, Target, Phone, Mail } from 'lucide-react';
+import { Bell, BookOpen, Users, Building, Target, Phone, Mail, ArrowRight } from 'lucide-react';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -27,26 +29,32 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section - Slider */}
-      <section id="home">
-        <HeroSlider />
-      </section>
+    <>
+      <SEO 
+        title="Holy Spirit Academy of Bangued - School Information Portal"
+        description="Official website of Holy Spirit Academy of Bangued. Stay updated with the latest announcements, events, and school information. Join our community of excellence in education."
+        keywords="Holy Spirit Academy, Bangued, Abra, Philippines, school, education, announcements, admissions"
+      />
+      <div className="flex flex-col min-h-screen">
+        {/* Hero Section - Slider */}
+        <section id="home">
+          <HeroSlider />
+        </section>
 
       {/* Announcements Section */}
-      <section id="announcements" className="py-16 md:py-24 px-4 bg-gradient-to-b from-white to-blue-50">
+      <section id="announcements" className="py-16 md:py-24 px-4 bg-gradient-to-b from-white to-blue-50 dark:from-slate-900 dark:to-slate-800">
         <div className="max-w-7xl mx-auto">
           <FadeIn>
             <div className="text-center mb-12 md:mb-16">
               <div className="inline-block mb-4">
-                <div className="bg-blue-100 p-3 rounded-2xl">
-                  <Bell className="text-blue-600" size={32} />
+                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-2xl">
+                  <Bell className="text-blue-600 dark:text-blue-400" size={32} />
                 </div>
               </div>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">
                 Latest Announcements
               </h2>
-              <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
+              <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg max-w-2xl mx-auto">
                 Stay updated with the latest news, events, and important information from our school community.
               </p>
             </div>
@@ -59,21 +67,34 @@ const Home = () => {
               ))}
             </div>
           ) : posts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {posts.map((post, index) => (
-                <FadeIn key={post.id} delay={index * 100}>
-                  <AnnouncementCard post={post} />
-                </FadeIn>
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                {posts.slice(0, 3).map((post, index) => (
+                  <FadeIn key={post.id} delay={index * 100}>
+                    <AnnouncementCard post={post} />
+                  </FadeIn>
+                ))}
+              </div>
+              <FadeIn delay={300}>
+                <div className="text-center">
+                  <Link 
+                    to="/announcements"
+                    className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-full hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  >
+                    View All Announcements
+                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </FadeIn>
+            </>
           ) : (
             <FadeIn>
-              <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100">
-                <div className="mx-auto h-16 w-16 text-gray-300 mb-4">
+              <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
+                <div className="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-4">
                   <Bell size={64} />
                 </div>
-                <h3 className="text-xl font-medium text-gray-900">No announcements yet</h3>
-                <p className="text-gray-500 mt-2">Check back later for school updates.</p>
+                <h3 className="text-xl font-medium text-gray-900 dark:text-white">No announcements yet</h3>
+                <p className="text-gray-500 dark:text-gray-400 mt-2">Check back later for school updates.</p>
               </div>
             </FadeIn>
           )}
@@ -81,41 +102,48 @@ const Home = () => {
       </section>
 
       {/* About Section */}
-      <section id="about" className="relative py-16 md:py-24 bg-gradient-to-br from-slate-50 to-blue-50">
+      <section id="about" className="relative py-16 md:py-24 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-800 dark:to-slate-900">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <FadeIn direction="right">
               <div className="inline-block mb-4">
-                <div className="bg-blue-100 p-3 rounded-2xl">
-                  <BookOpen className="text-blue-600" size={32} />
+                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-2xl">
+                  <BookOpen className="text-blue-600 dark:text-blue-400" size={32} />
                 </div>
               </div>
-              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
                 About Our School
               </h2>
-              <p className="text-base md:text-lg text-gray-600 mb-6 leading-relaxed">
-                Founded with a vision to nurture young minds, <span className="font-semibold text-blue-600">Holy Spirit Academy of Bangued</span> has been a beacon of educational excellence. 
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                Founded with a vision to nurture young minds, <span className="font-semibold text-blue-600 dark:text-blue-400">Holy Spirit Academy of Bangued</span> has been a beacon of educational excellence. 
                 We believe in a holistic approach to education that fosters intellectual growth, creativity, and moral character.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed mb-8">
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                 Our dedicated faculty and state-of-the-art resources ensure that every student receives personalized attention 
                 and the opportunity to thrive in a rapidly changing world.
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-100 transform hover:-translate-y-1 transition-transform duration-300">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">20+</div>
-                  <div className="text-sm text-gray-600">Years of Excellence</div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/50 transform hover:-translate-y-1 transition-transform duration-300">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">20+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Years of Excellence</div>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-100 transform hover:-translate-y-1 transition-transform duration-300">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">100+</div>
-                  <div className="text-sm text-gray-600">Qualified Teachers</div>
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/50 transform hover:-translate-y-1 transition-transform duration-300">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">100+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Qualified Teachers</div>
                 </div>
-                <div className="bg-white p-4 rounded-xl shadow-sm border border-blue-100 transform hover:-translate-y-1 transition-transform duration-300">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">1000+</div>
-                  <div className="text-sm text-gray-600">Happy Students</div>
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-blue-100 dark:border-blue-900/50 transform hover:-translate-y-1 transition-transform duration-300">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">1000+</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Happy Students</div>
                 </div>
               </div>
+              <Link 
+                to="/school-profile"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
+              >
+                Learn More About Us
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
             </FadeIn>
             
             <FadeIn direction="left" delay={200} className="hidden lg:block">
@@ -159,16 +187,16 @@ const Home = () => {
       </section>
 
       {/* Vision & Mission Section */}
-      <section id="vision-mission" className="py-16 md:py-24 px-4 bg-white relative overflow-hidden">
+      <section id="vision-mission" className="py-16 md:py-24 px-4 bg-white dark:bg-slate-900 relative overflow-hidden">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-50 dark:bg-blue-900/20 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 dark:bg-blue-800/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <FadeIn>
             <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">Vision & Mission</h2>
-              <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4">Vision & Mission</h2>
+              <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg max-w-2xl mx-auto">
                 Our guiding principles that drive educational excellence and character development.
               </p>
             </div>
@@ -211,26 +239,37 @@ const Home = () => {
               </div>
             </FadeIn>
           </div>
+          <FadeIn delay={400}>
+            <div className="text-center mt-8">
+              <Link 
+                to="/vision-mission"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all transform hover:scale-105 shadow-md hover:shadow-lg border-2 border-blue-600 dark:border-blue-500"
+              >
+                Read More About Our Vision & Mission
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Facilities Section */}
-      <section id="facilities" className="py-16 md:py-20 px-4 bg-gray-50">
+      <section id="facilities" className="py-16 md:py-20 px-4 bg-gray-50 dark:bg-slate-800">
         <div className="max-w-7xl mx-auto">
           <FadeIn>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
-                <Building className="text-primary" />
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-3">
+                <Building className="text-blue-600 dark:text-blue-400" />
                 Our Facilities
               </h2>
-              <div className="w-24 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
-              <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+              <div className="w-24 h-1 bg-blue-600 dark:bg-blue-500 mx-auto mt-4 rounded-full"></div>
+              <p className="mt-4 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 Our campus provides a conducive learning environment with modern amenities.
               </p>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {/* Placeholder Facility Items - In a real app, these could come from Firestore */}
             {[1, 2, 3].map((item, index) => (
               <FadeIn key={item} delay={index * 100}>
@@ -250,59 +289,89 @@ const Home = () => {
               </FadeIn>
             ))}
           </div>
+          <FadeIn delay={400}>
+            <div className="text-center">
+              <Link 
+                to="/facilities"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
+              >
+                View All Facilities
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Administrators Section */}
-      <section id="administrators" className="py-16 md:py-20 px-4 bg-white">
+      <section id="administrators" className="py-16 md:py-20 px-4 bg-white dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <FadeIn>
             <div className="text-center mb-12 md:mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
-                <Users className="text-primary" />
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-3">
+                <Users className="text-blue-600 dark:text-blue-400" />
                 School Administrators
               </h2>
-              <div className="w-24 h-1 bg-primary mx-auto mt-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-blue-600 dark:bg-blue-500 mx-auto mt-4 rounded-full"></div>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* Placeholder Admin Profiles */}
             {[1, 2, 3, 4].map((item, index) => (
               <FadeIn key={item} delay={index * 100}>
-                <div className="text-center p-6 rounded-xl hover:bg-gray-50 transition-all duration-300 hover:-translate-y-2">
-                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-100 shadow-md group-hover:border-blue-200 transition-colors">
+                <div className="text-center p-6 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-all duration-300 hover:-translate-y-2">
+                  <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-blue-100 dark:border-blue-900/50 shadow-md group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors">
                     <img 
                       src={`https://ui-avatars.com/api/?name=Admin+${item}&background=random`} 
                       alt="Administrator" 
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900">Administrator Name</h3>
-                  <p className="text-primary font-medium text-sm">Position Title</p>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white">Administrator Name</h3>
+                  <p className="text-blue-600 dark:text-blue-400 font-medium text-sm">Position Title</p>
                 </div>
               </FadeIn>
             ))}
           </div>
+          <FadeIn delay={400}>
+            <div className="text-center">
+              <Link 
+                to="/administrators"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
+              >
+                View All Administrators
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-16 md:py-20 px-4 bg-gray-50">
+      <section id="contact" className="py-16 md:py-20 px-4 bg-gray-50 dark:bg-slate-800">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <FadeIn direction="right">
               <div className="mb-8">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-3">
-                  <Phone className="text-primary" />
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                  <Phone className="text-blue-600 dark:text-blue-400" />
                   Get in Touch
                 </h2>
-                <div className="w-24 h-1 bg-primary mt-4 rounded-full"></div>
+                <div className="w-24 h-1 bg-blue-600 dark:bg-blue-500 mt-4 rounded-full"></div>
               </div>
-              <p className="text-gray-600 mb-8 text-lg">
+              <p className="text-gray-600 dark:text-gray-300 mb-8 text-lg">
                 Have questions or feedback? We'd love to hear from you. Fill out the form, 
                 and our administration will get back to you as soon as possible.
               </p>
+              
+              <Link 
+                to="/contact"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all transform hover:scale-105 shadow-md hover:shadow-lg mb-8"
+              >
+                Visit Contact Page
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
               
               <div className="space-y-6">
                 {[
@@ -311,12 +380,12 @@ const Home = () => {
                   { icon: Mail, title: "Email Us", text: "info@holyspiritacademy.edu.ph" }
                 ].map((contact, idx) => (
                   <div key={idx} className="flex items-start gap-4 group cursor-default">
-                    <div className="bg-white p-3 rounded-lg shadow-sm text-primary group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                    <div className="bg-white dark:bg-slate-700 p-3 rounded-lg shadow-sm text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-600 dark:group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                       <contact.icon size={24} />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900">{contact.title}</h3>
-                      <p className="text-gray-600">{contact.text}</p>
+                      <h3 className="font-bold text-gray-900 dark:text-white">{contact.title}</h3>
+                      <p className="text-gray-600 dark:text-gray-300">{contact.text}</p>
                     </div>
                   </div>
                 ))}
@@ -324,14 +393,15 @@ const Home = () => {
             </FadeIn>
             
             <FadeIn direction="left" delay={200}>
-              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+              <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">
                 <ContactForm />
               </div>
             </FadeIn>
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 };
 

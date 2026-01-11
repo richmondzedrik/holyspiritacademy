@@ -4,7 +4,7 @@ import logo from '../../assets/logo.png';
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-300 pt-16 pb-8 border-t-4 border-blue-600">
+    <footer className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-slate-950 dark:to-slate-900 text-gray-300 dark:text-gray-300 pt-16 pb-8 border-t-4 border-blue-600 dark:border-blue-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Brand Column */}
@@ -22,13 +22,13 @@ const Footer = () => {
               Empowering students with knowledge, character, and faith. Join us in shaping the leaders of tomorrow through holistic education and innovation.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="bg-gray-800 dark:bg-slate-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <Facebook size={18} />
               </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-blue-400 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="bg-gray-800 dark:bg-slate-800 p-2 rounded-full hover:bg-blue-400 hover:text-white transition-all transform hover:-translate-y-1">
                 <Twitter size={18} />
               </a>
-              <a href="#" className="bg-gray-800 p-2 rounded-full hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1">
+              <a href="#" className="bg-gray-800 dark:bg-slate-800 p-2 rounded-full hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <Instagram size={18} />
               </a>
             </div>
@@ -140,12 +140,12 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+        <div className="border-t border-gray-800 dark:border-slate-700 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
           <p>&copy; {new Date().getFullYear()} Holy Spirit Academy of Bangued. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Sitemap</a>
+            <a href="#" className="hover:text-white dark:hover:text-blue-400 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white dark:hover:text-blue-400 transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-white dark:hover:text-blue-400 transition-colors">Sitemap</a>
           </div>
         </div>
       </div>

@@ -61,10 +61,10 @@ const CommentSection = ({ postId }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-blue-50 border-t border-gray-200 px-6 py-6">
+    <div className="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-slate-800 dark:to-slate-900 border-t border-gray-200 dark:border-slate-700 px-6 py-6">
       <div className="max-w-4xl">
-        <h4 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-          <MessageCircle className="text-blue-600" size={22} />
+        <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+          <MessageCircle className="text-blue-600 dark:text-blue-400" size={22} />
           Comments ({comments.length})
         </h4>
         
@@ -76,7 +76,7 @@ const CommentSection = ({ postId }) => {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 placeholder="Share your thoughts..."
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-700 border-2 border-gray-200 dark:border-slate-600 text-gray-900 dark:text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none placeholder-gray-400 dark:placeholder-gray-400"
                 rows={3}
               />
               <button
@@ -97,14 +97,14 @@ const CommentSection = ({ postId }) => {
                 )}
               </button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               * Your comment will be visible after admin approval.
             </p>
           </form>
         ) : (
-          <div className="mb-8 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-xl">
-            <p className="text-sm text-blue-700">
-              Please <a href="/login" className="font-semibold underline hover:text-blue-800">log in</a> to leave a comment.
+          <div className="mb-8 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 dark:border-blue-500 p-4 rounded-xl">
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              Please <a href="/login" className="font-semibold underline hover:text-blue-800 dark:hover:text-blue-200">log in</a> to leave a comment.
             </p>
           </div>
         )}
@@ -112,28 +112,28 @@ const CommentSection = ({ postId }) => {
         {/* Comments List */}
         <div className="space-y-4">
           {fetchingComments ? (
-            <div className="text-center py-4 text-gray-500">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 dark:border-blue-400 mx-auto"></div>
             </div>
           ) : comments.length === 0 ? (
-            <div className="text-center py-8 text-gray-500 bg-white rounded-xl border border-gray-200">
-              <MessageCircle className="mx-auto mb-2 text-gray-300" size={32} />
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700">
+              <MessageCircle className="mx-auto mb-2 text-gray-300 dark:text-gray-600" size={32} />
               <p>No comments yet. Be the first to comment!</p>
             </div>
           ) : (
             comments.map((comment) => (
-              <div key={comment.id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              <div key={comment.id} className="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-shadow">
                 <div className="flex items-start gap-3">
                   <img 
                     src={comment.userProfilePicture || `https://ui-avatars.com/api/?name=${comment.userName}&size=80&background=3b82f6&color=fff`}
                     alt={comment.userName}
-                    className="w-10 h-10 rounded-full border-2 border-blue-100"
+                    className="w-10 h-10 rounded-full border-2 border-blue-100 dark:border-blue-900"
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h5 className="font-semibold text-gray-900">{comment.userName}</h5>
-                      <span className="text-xs text-gray-400">•</span>
-                      <span className="text-xs text-gray-500">
+                      <h5 className="font-semibold text-gray-900 dark:text-white">{comment.userName}</h5>
+                      <span className="text-xs text-gray-400 dark:text-gray-500">•</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         {comment.createdAt?.seconds 
                           ? new Date(comment.createdAt.seconds * 1000).toLocaleDateString('en-US', {
                               month: 'short',
@@ -143,7 +143,7 @@ const CommentSection = ({ postId }) => {
                           : 'Just now'}
                       </span>
                     </div>
-                    <p className="text-gray-700 leading-relaxed">{comment.content}</p>
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{comment.content}</p>
                   </div>
                 </div>
               </div>

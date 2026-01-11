@@ -48,6 +48,26 @@ export const getPosts = async () => {
   }
 };
 
+// Get a single post by ID
+export const getPost = async (id) => {
+  try {
+    const postDoc = doc(db, 'posts', id);
+    const postSnapshot = await getDoc(postDoc);
+    
+    if (postSnapshot.exists()) {
+      return {
+        id: postSnapshot.id,
+        ...postSnapshot.data()
+      };
+    } else {
+      throw new Error('Post not found');
+    }
+  } catch (error) {
+    console.error("Error fetching post: ", error);
+    throw error;
+  }
+};
+
 // Delete a post
 export const deletePost = async (id) => {
   try {

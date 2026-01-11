@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, FileText, CheckCircle, HelpCircle, School, BookOpen } from 'lucide-react';
+import SEO from '../components/common/SEO';
 
 const Admissions = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -64,7 +65,13 @@ const Admissions = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+    <>
+      <SEO 
+        title="Admissions - Holy Spirit Academy of Bangued"
+        description="Join Holy Spirit Academy of Bangued. Learn about our admission process, requirements, and enrollment procedures. Start your journey to excellence today."
+        keywords="admissions, enrollment, Holy Spirit Academy, Bangued, school application, requirements"
+      />
+      <div className="min-h-screen bg-gray-50 pt-20 pb-12">
       {/* Header */}
       <div className="bg-blue-600 text-white py-16 mb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -180,7 +187,8 @@ const Admissions = () => {
 
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
