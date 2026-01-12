@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, FileText, CheckCircle, HelpCircle, School, BookOpen } from 'lucide-react';
 import SEO from '../components/common/SEO';
+import { PageHeaderSkeleton, AdmissionsContentSkeleton } from '../components/common/Skeletons';
 
 const Admissions = () => {
+  const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState(null);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
 
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -64,6 +74,36 @@ const Admissions = () => {
     }
   ];
 
+  if (loading) {
+    return (
+      <>
+        <SEO 
+          title="Admissions - Holy Spirit Academy of Bangued"
+          description="Join Holy Spirit Academy of Bangued. Learn about our admission process, requirements, and enrollment procedures. Start your journey to excellence today."
+          keywords="admissions, enrollment, Holy Spirit Academy, Bangued, school application, requirements"
+        />
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-20 pb-16">
+          <PageHeaderSkeleton />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              <div className="lg:col-span-2">
+                <AdmissionsContentSkeleton />
+              </div>
+              <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700 animate-pulse">
+                <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mb-8"></div>
+                <div className="space-y-4">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <SEO 
@@ -71,14 +111,25 @@ const Admissions = () => {
         description="Join Holy Spirit Academy of Bangued. Learn about our admission process, requirements, and enrollment procedures. Start your journey to excellence today."
         keywords="admissions, enrollment, Holy Spirit Academy, Bangued, school application, requirements"
       />
-      <div className="min-h-screen bg-gray-50 pt-20 pb-12">
-      {/* Header */}
-      <div className="bg-blue-600 text-white py-16 mb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Admissions</h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-            Join the Holy Spirit Academy family. Your journey to excellence starts here.
-          </p>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-20 pb-16">
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-900 text-white py-20 mb-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center">
+            <div className="inline-block mb-6">
+              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-3xl border border-white/30 shadow-xl">
+                <School className="text-white" size={40} />
+              </div>
+            </div>
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+              Admissions
+            </h1>
+            <p className="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto leading-relaxed">
+              Join the Holy Spirit Academy family. Your journey to excellence starts here.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -89,66 +140,83 @@ const Admissions = () => {
           <div className="lg:col-span-2 space-y-12">
             
             {/* Admission Process */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <span className="bg-blue-100 p-2 rounded-lg">
-                  <School className="text-blue-600" size={24} />
-                </span>
-                Admission Process
-              </h2>
+            <section className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-3 rounded-2xl">
+                  <School className="text-white" size={28} />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                  Admission Process
+                </h2>
+              </div>
               
-              <div className="space-y-8">
+              <div className="space-y-6">
                 {steps.map((step, index) => (
-                  <div key={index} className="flex gap-4">
-                    <div className="flex-shrink-0 mt-1">
-                      <div className="w-8 h-8 rounded-full bg-blue-50 border-2 border-blue-100 flex items-center justify-center font-bold text-blue-600">
-                        {index + 1}
+                  <div key={index} className="group flex gap-6 p-6 rounded-2xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 border border-transparent hover:border-blue-200 dark:hover:border-blue-800">
+                    <div className="flex-shrink-0">
+                      <div className="relative">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center font-bold text-white text-xl shadow-lg group-hover:scale-110 transition-transform">
+                          {index + 1}
+                        </div>
+                        {index < steps.length - 1 && (
+                          <div className="absolute top-14 left-1/2 transform -translate-x-1/2 w-0.5 h-6 bg-gradient-to-b from-blue-300 to-transparent"></div>
+                        )}
                       </div>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-1">{step.title}</h3>
-                      <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                    <div className="flex-1 pt-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="text-blue-600 dark:text-blue-400">{step.icon}</div>
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">{step.title}</h3>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{step.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 pt-8 border-t border-gray-100">
+              <div className="mt-10 pt-8 border-t border-gray-200 dark:border-slate-700">
                 <Link 
                   to="/signup" 
-                  className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10 transition-all shadow-md hover:shadow-lg w-full sm:w-auto"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl md:text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto"
                 >
                   Register Online Now
+                  <span className="ml-2">→</span>
                 </Link>
               </div>
             </section>
 
             {/* FAQs */}
-            <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                <span className="bg-blue-100 p-2 rounded-lg">
-                  <HelpCircle className="text-blue-600" size={24} />
-                </span>
-                Frequently Asked Questions
-              </h2>
+            <section className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-4 mb-10">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-3 rounded-2xl">
+                  <HelpCircle className="text-white" size={28} />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                  Frequently Asked Questions
+                </h2>
+              </div>
               
               <div className="space-y-4">
                 {faqs.map((faq, index) => (
-                  <div key={index} className="border border-gray-200 rounded-xl overflow-hidden">
+                  <div key={index} className="border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-800 shadow-md hover:shadow-lg transition-all duration-300">
                     <button
-                      className="w-full px-6 py-4 text-left bg-white hover:bg-gray-50 flex justify-between items-center transition-colors focus:outline-none"
+                      className="w-full px-6 py-5 text-left bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 flex justify-between items-center transition-colors focus:outline-none group"
                       onClick={() => toggleFaq(index)}
                     >
-                      <span className="font-semibold text-gray-900">{faq.question}</span>
-                      {openFaq === index ? (
-                        <ChevronUp className="text-blue-600" size={20} />
-                      ) : (
-                        <ChevronDown className="text-gray-400" size={20} />
-                      )}
+                      <span className="font-semibold text-gray-900 dark:text-white text-lg group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors pr-4">
+                        {faq.question}
+                      </span>
+                      <div className={`flex-shrink-0 p-2 rounded-lg transition-all ${openFaq === index ? 'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400' : 'bg-gray-100 dark:bg-slate-700 text-gray-400 dark:text-gray-500'}`}>
+                        {openFaq === index ? (
+                          <ChevronUp size={20} />
+                        ) : (
+                          <ChevronDown size={20} />
+                        )}
+                      </div>
                     </button>
                     {openFaq === index && (
-                      <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
-                        <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                      <div className="px-6 py-5 bg-gradient-to-br from-blue-50 to-white dark:from-slate-700 dark:to-slate-800 border-t border-gray-200 dark:border-slate-600">
+                        <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{faq.answer}</p>
                       </div>
                     )}
                   </div>
@@ -160,27 +228,33 @@ const Admissions = () => {
           {/* Sidebar */}
           <div className="space-y-8">
             {/* Requirements Card */}
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 sticky top-24">
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <FileText className="text-blue-600" size={20} />
-                Requirements
-              </h3>
-              <ul className="space-y-4">
+            <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700 sticky top-24">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-3 rounded-2xl">
+                  <FileText className="text-white" size={24} />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Requirements
+                </h3>
+              </div>
+              <ul className="space-y-4 mb-8">
                 {requirements.map((req, index) => (
-                  <li key={index} className="flex items-start gap-3 text-sm text-gray-600">
-                    <CheckCircle className="text-green-500 mt-0.5 flex-shrink-0" size={16} />
-                    <span>{req}</span>
+                  <li key={index} className="flex items-start gap-4 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors">
+                    <div className="flex-shrink-0 mt-0.5">
+                      <CheckCircle className="text-green-500 dark:text-green-400" size={20} />
+                    </div>
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{req}</span>
                   </li>
                 ))}
               </ul>
               
-              <div className="mt-8 bg-blue-50 p-4 rounded-xl border border-blue-100">
-                <p className="text-sm text-blue-800 font-medium mb-1">Need assistance?</p>
-                <p className="text-xs text-blue-600">
-                  Contact our Admissions Office:<br/>
-                  (123) 456-7890<br/>
-                  admissions@holyspiritacademy.edu.ph
-                </p>
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-6 rounded-2xl border border-blue-200 dark:border-blue-800/50 shadow-md">
+                <p className="text-base text-blue-800 dark:text-blue-300 font-bold mb-3">Need assistance?</p>
+                <div className="space-y-2 text-sm text-blue-700 dark:text-blue-400">
+                  <p className="font-semibold">Contact our Admissions Office:</p>
+                  <p>(123) 456-7890</p>
+                  <p>admissions@holyspiritacademy.edu.ph</p>
+                </div>
               </div>
             </div>
           </div>

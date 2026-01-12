@@ -1,9 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
-import { BookOpen, Target, Users, Building } from 'lucide-react';
+import { PageHeaderSkeleton } from '../components/common/Skeletons';
 
 const SchoolProfile = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <>
+        <SEO 
+          title="School Profile - Holy Spirit Academy of Bangued"
+          description="Learn about Holy Spirit Academy of Bangued - our history, values, and commitment to educational excellence."
+          keywords="school profile, about us, Holy Spirit Academy, Bangued, education, school history"
+        />
+        <div className="min-h-screen bg-white dark:bg-slate-900 pt-24 pb-16">
+          <PageHeaderSkeleton />
+          <div className="max-w-4xl mx-auto px-4 space-y-16 animate-pulse">
+            <div>
+              <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-6"></div>
+              <div className="space-y-4">
+                <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+                <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+                <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-5/6"></div>
+              </div>
+            </div>
+            <div>
+              <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-8"></div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="border-l-4 border-blue-600 dark:border-blue-400 pl-6 space-y-3">
+                    <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-2/3"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <SEO 
@@ -11,89 +57,61 @@ const SchoolProfile = () => {
         description="Learn about Holy Spirit Academy of Bangued - our history, values, and commitment to educational excellence."
         keywords="school profile, about us, Holy Spirit Academy, Bangued, education, school history"
       />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pt-24 pb-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <FadeIn>
-            <div className="text-center mb-12 md:mb-16">
-              <div className="inline-block mb-4">
-                <div className="bg-blue-100 p-3 rounded-2xl">
-                  <BookOpen className="text-blue-600" size={32} />
-                </div>
+      <div className="min-h-screen bg-white dark:bg-slate-900 pt-24 pb-16">
+        {/* Hero Header */}
+        <div className="bg-blue-600 dark:bg-blue-700 text-white py-16 mb-12">
+          <div className="max-w-4xl mx-auto px-4">
+            <FadeIn>
+              <div className="text-center">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                  School Profile
+                </h1>
+                <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto">
+                  Learn about our school's history, values, and commitment to educational excellence.
+                </p>
               </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 mb-4">
-                School Profile
-              </h1>
-              <p className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto">
-                Learn about our school's history, values, and commitment to educational excellence.
-              </p>
-            </div>
-          </FadeIn>
+            </FadeIn>
+          </div>
+        </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-16">
-            <FadeIn direction="right">
-              <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="space-y-16">
+            {/* About Our School Section */}
+            <FadeIn>
+              <div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   About Our School
                 </h2>
-                <p className="text-base md:text-lg text-gray-600 mb-6 leading-relaxed">
-                  Founded with a vision to nurture young minds, <span className="font-semibold text-blue-600">Holy Spirit Academy of Bangued</span> has been a beacon of educational excellence. 
-                  We believe in a holistic approach to education that fosters intellectual growth, creativity, and moral character.
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed mb-8">
-                  Our dedicated faculty and state-of-the-art resources ensure that every student receives personalized attention 
-                  and the opportunity to thrive in a rapidly changing world.
-                </p>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100 transform hover:-translate-y-1 transition-transform duration-300">
-                    <div className="text-3xl font-bold text-blue-600 mb-1">20+</div>
-                    <div className="text-sm text-gray-600">Years of Excellence</div>
-                  </div>
-                  <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100 transform hover:-translate-y-1 transition-transform duration-300">
-                    <div className="text-3xl font-bold text-blue-600 mb-1">100+</div>
-                    <div className="text-sm text-gray-600">Qualified Teachers</div>
-                  </div>
-                  <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100 transform hover:-translate-y-1 transition-transform duration-300">
-                    <div className="text-3xl font-bold text-blue-600 mb-1">1000+</div>
-                    <div className="text-sm text-gray-600">Happy Students</div>
-                  </div>
+                <div>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                    Founded with a vision to nurture young minds, <span className="font-semibold text-blue-600 dark:text-blue-400">Holy Spirit Academy of Bangued</span> has been a beacon of educational excellence. 
+                    We believe in a holistic approach to education that fosters intellectual growth, creativity, and moral character.
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    Our dedicated faculty and state-of-the-art resources ensure that every student receives personalized attention 
+                    and the opportunity to thrive in a rapidly changing world.
+                  </p>
                 </div>
               </div>
             </FadeIn>
             
-            <FadeIn direction="left" delay={200}>
-              <div className="relative">
-                <div className="bg-gradient-to-br from-blue-600 to-blue-800 p-10 rounded-3xl shadow-2xl">
-                  <h3 className="text-3xl font-bold text-white mb-8">Why Choose Us?</h3>
-                  <ul className="space-y-6">
-                    <li className="flex items-start gap-4 group">
-                      <div className="bg-white/20 p-3 rounded-xl group-hover:bg-white/30 transition-colors">
-                        <Target className="text-white" size={24} />
-                      </div>
-                      <div>
-                        <h4 className="text-white font-bold text-lg mb-1">Excellence in Academics</h4>
-                        <p className="text-blue-100">Comprehensive curriculum designed for success</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4 group">
-                      <div className="bg-white/20 p-3 rounded-xl group-hover:bg-white/30 transition-colors">
-                        <Users className="text-white" size={24} />
-                      </div>
-                      <div>
-                        <h4 className="text-white font-bold text-lg mb-1">Dedicated Faculty</h4>
-                        <p className="text-blue-100">Experienced teachers committed to your growth</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-4 group">
-                      <div className="bg-white/20 p-3 rounded-xl group-hover:bg-white/30 transition-colors">
-                        <Building className="text-white" size={24} />
-                      </div>
-                      <div>
-                        <h4 className="text-white font-bold text-lg mb-1">Modern Facilities</h4>
-                        <p className="text-blue-100">State-of-the-art learning environment</p>
-                      </div>
-                    </li>
-                  </ul>
+            {/* Why Choose Us Section */}
+            <FadeIn delay={200}>
+              <div>
+                <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-8">Why Choose Us?</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  <div className="border-l-4 border-blue-600 dark:border-blue-400 pl-6">
+                    <h4 className="text-gray-900 dark:text-white font-semibold text-lg mb-2">Excellence in Academics</h4>
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">Comprehensive curriculum designed for success</p>
+                  </div>
+                  <div className="border-l-4 border-blue-600 dark:border-blue-400 pl-6">
+                    <h4 className="text-gray-900 dark:text-white font-semibold text-lg mb-2">Dedicated Faculty</h4>
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">Experienced teachers committed to your growth</p>
+                  </div>
+                  <div className="border-l-4 border-blue-600 dark:border-blue-400 pl-6">
+                    <h4 className="text-gray-900 dark:text-white font-semibold text-lg mb-2">Modern Facilities</h4>
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">State-of-the-art learning environment</p>
+                  </div>
                 </div>
               </div>
             </FadeIn>

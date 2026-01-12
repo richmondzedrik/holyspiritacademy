@@ -35,17 +35,29 @@ export const addComment = async (postId, userId, userName, userPhoto, content) =
 // Get approved comments for a specific post
 export const getCommentsByPost = async (postId) => {
   try {
+    // Query only by postId to avoid needing a composite index
+    // We'll filter isApproved and sort client-side
     const q = query(
       commentsCollection, 
-      where("postId", "==", postId), 
-      where("isApproved", "==", true),
-      orderBy("createdAt", "asc")
+      where("postId", "==", postId)
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    
+    // Filter approved comments, map results, and sort by createdAt
+    const comments = snapshot.docs
+      .map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      .filter(comment => comment.isApproved === true)
+      .sort((a, b) => {
+        // Sort by createdAt (ascending - oldest first)
+        const aTime = a.createdAt?.seconds || 0;
+        const bTime = b.createdAt?.seconds || 0;
+        return aTime - bTime;
+      });
+    
+    return comments;
   } catch (error) {
     console.error("Error fetching comments: ", error);
     throw error;

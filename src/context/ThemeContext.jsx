@@ -12,16 +12,29 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    // Get theme from localStorage or default to 'light'
+    // Get theme from localStorage or check system preference
     const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'light';
+    if (savedTheme) {
+      return savedTheme;
+    }
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
   });
 
   useEffect(() => {
     // Apply theme to document root
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
+    
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.style.colorScheme = 'dark';
+    } else {
+      root.classList.remove('dark');
+      root.style.colorScheme = 'light';
+    }
     
     // Save to localStorage
     localStorage.setItem('theme', theme);

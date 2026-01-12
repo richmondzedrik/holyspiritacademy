@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { getPosts, getPost } from '../services/postService';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
-import { PostSkeleton } from '../components/common/Skeletons';
+import { PostSkeleton, SinglePostSkeleton } from '../components/common/Skeletons';
 import CommentSection from '../components/common/CommentSection';
 import { Bell, Search, Calendar, Clock, Share2, FileText, ArrowLeft } from 'lucide-react';
 import DOMPurify from 'dompurify';
@@ -92,9 +92,7 @@ const Announcements = () => {
         <div className="min-h-screen bg-white dark:bg-slate-900 pt-24 pb-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {loading ? (
-              <div className="space-y-8">
-                <PostSkeleton />
-              </div>
+              <SinglePostSkeleton />
             ) : post ? (
               <FadeIn>
                 <Link 
