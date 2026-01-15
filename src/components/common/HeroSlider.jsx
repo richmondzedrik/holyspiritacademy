@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SLIDES = [
@@ -85,21 +86,21 @@ const HeroSlider = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <a 
-                  href="#announcements" 
+                <Link 
+                  to="/announcements" 
                   className="group px-8 py-4 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl flex items-center justify-center gap-2"
                 >
-                  View Updates
+                  View Announcements
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </a>
-                <a 
-                  href="/admissions" 
+                </Link>
+                <Link 
+                  to="/admissions" 
                   className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-blue-900 transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl backdrop-blur-sm"
                 >
                   Join Us Today
-                </a>
+                </Link>
               </div>
             </div>
           </div>

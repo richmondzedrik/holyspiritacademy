@@ -71,25 +71,75 @@ const SchoolProfile = () => {
 
         <div className="max-w-7xl mx-auto px-4">
           <div className="space-y-12">
-            {/* About Our School Section */}
+            {/* History Section */}
             <FadeIn>
               <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-                  About Our School
+                  History
                 </h2>
                 <div>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 text-lg">
-                    Founded with a vision to nurture young minds, <span className="font-semibold text-blue-600 dark:text-blue-400">Holy Spirit Academy of Bangued</span> has been a beacon of educational excellence. 
-                    We believe in a holistic approach to education that fosters intellectual growth, creativity, and moral character.
+                    The <span className="font-semibold text-blue-600 dark:text-blue-400">Holy Spirit Academy of Bangued</span> traces its origin to the former Colegio del Sagrado Corazon, Girls’ Department, founded in 1920 through the initiative of the Society of the Divine Word (SVD). In 1923, the supervision of the elementary department was entrusted to the Missionary Servants of the Holy Spirit (SSpS).
                   </p>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                    Our dedicated faculty and state-of-the-art resources ensure that every student receives personalized attention 
-                    and the opportunity to thrive in a rapidly changing world.
+                    In 1929, the school graduated its first batch of high school alumnae. Classes were interrupted during World War II and resumed only in 1947 when the colegio was rebuilt. The high school was later taken over completely by the Sisters and, in 1965, the former Sacred Heart of Jesus Academy was renamed the Holy Spirit Academy of Bangued.
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                    On May 6, 2003, in accordance with their Chapter Resolution, the Sisters handed over the school to the ownership and administration of the Diocese of Bangued. As part of the Diocesan School System and treasuring its exemplary legacy from the SSpS Congregation, HSAB continues to strive to give quality Christian education to the youth of Abra in line with its enduring motto, <span className="font-semibold text-blue-600 dark:text-blue-400">“Truth in Love.”</span>
                   </p>
                 </div>
               </div>
             </FadeIn>
             
+            {/* HSAB Hymn */}
+            <FadeIn delay={300}>
+              <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  HSAB Hymn
+                </h2>
+                <p className="text-sm uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400 mb-6">
+                  O Alma Mater, Kind and Dear
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-700 dark:text-gray-300 leading-relaxed text-base md:text-lg">
+                  <div className="space-y-4">
+                    <p>
+                      O Alma Mater, kind and dear<br />
+                      We sing your praises far and near<br />
+                      At home, at school, on land and sea<br />
+                      The thought of you is dear to me.
+                    </p>
+                    <p className="font-semibold">
+                      Refrain:
+                    </p>
+                    <p>
+                      O HSA in joy we sing<br />
+                      Our hearts with love for you we bring.<br />
+                      Stand, stand for the HSA for Truth in Love;<br />
+                      Stand, stand for the HSA for Truth in Love.<br />
+                      Your loyal children here we stand,<br />
+                      With you we link our hearts and hands;<br />
+                      Beneath your banner here today<br />
+                      The pledge of loyalty we pay.
+                    </p>
+                  </div>
+                  <div className="space-y-4">
+                    <p className="font-semibold">
+                      (Refrain)
+                    </p>
+                    <p>
+                      Someday when far from you we roam,<br />
+                      Our thoughts will surely travel home;<br />
+                      And mem’ries sweet will be to me<br />
+                      Those dear old days that used to be.
+                    </p>
+                    <p className="font-semibold">
+                      (Refrain)
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
             {/* Why Choose Us Section */}
             <FadeIn delay={200}>
               <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300">

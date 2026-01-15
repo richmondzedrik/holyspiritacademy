@@ -56,6 +56,8 @@ const Navbar = () => {
         { name: 'Vision & Mission', path: '/vision-mission' },
         { name: 'Facilities', path: '/facilities' },
         { name: 'Administrators', path: '/administrators' },
+        { name: 'Achievements', path: '/achievements' },
+        { name: 'Organizations & Clubs', path: '/organizations' },
       ]
     },
     { 
@@ -63,6 +65,7 @@ const Navbar = () => {
       path: '/admissions',
       children: [
          { name: 'Admission Process', path: '/admissions' },
+         { name: 'Tuition & Fees', path: '/fees' },
          { name: 'Apply Now', path: '/signup' },
          { name: 'Student Portal', path: '/login' },
       ]

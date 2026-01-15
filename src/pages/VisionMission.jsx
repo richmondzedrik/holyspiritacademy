@@ -82,8 +82,7 @@ const VisionMission = () => {
                   Our Vision
                 </h2>
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg flex-grow">
-                  To be a premier educational institution that cultivates globally competitive, 
-                  socially responsible, and lifelong learners who contribute positively to society.
+                  The Holy Spirit Academy of Bangued, Abra, Inc. is an agent of the Diocese of Bangued in its educational apostolate for the integral formation of the young people of Abra as mature Christians and enlightened as well as empowered model citizens.
                 </p>
               </div>
             </FadeIn>
@@ -98,10 +97,28 @@ const VisionMission = () => {
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   Our Mission
                 </h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg flex-grow">
-                  We are committed to providing quality education through innovative teaching, 
-                  values formation, and community engagement, empowering students to achieve their full potential.
-                </p>
+                <div className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg flex-grow space-y-4">
+                  <p>
+                    The Holy Spirit Academy of Bangued commits itself to educate and influence the young people of Abra to become:
+                  </p>
+                  <div className="space-y-2 text-base md:text-lg">
+                    <p className="font-semibold text-gray-900 dark:text-white">I. Mature Christians who have</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>a trust and faith in God;</li>
+                      <li>love and concern for others;</li>
+                      <li>the spirit of service for the Church.</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2 text-base md:text-lg">
+                    <p className="font-semibold text-gray-900 dark:text-white">II. Enlightened and empowered model citizens who are</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>physically and mentally developed;</li>
+                      <li>socially and ecologically responsible, culture-oriented and economically self‑reliant;</li>
+                      <li>nationalistic and upright; and</li>
+                      <li>equipped with 21st‑century skills.</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </FadeIn>
           </div>

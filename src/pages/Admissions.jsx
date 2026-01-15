@@ -45,11 +45,17 @@ const Admissions = () => {
   ];
 
   const requirements = [
-    "Original Report Card (Form 138)",
+    "Report Card (SF9 / Form 138)",
     "Certificate of Good Moral Character",
-    "PSA Birth Certificate (Original & Photocopy)",
-    "2 pcs 2x2 ID Picture (White Background)",
-    "Certificate of Junior High School Completion (for SHS)"
+    "PSA Birth Certificate (original and photocopy)",
+    "Baptismal Certificate (if Christian)",
+    "Confirmation Certificate (if confirmed)",
+    "Marriage Certificate / Contract of Parents (if married)",
+    "1x1 and 2x2 ID pictures with name tag",
+    "Long folder (2 pieces)",
+    "ESC certificate (for JHS transferees, if applicable)",
+    "Voucher or QVR certificate (for SHS transferees, if applicable)",
+    "Latest ITR or Certificate of Tax Exemption / Municipal Certificate of Unemployment of Parents or Guardians (for Grade 7 only)"
   ];
 
   const faqs = [
@@ -143,6 +149,40 @@ const Admissions = () => {
           
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-12">
+
+            {/* Programs Offered */}
+            <section className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-3 rounded-2xl">
+                  <BookOpen className="text-white" size={28} />
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+                  Programs Offered
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Basic Education</h3>
+                  <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>• Kindergarten</li>
+                    <li>• Elementary (Grade 1 to Grade 6)</li>
+                    <li>• Junior High School (Grade 7 to Grade 10)</li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">Senior High School (Grade 11 to Grade 12)</h3>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base">
+                    Academic tracks designed to prepare students for college and future careers:
+                  </p>
+                  <ul className="space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>• Science, Technology, Engineering and Mathematics (STEM)</li>
+                    <li>• Accountancy, Business and Management (ABM)</li>
+                    <li>• Humanities and Social Sciences (HUMSS)</li>
+                    <li>• General Academic Strand (GAS)</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
             
             {/* Admission Process */}
             <section className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">

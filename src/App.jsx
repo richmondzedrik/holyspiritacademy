@@ -24,6 +24,9 @@ const SchoolProfile = lazy(() => import('./pages/SchoolProfile'));
 const VisionMission = lazy(() => import('./pages/VisionMission'));
 const Facilities = lazy(() => import('./pages/Facilities'));
 const Administrators = lazy(() => import('./pages/Administrators'));
+const Achievements = lazy(() => import('./pages/Achievements'));
+const Organizations = lazy(() => import('./pages/Organizations'));
+const Fees = lazy(() => import('./pages/Fees'));
 const Contact = lazy(() => import('./pages/Contact'));
 
 // Loading fallback component
@@ -71,6 +74,9 @@ function App() {
                       <Route path="/vision-mission" element={<VisionMission />} />
                       <Route path="/facilities" element={<Facilities />} />
                       <Route path="/administrators" element={<Administrators />} />
+                      <Route path="/achievements" element={<Achievements />} />
+                      <Route path="/organizations" element={<Organizations />} />
+                      <Route path="/fees" element={<Fees />} />
                       <Route path="/contact" element={<Contact />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
