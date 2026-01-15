@@ -48,12 +48,18 @@ export const DashboardCardSkeleton = () => (
 );
 
 export const PageHeaderSkeleton = () => (
-  <div className="bg-blue-600 dark:bg-blue-700 text-white py-16 mb-12">
-    <div className="max-w-4xl mx-auto px-4">
+  <div className="text-white py-20 mb-20 relative overflow-hidden">
+    <div className="absolute inset-0 bg-gray-300 dark:bg-slate-700"></div>
+    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50"></div>
+    <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]"></div>
+    <div className="max-w-7xl mx-auto px-4 relative z-10">
       <div className="text-center animate-pulse">
-        <div className="h-12 bg-white/20 rounded w-48 mx-auto mb-4"></div>
-        <div className="h-6 bg-white/20 rounded w-64 mx-auto mb-2"></div>
-        <div className="h-6 bg-white/20 rounded w-80 mx-auto"></div>
+        <div className="inline-block mb-6">
+          <div className="bg-white/20 backdrop-blur-sm p-4 rounded-3xl border border-white/30 shadow-xl w-20 h-20 mx-auto"></div>
+        </div>
+        <div className="h-16 bg-white/20 rounded-lg w-64 md:w-96 mx-auto mb-6"></div>
+        <div className="h-6 bg-white/20 rounded w-72 md:w-[32rem] mx-auto mb-2"></div>
+        <div className="h-6 bg-white/20 rounded w-64 md:w-80 mx-auto"></div>
       </div>
     </div>
   </div>
@@ -107,27 +113,101 @@ export const SinglePostSkeleton = () => (
 export const ContactFormSkeleton = () => (
   <div className="space-y-6 animate-pulse">
     <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mb-6"></div>
-    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded"></div>
-    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded"></div>
-    <div className="h-32 bg-gray-200 dark:bg-slate-700 rounded"></div>
-    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded w-32"></div>
+    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-lg"></div>
+    <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-lg"></div>
+    <div className="h-32 bg-gray-200 dark:bg-slate-700 rounded-lg"></div>
+    <div className="h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg w-32"></div>
+  </div>
+);
+
+export const SchoolProfileContentSkeleton = () => (
+  <div className="space-y-12 animate-pulse">
+    <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
+      <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-6"></div>
+      <div className="space-y-4">
+        <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+        <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+        <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-5/6"></div>
+        <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-4/5"></div>
+      </div>
+    </div>
+    <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
+      <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/3 mb-8"></div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="group p-6 rounded-2xl border border-gray-200 dark:border-slate-700">
+            <div className="w-16 h-16 rounded-2xl bg-gray-200 dark:bg-slate-700 mb-4"></div>
+            <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-2/3 mb-2"></div>
+            <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+export const VisionMissionContentSkeleton = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 animate-pulse">
+    <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
+      <div className="inline-flex mb-6">
+        <div className="w-16 h-16 rounded-2xl bg-gray-200 dark:bg-slate-700"></div>
+      </div>
+      <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mb-6"></div>
+      <div className="space-y-3">
+        <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+        <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+        <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-5/6"></div>
+      </div>
+    </div>
+    <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
+      <div className="inline-flex mb-6">
+        <div className="w-16 h-16 rounded-2xl bg-gray-200 dark:bg-slate-700"></div>
+      </div>
+      <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mb-6"></div>
+      <div className="space-y-3">
+        <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+        <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+        <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-4/5"></div>
+      </div>
+    </div>
   </div>
 );
 
 export const AdmissionsContentSkeleton = () => (
-  <div className="space-y-8 animate-pulse">
-    <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/2 mb-8"></div>
-    <div className="space-y-6">
-      {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="flex gap-6 p-6 rounded-2xl border border-gray-200 dark:border-slate-700">
-          <div className="w-14 h-14 rounded-2xl bg-gray-200 dark:bg-slate-700"></div>
-          <div className="flex-1 space-y-2">
-            <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3"></div>
-            <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
-            <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-5/6"></div>
+  <div className="space-y-12 animate-pulse">
+    <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">
+      <div className="flex items-center gap-4 mb-10">
+        <div className="w-12 h-12 rounded-2xl bg-gray-200 dark:bg-slate-700"></div>
+        <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-1/2"></div>
+      </div>
+      <div className="space-y-6">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="flex gap-6 p-6 rounded-2xl border border-gray-200 dark:border-slate-700">
+            <div className="w-14 h-14 rounded-2xl bg-gray-200 dark:bg-slate-700 flex-shrink-0"></div>
+            <div className="flex-1 space-y-2">
+              <div className="h-6 bg-gray-200 dark:bg-slate-700 rounded w-1/3"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-full"></div>
+              <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+      <div className="mt-10 pt-8 border-t border-gray-200 dark:border-slate-700">
+        <div className="h-12 bg-gray-200 dark:bg-slate-700 rounded-lg w-48"></div>
+      </div>
+    </div>
+    <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">
+      <div className="flex items-center gap-4 mb-10">
+        <div className="w-12 h-12 rounded-2xl bg-gray-200 dark:bg-slate-700"></div>
+        <div className="h-10 bg-gray-200 dark:bg-slate-700 rounded w-2/3"></div>
+      </div>
+      <div className="space-y-4">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden">
+            <div className="h-16 bg-gray-50 dark:bg-slate-700/50 p-6"></div>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 );
@@ -136,8 +216,10 @@ export const ProfileSkeleton = () => (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white dark:from-slate-900 dark:to-slate-800 py-12 px-4 animate-pulse">
     <div className="max-w-4xl mx-auto">
       <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-700">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12">
-          <div className="flex flex-col md:flex-row items-center gap-6">
+        <div className="px-8 py-12 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gray-300 dark:bg-slate-700"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50"></div>
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
             <div className="w-32 h-32 rounded-full bg-white/20 border-4 border-white"></div>
             <div className="flex-1 space-y-3">
               <div className="h-8 bg-white/20 rounded w-48"></div>

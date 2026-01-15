@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, FileText, CheckCircle, HelpCircle, School, BookOpen } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import { PageHeaderSkeleton, AdmissionsContentSkeleton } from '../components/common/Skeletons';
+import hsabImage from '../assets/hsab.jpg';
 
 const Admissions = () => {
   const [loading, setLoading] = useState(true);
@@ -113,9 +114,13 @@ const Admissions = () => {
       />
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-20 pb-16">
       {/* Hero Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-800 dark:to-blue-900 text-white py-20 mb-16 relative overflow-hidden">
+      <div className="text-white py-20 mb-16 relative overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${hsabImage})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]" />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
             <div className="inline-block mb-6">

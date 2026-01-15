@@ -4,6 +4,7 @@ import { getUserData, updateUserProfile } from '../services/userService';
 import { User, Mail, Shield, CheckCircle, XCircle, Camera, Save } from 'lucide-react';
 import { ProfileSkeleton } from '../components/common/Skeletons';
 import toast from 'react-hot-toast';
+import hsabImage from '../assets/hsab.jpg';
 
 const MyAccount = () => {
   const { currentUser, sendVerificationEmail } = useAuth();
@@ -73,8 +74,12 @@ const MyAccount = () => {
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 animate-fade-in">
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-12 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+          <div className="px-8 py-12 text-white relative overflow-hidden">
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: `url(${hsabImage})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
               <div className="relative">
                 <img 
