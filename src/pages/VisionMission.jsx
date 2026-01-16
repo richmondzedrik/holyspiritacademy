@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
 import { Eye, Target, BookOpen } from 'lucide-react';
 import { PageHeaderSkeleton, VisionMissionContentSkeleton } from '../components/common/Skeletons';
 import hsabImage from '../assets/hsab.jpg';
+import { usePageLoader } from '../hooks/usePageLoader';
 
 const VisionMission = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const loading = usePageLoader();
 
   if (loading) {
     return (
       <>
-        <SEO 
+        <SEO
           title="Vision & Mission - Holy Spirit Academy of Bangued"
           description="Our vision and mission guide our commitment to educational excellence and character development at Holy Spirit Academy of Bangued."
           keywords="vision, mission, educational goals, Holy Spirit Academy, Bangued"
@@ -36,7 +29,7 @@ const VisionMission = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Vision & Mission - Holy Spirit Academy of Bangued"
         description="Our vision and mission guide our commitment to educational excellence and character development at Holy Spirit Academy of Bangued."
         keywords="vision, mission, educational goals, Holy Spirit Academy, Bangued"
@@ -44,7 +37,7 @@ const VisionMission = () => {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-24 pb-16">
         {/* Hero Header */}
         <div className="text-white py-20 mb-20 relative overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${hsabImage})` }}
           />
@@ -68,7 +61,7 @@ const VisionMission = () => {
             </FadeIn>
           </div>
         </div>
-          
+
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             <FadeIn delay={100}>
@@ -86,7 +79,7 @@ const VisionMission = () => {
                 </p>
               </div>
             </FadeIn>
-            
+
             <FadeIn delay={200}>
               <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
                 <div className="inline-flex mb-6">

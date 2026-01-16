@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
 import ContactForm from '../components/common/ContactForm';
@@ -6,22 +6,15 @@ import SchoolMap from '../components/common/SchoolMap';
 import { Phone, Mail, Building } from 'lucide-react';
 import { PageHeaderSkeleton, ContactFormSkeleton } from '../components/common/Skeletons';
 import hsabImage from '../assets/hsab.jpg';
+import { usePageLoader } from '../hooks/usePageLoader';
 
 const Contact = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const loading = usePageLoader(500);
 
   if (loading) {
     return (
       <>
-        <SEO 
+        <SEO
           title="Contact Us - Holy Spirit Academy of Bangued"
           description="Get in touch with Holy Spirit Academy of Bangued. We'd love to hear from you and answer any questions you may have."
           keywords="contact, get in touch, school contact, Holy Spirit Academy, Bangued"
@@ -54,7 +47,7 @@ const Contact = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Contact Us - Holy Spirit Academy of Bangued"
         description="Get in touch with Holy Spirit Academy of Bangued. We'd love to hear from you and answer any questions you may have."
         keywords="contact, get in touch, school contact, Holy Spirit Academy, Bangued"
@@ -62,7 +55,7 @@ const Contact = () => {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-24 pb-16">
         {/* Hero Header */}
         <div className="text-white py-20 mb-20 relative overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${hsabImage})` }}
           />
@@ -80,7 +73,7 @@ const Contact = () => {
                   Contact Us
                 </h1>
                 <p className="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto leading-relaxed">
-                  Have questions or feedback? We'd love to hear from you. Fill out the form below, 
+                  Have questions or feedback? We'd love to hear from you. Fill out the form below,
                   and our administration will get back to you as soon as possible.
                 </p>
               </div>
@@ -100,25 +93,25 @@ const Contact = () => {
                     Get in Touch
                   </h2>
                 </div>
-                
+
                 <div className="space-y-6 mb-10">
                   {[
-                    { 
-                      icon: Building, 
-                      title: "Visit Us", 
-                      text: "School Street, Bangued, Abra, Philippines",
+                    {
+                      icon: Building,
+                      title: "Visit Us",
+                      text: "Corner Mckinley and Taft Streets, Zone 6, Bangued, Abra",
                       detail: "We welcome visitors during school hours"
                     },
-                    { 
-                      icon: Phone, 
-                      title: "Call Us", 
-                      text: "(123) 456-7890",
+                    {
+                      icon: Phone,
+                      title: "Call Us",
+                      text: "(074) 752 - 8084",
                       detail: "Monday to Friday, 8:00 AM - 5:00 PM"
                     },
-                    { 
-                      icon: Mail, 
-                      title: "Email Us", 
-                      text: "info@holyspiritacademy.edu.ph",
+                    {
+                      icon: Mail,
+                      title: "Email Us",
+                      text: "holyspirit_1920@yahoo.com",
                       detail: "We'll respond within 24 hours"
                     }
                   ].map((contact, idx) => (
@@ -157,7 +150,7 @@ const Contact = () => {
                 </div>
               </div>
             </FadeIn>
-            
+
             <FadeIn direction="left" delay={200}>
               <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-700">
                 <ContactForm />
@@ -168,9 +161,9 @@ const Contact = () => {
           {/* Map Section */}
           <FadeIn delay={400}>
             <div className="mt-16">
-              <SchoolMap 
+              <SchoolMap
                 googleMapsLink="https://maps.app.goo.gl/1kAoUXMiy6RfpJoP6"
-                address="School Street, Bangued, Abra, Philippines"
+                address="Corner Mckinley and Taft Streets, Zone 6, Bangued, Abra"
                 schoolName="Holy Spirit Academy of Bangued"
               />
             </div>

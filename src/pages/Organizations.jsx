@@ -1,95 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
-import { Users, Star, Trophy, Heart, Sparkles, BookOpen, Music, PenTool } from 'lucide-react';
+import { Users, Star, Trophy, Heart, Sparkles, BookOpen, Music, GraduationCap, Palette, Microscope, Feather, Globe, Smile } from 'lucide-react';
 import { PageHeaderSkeleton } from '../components/common/Skeletons';
 import hsabImage from '../assets/hsab.jpg';
+import { usePageLoader } from '../hooks/usePageLoader';
+import { elementaryClubs, highSchoolClubs } from '../data/organizations';
 
 const Organizations = () => {
-  const [loading, setLoading] = useState(true);
+  const loading = usePageLoader(400);
+  const [activeTab, setActiveTab] = useState('all');
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
-  }, []);
+  const tabs = [
+    { id: 'all', label: 'All Organizations', icon: Users },
+    { id: 'elementary', label: 'Elementary', icon: BookOpen },
+    { id: 'highschool', label: 'High School', icon: GraduationCap },
+  ];
 
-  const elementaryClubs = {
-    title: 'Grade School Organizations',
-    description: 'Nurturing young talents and building character through active participation.',
-    groups: [
-      {
-        name: 'Academic & Special Interest',
-        icon: Star,
-        items: [
-          'Arts Club',
-          'Book Lovers Club',
-          'English–Filipino Club',
-          'Mathematics–Science Club',
-          'E-Pen Club',
-          'I Can Read Club',
-          'I Can Count Club',
-        ],
-      },
-      {
-        name: 'Service & Leadership',
-        icon: Heart,
-        items: [
-          'Kids’ Crew Club',
-          'Young Movers Club',
-          'Boy Scouts of the Philippines',
-          'Knights of the Altar',
-          'Children of Mary',
-        ],
-      },
-      {
-        name: 'Performing Arts & Sports',
-        icon: Music,
-        items: [
-          'Drum and Lyre Corps',
-          'Sports Club',
-        ],
-      },
-    ],
+  // Helper to get a nice icon for a club based on its name
+  const getClubIcon = (clubName) => {
+    const name = clubName.toLowerCase();
+    if (name.includes('math') || name.includes('science') || name.includes('e-pen')) return Microscope;
+    if (name.includes('arts') || name.includes('painting')) return Palette;
+    if (name.includes('book') || name.includes('read') || name.includes('writers')) return Feather;
+    if (name.includes('music') || name.includes('lyre') || name.includes('chorale')) return Music;
+    if (name.includes('scout') || name.includes('crew') || name.includes('service')) return Globe;
+    if (name.includes('sport')) return Trophy;
+    if (name.includes('mary') || name.includes('altar') || name.includes('religious')) return Heart;
+    return Star;
   };
 
-  const highSchoolClubs = {
-    title: 'High School Organizations',
-    description: 'Developing leadership skills and fostering camaraderie among students.',
-    groups: [
-      {
-        name: 'Academic Clubs',
-        icon: BookOpen,
-        items: [
-          'Filipiniana Club',
-          'Writers’ Guild',
-          'Math–Science Club',
-          'Homemakers Club',
-          'Book Lovers Club',
-        ],
-      },
-      {
-        name: 'Religious Clubs',
-        icon: Sparkles,
-        items: [
-          'Catholic Women’s League (CWL)',
-          'HSABAI Chorale',
-          'Knights / Handmaids of the Altar',
-          'Junior Lay Ministers',
-        ],
-      },
-      {
-        name: 'Special Interest',
-        icon: Trophy,
-        items: [
-          'E-Club',
-          'Drum and Lyre Corps (DLC)',
-          'Sports Club',
-          'Performing Arts Club',
-          'Peer Counseling',
-        ],
-      },
-    ],
+  const renderClubCard = (clubName, index, colorClass) => {
+    const Icon = getClubIcon(clubName);
+    return (
+      <FadeIn key={clubName} delay={index * 30}>
+        <div className="group bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 dark:border-slate-700 flex flex-col items-center text-center h-full relative overflow-hidden">
+
+          <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${colorClass}`}></div>
+          <div className={`absolute -right-6 -top-6 w-20 h-20 bg-gradient-to-br ${colorClass} opacity-5 rounded-full group-hover:scale-150 transition-transform duration-500`}></div>
+
+          <div className={`mb-4 p-3 rounded-full bg-gradient-to-br ${colorClass} bg-opacity-10 text-white shadow-md group-hover:scale-110 transition-transform duration-300`}>
+            <Icon size={24} />
+          </div>
+
+          <h4 className="font-bold text-gray-800 dark:text-gray-100 mb-1 z-10">{clubName}</h4>
+
+          <div className="mt-auto pt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider">View Details</span>
+          </div>
+        </div>
+      </FadeIn>
+    );
   };
+
+  const renderSection = (title, groups, colorClass) => (
+    <div className="space-y-12">
+      {groups.map((group, groupIdx) => (
+        <div key={group.name} className="relative">
+          <div className="flex items-center gap-4 mb-6">
+            <div className={`p-2 rounded-lg bg-gradient-to-br ${colorClass} text-white shadow-sm`}>
+              {React.createElement(group.icon || Users, { size: 20 })}
+            </div>
+            <h3 className="text-2xl font-bold text-gray-800 dark:text-white">{group.name}</h3>
+            <div className="h-px flex-1 bg-gray-100 dark:bg-slate-700"></div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {group.items.map((item, idx) => renderClubCard(item, idx + (groupIdx * 5), colorClass))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   if (loading) {
     return (
@@ -102,9 +84,11 @@ const Organizations = () => {
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-24 pb-16">
           <PageHeaderSkeleton />
           <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              <div className="h-96 bg-gray-200 dark:bg-slate-700 rounded-3xl animate-pulse"></div>
-              <div className="h-96 bg-gray-200 dark:bg-slate-700 rounded-3xl animate-pulse"></div>
+            <div className="h-20 bg-gray-200 dark:bg-slate-700 rounded-xl mb-12 animate-pulse"></div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div key={i} className="h-40 bg-gray-200 dark:bg-slate-700 rounded-2xl animate-pulse"></div>
+              ))}
             </div>
           </div>
         </div>
@@ -112,23 +96,8 @@ const Organizations = () => {
     );
   }
 
-  const renderGroup = (group, index) => (
-    <div key={group.name} className="bg-gray-50 dark:bg-slate-700/50 p-6 rounded-2xl hover:bg-blue-50 dark:hover:bg-slate-700 transition-all duration-300 border border-transparent hover:border-blue-200 dark:hover:border-blue-800 group-card">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="bg-white dark:bg-slate-800 p-2 rounded-xl shadow-sm group-hover:shadow-md transition-shadow">
-          {React.createElement(group.icon || Users, { size: 20, className: "text-blue-600 dark:text-blue-400" })}
-        </div>
-        <h3 className="text-lg font-bold text-gray-900 dark:text-white">{group.name}</h3>
-      </div>
-      <div className="flex flex-wrap gap-2">
-        {group.items.map((item) => (
-          <span key={item} className="inline-block px-3 py-1 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 text-sm rounded-full shadow-sm border border-gray-100 dark:border-slate-600">
-            {item}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
+  const showElementary = activeTab === 'all' || activeTab === 'elementary';
+  const showHighSchool = activeTab === 'all' || activeTab === 'highschool';
 
   return (
     <>
@@ -138,27 +107,27 @@ const Organizations = () => {
         keywords="organizations, clubs, student life, Holy Spirit Academy, Bangued"
       />
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-24 pb-16">
-        {/* Hero Header */}
-        <div className="text-white py-20 mb-20 relative overflow-hidden">
+        {/* Simple Hero Header */}
+        <div className="text-white py-20 mb-12 relative overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${hsabImage})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-black/60" />
           <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]" />
           <div className="max-w-7xl mx-auto px-4 relative z-10">
             <FadeIn>
               <div className="text-center">
-                <div className="inline-block mb-6">
-                  <div className="bg-white/20 backdrop-blur-sm p-4 rounded-3xl border border-white/30 shadow-xl">
-                    <Users className="text-white" size={40} />
+                <div className="inline-block mb-4">
+                  <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-xl">
+                    <Users className="text-white" size={32} />
                   </div>
                 </div>
-                <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  Student Life
+                <h1 className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+                  Student Organizations
                 </h1>
-                <p className="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto leading-relaxed">
-                  Join our vibrant community of learners and leaders. Discover clubs that match your passions.
+                <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto font-light">
+                  Discover your passion, build leadership skills, and make lifelong friends.
                 </p>
               </div>
             </FadeIn>
@@ -166,34 +135,61 @@ const Organizations = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <FadeIn direction="right">
-              <section className="h-full bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
-                <div className="mb-8">
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {elementaryClubs.title}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400">{elementaryClubs.description}</p>
-                </div>
-                <div className="space-y-4">
-                  {elementaryClubs.groups.map(renderGroup)}
-                </div>
-              </section>
-            </FadeIn>
+          {/* Tabs */}
+          <FadeIn delay={100}>
+            <div className="flex flex-wrap justify-center gap-2 mb-16">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 ${activeTab === tab.id
+                      ? 'bg-blue-600 text-white shadow-lg scale-105 ring-4 ring-blue-500/20'
+                      : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700'
+                    }`}
+                >
+                  <tab.icon size={18} />
+                  <span>{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </FadeIn>
 
-            <FadeIn direction="left" delay={150}>
-              <section className="h-full bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
-                <div className="mb-8">
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {highSchoolClubs.title}
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400">{highSchoolClubs.description}</p>
-                </div>
-                <div className="space-y-4">
-                  {highSchoolClubs.groups.map(renderGroup)}
-                </div>
+          <div className="space-y-24">
+            {showElementary && (
+              <section className="scroll-mt-24">
+                <FadeIn delay={150}>
+                  <div className="mb-10 text-center md:text-left">
+                    <span className="text-green-600 dark:text-green-400 font-bold tracking-wider uppercase text-sm mb-2 block">Grade School</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                      {elementaryClubs.title}
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 max-w-3xl leading-relaxed">
+                      {elementaryClubs.description}
+                    </p>
+                  </div>
+                </FadeIn>
+
+                {renderSection(elementaryClubs.title, elementaryClubs.groups, 'from-green-500 to-emerald-600')}
               </section>
-            </FadeIn>
+            )}
+
+            {showHighSchool && (
+              <section className="scroll-mt-24">
+                <FadeIn delay={300}>
+                  <div className="mb-10 text-center md:text-left">
+                    <span className="text-blue-600 dark:text-blue-400 font-bold tracking-wider uppercase text-sm mb-2 block">High School</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                      {highSchoolClubs.title}
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 max-w-3xl leading-relaxed">
+                      {highSchoolClubs.description}
+                    </p>
+                  </div>
+                </FadeIn>
+
+                {renderSection(highSchoolClubs.title, highSchoolClubs.groups, 'from-blue-600 to-indigo-600')}
+              </section>
+            )}
           </div>
         </div>
       </div>
@@ -202,4 +198,3 @@ const Organizations = () => {
 };
 
 export default Organizations;
-

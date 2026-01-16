@@ -16,24 +16,27 @@ const AnnouncementCard = ({ post }) => {
   // Format date with relative time
   const formatDate = () => {
     if (!post.createdAt?.seconds) return 'Just now';
-    
+
     const date = new Date(post.createdAt.seconds * 1000);
     const now = new Date();
     const diffInSeconds = Math.floor((now - date) / 1000);
     const diffInDays = Math.floor(diffInSeconds / 86400);
-    
+
     if (diffInDays === 0) {
       return 'Today';
     } else if (diffInDays === 1) {
       return 'Yesterday';
-    } else if (diffInDays < 7) {
+    } else if (diffInDays > 0 && diffInDays < 7) {
       return `${diffInDays} days ago`;
+    } else if (diffInDays < 0 && diffInDays > -7) {
+      // Optional: Handle "In X days" if desired, or just fall through to date
+      // For now, let's fall through to full date for clarity on future events
     }
-    
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
@@ -43,9 +46,9 @@ const AnnouncementCard = ({ post }) => {
     <article className="group bg-white dark:bg-slate-800 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 flex flex-col h-full animate-fade-in transform hover:-translate-y-2">
       {post.imageUrl && (
         <div className="h-64 overflow-hidden relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-700 dark:to-slate-800">
-          <img 
-            src={post.imageUrl} 
-            alt={post.title} 
+          <img
+            src={post.imageUrl}
+            alt={post.title}
             className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
             loading="lazy"
           />
@@ -60,7 +63,7 @@ const AnnouncementCard = ({ post }) => {
           </div>
         </div>
       )}
-      
+
       <div className="p-8 flex-grow flex flex-col">
         {!post.imageUrl && (
           <div className="mb-4">
@@ -70,19 +73,19 @@ const AnnouncementCard = ({ post }) => {
             </div>
           </div>
         )}
-        
+
         <h3 className="text-2xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 leading-tight line-clamp-2">
           {post.title}
         </h3>
-        
-        <div 
+
+        <div
           className={`text-gray-600 dark:text-gray-300 mb-6 prose prose-sm dark:prose-invert max-w-none leading-relaxed ${!expanded ? 'line-clamp-4' : ''}`}
           dangerouslySetInnerHTML={{ __html: cleanContent }}
         />
-        
+
         <div className="flex items-center justify-between mt-auto pt-6 border-t border-gray-100 dark:border-slate-700">
           {isLongContent && (
-            <button 
+            <button
               onClick={() => setExpanded(!expanded)}
               className="group/read inline-flex items-center gap-2 px-4 py-2 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-semibold rounded-lg transition-all duration-300 text-sm hover:shadow-md"
             >
@@ -100,7 +103,7 @@ const AnnouncementCard = ({ post }) => {
             </button>
           )}
 
-          <button 
+          <button
             onClick={() => setShowComments(!showComments)}
             className={`inline-flex items-center gap-2 px-5 py-2.5 ${showComments ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300'} font-semibold rounded-lg transition-all duration-300 text-sm shadow-sm hover:shadow-md`}
           >

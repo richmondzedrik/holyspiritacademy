@@ -19,6 +19,7 @@ const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const MyAccount = lazy(() => import('./pages/MyAccount'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const AuthAction = lazy(() => import('./pages/AuthAction'));
+const UpcomingEvents = lazy(() => import('./pages/UpcomingEvents'));
 const Announcements = lazy(() => import('./pages/Announcements'));
 const SchoolProfile = lazy(() => import('./pages/SchoolProfile'));
 const VisionMission = lazy(() => import('./pages/VisionMission'));
@@ -28,6 +29,7 @@ const Achievements = lazy(() => import('./pages/Achievements'));
 const Organizations = lazy(() => import('./pages/Organizations'));
 const Fees = lazy(() => import('./pages/Fees'));
 const Contact = lazy(() => import('./pages/Contact'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -71,6 +73,7 @@ const AppContent = () => {
               <Route path="/admissions" element={<Admissions />} />
               <Route path="/announcements/:id" element={<Announcements />} />
               <Route path="/announcements" element={<Announcements />} />
+              <Route path="/upcoming-events" element={<UpcomingEvents />} />
               <Route path="/school-profile" element={<SchoolProfile />} />
               <Route path="/vision-mission" element={<VisionMission />} />
               <Route path="/facilities" element={<Facilities />} />
@@ -105,6 +108,9 @@ const AppContent = () => {
                   </ProtectedRoute>
                 }
               />
+
+              {/* 404 Catch-all */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
         </ErrorBoundary>

@@ -8,6 +8,8 @@ import SchoolMap from '../components/common/SchoolMap';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
 import { PostSkeleton } from '../components/common/Skeletons';
+import StudentLifeHighlights from '../components/home/StudentLifeHighlights';
+import HomeUpcomingEvents from '../components/home/HomeUpcomingEvents';
 import {
   Bell,
   BookOpen,
@@ -121,6 +123,12 @@ const Home = () => {
             )}
           </div>
         </section>
+
+        {/* Upcoming Events Section - Preview */}
+        <HomeUpcomingEvents />
+
+        {/* Student Life Highlights */}
+        <StudentLifeHighlights />
 
         {/* About Section */}
         <section id="about" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
@@ -319,7 +327,7 @@ const Home = () => {
 
         {/* Administrators Section */}
         <section id="administrators" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-7xl mx-auto relative group/section">
             <FadeIn>
               <div className="text-center mb-16">
                 <div className="inline-block mb-4">
@@ -328,38 +336,95 @@ const Home = () => {
                   </div>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  School Administrators
+                  School Administrators & Faculty
                 </h2>
                 <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                  Meet the dedicated leaders guiding our institution.
+                  Meet the dedicated leaders and teachers guiding our institution.
                 </p>
               </div>
             </FadeIn>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-              {administrators.slice(0, 4).map((admin, index) => (
-                <FadeIn key={admin.id} delay={index * 100}>
-                  <div className="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 hover:-translate-y-2 text-center">
-                    <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-blue-50 dark:border-blue-900/50 mb-6 group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors">
-                      <img
-                        src={admin.image}
-                        alt={admin.name}
-                        className="w-full h-full object-cover relative z-10"
-                      />
+            {/* Slider Container */}
+            <div className="relative px-4 md:px-20">
+              {/* Navigation Arrows */}
+              <button
+                onClick={() => document.getElementById('admin-slider').scrollBy({ left: -320, behavior: 'smooth' })}
+                className="absolute left-0 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg border border-gray-100 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 hover:scale-110 transition-all focus:outline-none hidden md:flex items-center justify-center cursor-pointer"
+                aria-label="Previous"
+                type="button"
+              >
+                <ArrowRight size={24} className="rotate-180" />
+              </button>
+
+              <button
+                onClick={() => document.getElementById('admin-slider').scrollBy({ left: 320, behavior: 'smooth' })}
+                className="absolute right-0 md:right-4 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg border border-gray-100 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 hover:scale-110 transition-all focus:outline-none hidden md:flex items-center justify-center cursor-pointer"
+                aria-label="Next"
+                type="button"
+              >
+                <ArrowRight size={24} />
+              </button>
+
+              <div
+                id="admin-slider"
+                className="flex overflow-x-auto gap-6 pb-12 snap-x snap-mandatory hide-scrollbar scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {[
+                  // Key Admins
+                  { ...administrators[1].members[0], role: 'Superintendent', color: 'from-indigo-500 to-indigo-600' },
+                  { ...administrators[2].members[0], role: 'Director', color: 'from-blue-500 to-blue-600' },
+                  { ...administrators[2].members[1], role: 'Principal (GS)', color: 'from-green-500 to-green-600' },
+                  { ...administrators[4].members[1], role: 'Principal (HS)', color: 'from-blue-600 to-cyan-600' },
+                  // Faculty Samples
+                  { ...administrators[3].members[0], role: 'Kindergarten Adviser', color: 'from-orange-400 to-orange-500' },
+                  { ...administrators[3].members[1], role: 'Grade 1 Adviser', color: 'from-teal-400 to-teal-500' },
+                  { ...administrators[5].members[0], role: 'HS Teacher', color: 'from-purple-500 to-purple-600' },
+                  { ...administrators[5].members[2], role: 'HS Teacher', color: 'from-pink-500 to-pink-600' },
+                ].map((admin, index) => {
+                  const initials = admin.name
+                    .split(' ')
+                    .map(n => n[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase();
+
+                  return (
+                    <div key={admin.id} className="min-w-[280px] md:min-w-[300px] snap-center">
+                      <FadeIn delay={index * 100} className="h-full">
+                        <div className="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 hover:-translate-y-2 text-center h-full flex flex-col items-center">
+                          <div className={`w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-blue-50 dark:border-blue-900/50 mb-6 group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors flex items-center justify-center bg-gradient-to-br ${admin.color}`}>
+                            {admin.image ? (
+                              <img
+                                src={admin.image}
+                                alt={admin.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-3xl font-bold text-white tracking-widest">{initials}</span>
+                            )}
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight min-h-[3.5rem] flex items-center justify-center">
+                            {admin.name}
+                          </h3>
+                          <p className="text-blue-600 dark:text-blue-400 font-medium text-xs bg-blue-50 dark:bg-blue-900/20 py-1.5 px-3 rounded-full inline-block max-w-full truncate">
+                            {admin.role || admin.position}
+                          </p>
+                        </div>
+                      </FadeIn>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{admin.name}</h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium text-sm bg-blue-50 dark:bg-blue-900/20 py-1 px-3 rounded-full inline-block">{admin.position}</p>
-                  </div>
-                </FadeIn>
-              ))}
+                  );
+                })}
+              </div>
             </div>
+
             <FadeIn delay={400}>
-              <div className="text-center">
+              <div className="text-center mt-4">
                 <Link
                   to="/administrators"
                   className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:gap-4 transition-all"
                 >
-                  <span>View Full Administration</span>
+                  <span>View All Administrators & Faculty</span>
                   <ArrowRight size={20} />
                 </Link>
               </div>

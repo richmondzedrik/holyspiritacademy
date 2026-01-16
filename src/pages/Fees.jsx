@@ -1,17 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
-import { Banknote, CreditCard, Receipt } from 'lucide-react';
+import { Banknote, Receipt, ChevronDown, ChevronUp, AlertCircle, School, GraduationCap } from 'lucide-react';
 import { PageHeaderSkeleton } from '../components/common/Skeletons';
 import hsabImage from '../assets/hsab.jpg';
+import { usePageLoader } from '../hooks/usePageLoader';
+
+const FeeItem = ({ label, amount, isTotal = false, isSubtotal = false }) => (
+  <div className={`flex justify-between items-center py-2 ${isTotal ? 'border-t-2 border-gray-200 dark:border-slate-600 mt-2 font-bold text-lg text-blue-600 dark:text-blue-400' : isSubtotal ? 'border-t border-gray-100 dark:border-slate-700 mt-1 font-semibold text-gray-800 dark:text-gray-200' : 'text-gray-600 dark:text-gray-300 text-sm'}`}>
+    <span>{label}</span>
+    <span>{amount}</span>
+  </div>
+);
+
+const FeeCard = ({ grade, total, items, delay }) => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <FadeIn delay={delay}>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div
+          className="p-6 bg-gradient-to-r from-gray-50 to-white dark:from-slate-700 dark:to-slate-800 cursor-pointer flex justify-between items-center"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white">{grade}</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Total Fees</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">{total}</span>
+            <div className={`p-2 rounded-full bg-blue-50 dark:bg-slate-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+              <ChevronDown size={20} className="text-blue-600 dark:text-blue-300" />
+            </div>
+          </div>
+        </div>
+
+        <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="p-6 pt-0 border-t border-gray-100 dark:border-slate-700">
+            <div className="mt-4 space-y-1">
+              {items.map((item, idx) => (
+                item.isSection ? (
+                  <h4 key={idx} className="font-semibold text-gray-800 dark:text-gray-200 mt-4 mb-2">{item.label}</h4>
+                ) : (
+                  <FeeItem key={idx} label={item.label} amount={item.amount} isSubtotal={item.isSubtotal} />
+                )
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </FadeIn>
+  );
+};
 
 const Fees = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(timer);
-  }, []);
+  const loading = usePageLoader(400);
+  const [activeTab, setActiveTab] = useState('grade_school');
 
   if (loading) {
     return (
@@ -34,6 +78,11 @@ const Fees = () => {
     );
   }
 
+  const tabs = [
+    { id: 'grade_school', label: 'Grade School', icon: School },
+    { id: 'high_school', label: 'High School', icon: GraduationCap },
+  ];
+
   return (
     <>
       <SEO
@@ -43,8 +92,8 @@ const Fees = () => {
       />
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-24 pb-16">
         {/* Hero Header */}
-        <div className="text-white py-20 mb-20 relative overflow-hidden">
-          <div 
+        <div className="text-white py-20 mb-12 relative overflow-hidden">
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${hsabImage})` }}
           />
@@ -62,88 +111,218 @@ const Fees = () => {
                   Tuition & Fees
                 </h1>
                 <p className="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto leading-relaxed">
-                  The following sections summarize the schedule of fees for the academic year 2025–2026.
+                  Academic Year 2025–2026 Schedule of Fees
                 </p>
               </div>
             </FadeIn>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="mb-12">
-            <FadeIn delay={100}>
-               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-center leading-relaxed bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/50">
-                <span className="font-semibold text-blue-600 dark:text-blue-400">Note:</span> Amounts are referenced from the official HSAB brochure. For the most updated and detailed breakdown per item, please refer to the Registrar’s Office.
+        <div className="max-w-5xl mx-auto px-4">
+
+          {/* Tabs */}
+          <FadeIn delay={100}>
+            <div className="flex justify-center mb-12">
+              <div className="bg-white dark:bg-slate-800 p-1.5 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 inline-flex">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === tab.id
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'
+                      }`}
+                  >
+                    <tab.icon size={18} />
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Important Note */}
+          <FadeIn delay={200}>
+            <div className="mb-10 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-800/50 flex gap-3 items-start">
+              <AlertCircle className="text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" size={20} />
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                <span className="font-bold">Note:</span> Amounts are referenced from the official HSAB brochure. Booksale in all grade levels are not yet included. For the most updated breakdown, please refer to the Registrar’s Office.
               </p>
-            </FadeIn>
-          </div>
+            </div>
+          </FadeIn>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <FadeIn direction="right" delay={200}>
-              <section className="h-full bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-3 rounded-2xl shadow-lg">
-                    <Receipt className="text-white" size={28} />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                    Grade School <span className="block text-lg font-normal text-gray-500 dark:text-gray-400 mt-1">Kindergarten – Grade 6</span>
-                  </h2>
-                </div>
-                
-                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  Fees include tuition, subscriptions, school organ, DSO service fee, PTA fee, and miscellaneous fees.
-                </p>
-                
-                <div className="space-y-3">
-                  {['Kindergarten', 'Grade One', 'Grade Two', 'Grade Three', 'Grade Four', 'Grade Five', 'Grade Six'].map((grade, idx) => (
-                    <div key={idx} className="flex items-center p-3 rounded-xl bg-gray-50 dark:bg-slate-700/50 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors border border-transparent hover:border-blue-100 dark:hover:border-blue-800">
-                      <div className="w-2 h-2 rounded-full bg-blue-500 mr-3"></div>
-                      <span className="text-gray-700 dark:text-gray-200 font-medium">{grade}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-100 dark:border-yellow-800/50">
-                  <p className="text-sm text-yellow-800 dark:text-yellow-200 flex gap-2">
-                    <span className="font-bold">Note:</span> Book sales are not yet included in the printed schedule of fees.
-                  </p>
-                </div>
-              </section>
-            </FadeIn>
+          <div className="space-y-6">
+            {activeTab === 'grade_school' ? (
+              <>
+                <FeeCard
+                  grade="Kindergarten"
+                  total="₱ 9,825.00"
+                  delay={300}
+                  items={[
+                    { label: "Tuition fee", amount: "₱ 7,500.00" },
+                    { label: "Other fees", amount: "₱ 1,000.00" },
+                    { label: "School Organ", amount: "₱ 80.00" },
+                    { label: "DSO Service fee", amount: "₱ 145.00" },
+                    { label: "PTA fee", amount: "₱ 100.00" },
+                    { label: "Achievement fee", amount: "₱ 300.00" },
+                    { label: "Stud. Insurance", amount: "₱ 40.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "SRS", amount: "₱ 50.00" },
+                    { label: "Test Papers", amount: "₱ 500.00" },
+                    { label: "Misc.", amount: "₱ 10.00" },
+                  ]}
+                />
+                <FeeCard
+                  grade="Grade One"
+                  total="₱ 10,415.00"
+                  delay={350}
+                  items={[
+                    { label: "Tuition fee", amount: "₱ 8,000.00" },
+                    { label: "Other fees", amount: "₱ 950.00" },
+                    { label: "Subscription", amount: "₱ 380.00" },
+                    { label: "School Organ", amount: "₱ 80.00" },
+                    { label: "DSO Service fee", amount: "₱ 145.00" },
+                    { label: "PTA fee", amount: "₱ 100.00" },
+                    { label: "Stud. Insurance", amount: "₱ 40.00" },
+                    { label: "Club fee", amount: "₱ 60.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "SRS", amount: "₱ 50.00" },
+                    { label: "Test Papers", amount: "₱ 500.00" },
+                    { label: "Misc.", amount: "₱ 10.00" },
+                  ]}
+                />
+                <FeeCard
+                  grade="Grade Two"
+                  total="₱ 10,265.00"
+                  delay={400}
+                  items={[
+                    { label: "Tuition fee", amount: "₱ 8,000.00" },
+                    { label: "Other fees", amount: "₱ 950.00" },
+                    { label: "Subscription", amount: "₱ 230.00" },
+                    { label: "School Organ", amount: "₱ 80.00" },
+                    { label: "DSO Service fee", amount: "₱ 145.00" },
+                    { label: "PTA fee", amount: "₱ 100.00" },
+                    { label: "Stud. Insurance", amount: "₱ 40.00" },
+                    { label: "Club fee", amount: "₱ 60.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "SRS", amount: "₱ 50.00" },
+                    { label: "Test Papers", amount: "₱ 500.00" },
+                    { label: "Misc.", amount: "₱ 10.00" },
+                  ]}
+                />
+                <FeeCard
+                  grade="Grade Three"
+                  total="₱ 10,315.00"
+                  delay={450}
+                  items={[
+                    { label: "Tuition fee", amount: "₱ 8,000.00" },
+                    { label: "Other fees", amount: "₱ 950.00" },
+                    { label: "Subscription", amount: "₱ 230.00" },
+                    { label: "School Organ", amount: "₱ 80.00" },
+                    { label: "DSO Service fee", amount: "₱ 145.00" },
+                    { label: "PTA fee", amount: "₱ 100.00" },
+                    { label: "Stud. Insurance", amount: "₱ 40.00" },
+                    { label: "Club fee", amount: "₱ 60.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "SPS", amount: "₱ 100.00" },
+                    { label: "Test Papers", amount: "₱ 500.00" },
+                    { label: "Misc.", amount: "₱ 10.00" },
+                  ]}
+                />
+                <FeeCard
+                  grade="Grade Four to Grade Six"
+                  total="₱ 11,665.00"
+                  delay={500}
+                  items={[
+                    { label: "Tuition fee", amount: "₱ 8,000.00" },
+                    { label: "Other fees", amount: "₱ 1,150.00" },
+                    { label: "Computer fee", amount: "₱ 850.00" },
+                    { label: "Subscription", amount: "₱ 530.00" },
+                    { label: "School Organ", amount: "₱ 80.00" },
+                    { label: "DSO Service fee", amount: "₱ 145.00" },
+                    { label: "PTA fee", amount: "₱ 100.00" },
+                    { label: "Stud. Insurance", amount: "₱ 40.00" },
+                    { label: "Club fee", amount: "₱ 60.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "SPS", amount: "₱ 100.00" },
+                    { label: "Test Papers", amount: "₱ 500.00" },
+                    { label: "Misc.", amount: "₱ 10.00" },
+                  ]}
+                />
+              </>
+            ) : (
+              <>
+                <FeeCard
+                  grade="Junior High School (JHS)"
+                  total="₱ 12,825.00"
+                  delay={300}
+                  items={[
+                    { isSection: true, label: "I. Tuition Fee" },
+                    { label: "Tuition Fee", amount: "₱ 9,000.00" },
+                    { label: "Computer Fee", amount: "₱ 850.00" },
+                    { label: "Subtotal", amount: "₱ 9,850.00", isSubtotal: true },
 
-            <FadeIn direction="left" delay={300}>
-              <section className="h-full bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-3 rounded-2xl shadow-lg">
-                    <CreditCard className="text-white" size={28} />
-                  </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                    High School <span className="block text-lg font-normal text-gray-500 dark:text-gray-400 mt-1">Junior & Senior High</span>
-                  </h2>
-                </div>
+                    { isSection: true, label: "II. Other Fees" },
+                    { label: "Registration Fee", amount: "₱ 300.00" },
+                    { label: "Library Fee", amount: "₱ 200.00" },
+                    { label: "Athletic Fee", amount: "₱ 150.00" },
+                    { label: "Medical Fee", amount: "₱ 150.00" },
+                    { label: "Guidance Fee", amount: "₱ 150.00" },
+                    { label: "Laboratory Fee", amount: "₱ 200.00" },
+                    { label: "Audio Visual Fee", amount: "₱ 150.00" },
+                    { label: "DSO Service Fee", amount: "₱ 145.00" },
+                    { label: "Subtotal", amount: "₱ 1,445.00", isSubtotal: true },
 
-                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  Fees include tuition, computer fees, insurance, test papers, religious services, club fees, and miscellaneous charges.
-                </p>
+                    { isSection: true, label: "III. Subscription and Others" },
+                    { label: "PTA Fee", amount: "₱ 100.00" },
+                    { label: "School Organ", amount: "₱ 80.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "Student Insurance", amount: "₱ 40.00" },
+                    { label: "Test Paper", amount: "₱ 500.00" },
+                    { label: "Student Religious Services", amount: "₱ 100.00" },
+                    { label: "Club Fee", amount: "₱ 60.00" },
+                    { label: "Student Subscription", amount: "₱ 530.00" },
+                    { label: "Miscellaneous", amount: "₱ 20.00" },
+                    { label: "Subtotal", amount: "₱ 1,530.00", isSubtotal: true },
+                  ]}
+                />
 
-                <div className="space-y-3">
-                  <div className="p-4 rounded-xl bg-gray-50 dark:bg-slate-700/50 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors border border-transparent hover:border-blue-100 dark:hover:border-blue-800">
-                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">Junior High School (JHS)</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Grade 7 to Grade 10</p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-gray-50 dark:bg-slate-700/50 hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors border border-transparent hover:border-blue-100 dark:hover:border-blue-800">
-                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">Senior High School (SHS)</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Grade 11 & Grade 12 (All Strands)</p>
-                  </div>
-                </div>
+                <FeeCard
+                  grade="Senior High School (SHS)"
+                  total="₱ 18,665.00"
+                  delay={350}
+                  items={[
+                    { isSection: true, label: "I. Tuition Fee" },
+                    { label: "Tuition Fee", amount: "₱ 14,500.00" },
+                    { label: "Computer Fee", amount: "₱ 900.00" },
+                    { label: "Subtotal", amount: "₱ 15,400.00", isSubtotal: true },
 
-                <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800/50">
-                  <p className="text-sm text-blue-800 dark:text-blue-200 font-medium">
-                    Financial assistance (ESC & Vouchers) available for eligible students.
-                  </p>
-                </div>
-              </section>
-            </FadeIn>
+                    { isSection: true, label: "II. Other Fees" },
+                    { label: "Registration Fee", amount: "₱ 300.00" },
+                    { label: "Library Fee", amount: "₱ 300.00" },
+                    { label: "Athletic Fee", amount: "₱ 200.00" },
+                    { label: "Medical Fee", amount: "₱ 150.00" },
+                    { label: "Guidance Fee", amount: "₱ 150.00" },
+                    { label: "Laboratory Fee", amount: "₱ 300.00" },
+                    { label: "Audio Visual Fee", amount: "₱ 150.00" },
+                    { label: "DSO Service Fee", amount: "₱ 145.00" },
+                    { label: "Subtotal", amount: "₱ 1,695.00", isSubtotal: true },
+
+                    { isSection: true, label: "III. Subscription and Others" },
+                    { label: "PTA Fee", amount: "₱ 100.00" },
+                    { label: "School Organ", amount: "₱ 100.00" },
+                    { label: "ID", amount: "₱ 100.00" },
+                    { label: "Student Insurance", amount: "₱ 40.00" },
+                    { label: "Test Paper", amount: "₱ 500.00" },
+                    { label: "Student Religious Services", amount: "₱ 100.00" },
+                    { label: "Club Fee", amount: "₱ 80.00" },
+                    { label: "Student Subscription", amount: "₱ 500.00" },
+                    { label: "Miscellaneous", amount: "₱ 50.00" },
+                    { label: "Subtotal", amount: "₱ 1,570.00", isSubtotal: true },
+                  ]}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -152,4 +331,3 @@ const Fees = () => {
 };
 
 export default Fees;
-

@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
 import { School, Target, Users, Building } from 'lucide-react';
 import { PageHeaderSkeleton, SchoolProfileContentSkeleton } from '../components/common/Skeletons';
 import hsabImage from '../assets/hsab.jpg';
+import { usePageLoader } from '../hooks/usePageLoader';
 
 const SchoolProfile = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+  const loading = usePageLoader();
 
   if (loading) {
     return (
       <>
-        <SEO 
+        <SEO
           title="School Profile - Holy Spirit Academy of Bangued"
           description="Learn about Holy Spirit Academy of Bangued - our history, values, and commitment to educational excellence."
           keywords="school profile, about us, Holy Spirit Academy, Bangued, education, school history"
@@ -36,7 +29,7 @@ const SchoolProfile = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="School Profile - Holy Spirit Academy of Bangued"
         description="Learn about Holy Spirit Academy of Bangued - our history, values, and commitment to educational excellence."
         keywords="school profile, about us, Holy Spirit Academy, Bangued, education, school history"
@@ -44,7 +37,7 @@ const SchoolProfile = () => {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-slate-900 dark:to-slate-800 pt-24 pb-16">
         {/* Hero Header */}
         <div className="text-white py-20 mb-20 relative overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${hsabImage})` }}
           />
@@ -90,7 +83,7 @@ const SchoolProfile = () => {
                 </div>
               </div>
             </FadeIn>
-            
+
             {/* HSAB Hymn */}
             <FadeIn delay={300}>
               <div className="bg-white dark:bg-slate-800 p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300">
