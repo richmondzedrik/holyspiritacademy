@@ -23,9 +23,9 @@ const UpcomingEvents = () => {
     }, []);
 
     return (
-        <section className="py-24 px-4 bg-white dark:bg-slate-900 relative">
+        <section className="py-16 md:py-24 px-4 bg-white dark:bg-slate-900 relative">
             <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
 
                     <FadeIn direction="right">
                         <div className="sticky top-24">
@@ -34,14 +34,14 @@ const UpcomingEvents = () => {
                                     Mark Your Calendars
                                 </span>
                             </div>
-                            <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
+                            <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
                                 Upcoming Events
                             </h2>
-                            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                                 Don't miss out on what's happening at Holy Spirit Academy. Join us for these upcoming activities.
                             </p>
 
-                            <div className="bg-blue-50 dark:bg-slate-800 p-8 rounded-3xl border border-blue-100 dark:border-slate-700">
+                            <div className="bg-blue-50 dark:bg-slate-800 p-6 md:p-8 rounded-3xl border border-blue-100 dark:border-slate-700">
                                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Why Attend?</h3>
                                 <ul className="space-y-4">
                                     {[
