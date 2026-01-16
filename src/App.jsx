@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -39,81 +39,95 @@ const PageLoader = () => (
   </div>
 );
 
+const AppContent = () => {
+  const location = useLocation();
+  const hideNavFooter = ['/login', '/signup', '/forgot-password', '/auth/action'];
+  const shouldHideNavFooter = hideNavFooter.includes(location.pathname);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          className: 'dark:bg-slate-800 dark:text-white',
+          style: {
+            background: 'var(--toast-bg)',
+            color: 'var(--toast-color)',
+          },
+        }}
+      />
+      {!shouldHideNavFooter && (
+        <ErrorBoundary>
+          <Navbar />
+        </ErrorBoundary>
+      )}
+      <main className="flex-grow">
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/admissions" element={<Admissions />} />
+              <Route path="/announcements/:id" element={<Announcements />} />
+              <Route path="/announcements" element={<Announcements />} />
+              <Route path="/school-profile" element={<SchoolProfile />} />
+              <Route path="/vision-mission" element={<VisionMission />} />
+              <Route path="/facilities" element={<Facilities />} />
+              <Route path="/administrators" element={<Administrators />} />
+              <Route path="/achievements" element={<Achievements />} />
+              <Route path="/organizations" element={<Organizations />} />
+              <Route path="/fees" element={<Fees />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+
+              {/* Firebase Auth Actions (Verify Email, Reset Password) */}
+              <Route path="/auth/action" element={<AuthAction />} />
+
+              {/* User Routes (Protected) */}
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <MyAccount />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* Admin Routes (Protected) */}
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedRoute adminOnly={true}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
+      </main>
+      {!shouldHideNavFooter && (
+        <ErrorBoundary>
+          <Footer />
+        </ErrorBoundary>
+      )}
+    </div>
+  );
+};
+
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-      <AuthProvider>
-        <Router>
+        <AuthProvider>
+          <Router>
             <ScrollToTop />
-            <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
-              <Toaster 
-                position="top-right" 
-                toastOptions={{ 
-                  duration: 4000,
-                  className: 'dark:bg-slate-800 dark:text-white',
-                  style: {
-                    background: 'var(--toast-bg)',
-                    color: 'var(--toast-color)',
-                  },
-                }} 
-              />
-            <ErrorBoundary>
-              <Navbar />
-            </ErrorBoundary>
-            <main className="flex-grow">
-              <ErrorBoundary>
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    {/* Public Routes */}
-                    <Route path="/" element={<Home />} />
-                    <Route path="/admissions" element={<Admissions />} />
-                      <Route path="/announcements/:id" element={<Announcements />} />
-                      <Route path="/announcements" element={<Announcements />} />
-                      <Route path="/school-profile" element={<SchoolProfile />} />
-                      <Route path="/vision-mission" element={<VisionMission />} />
-                      <Route path="/facilities" element={<Facilities />} />
-                      <Route path="/administrators" element={<Administrators />} />
-                      <Route path="/achievements" element={<Achievements />} />
-                      <Route path="/organizations" element={<Organizations />} />
-                      <Route path="/fees" element={<Fees />} />
-                      <Route path="/contact" element={<Contact />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    
-                    {/* Firebase Auth Actions (Verify Email, Reset Password) */}
-                    <Route path="/auth/action" element={<AuthAction />} />
-
-                    {/* User Routes (Protected) */}
-                    <Route 
-                      path="/account" 
-                      element={
-                        <ProtectedRoute>
-                          <MyAccount />
-                        </ProtectedRoute>
-                      } 
-                    />
-
-                    {/* Admin Routes (Protected) */}
-                    <Route 
-                      path="/admin/*" 
-                      element={
-                        <ProtectedRoute adminOnly={true}>
-                          <AdminDashboard />
-                        </ProtectedRoute>
-                      } 
-                    />
-                  </Routes>
-                </Suspense>
-              </ErrorBoundary>
-            </main>
-            <ErrorBoundary>
-              <Footer />
-            </ErrorBoundary>
-          </div>
-        </Router>
-      </AuthProvider>
+            <AppContent />
+          </Router>
+        </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

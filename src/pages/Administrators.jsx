@@ -5,6 +5,8 @@ import { Users } from 'lucide-react';
 import { PageHeaderSkeleton, AdministratorCardSkeleton } from '../components/common/Skeletons';
 import hsabImage from '../assets/hsab.jpg';
 
+import { administrators } from '../data/administrators';
+
 const Administrators = () => {
   const [loading, setLoading] = useState(true);
 
@@ -16,18 +18,11 @@ const Administrators = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Sample administrators data - In a real app, this could come from Firestore
-  const administrators = [
-    { id: 1, name: 'Dr. Maria Santos', position: 'School Principal', image: 'https://ui-avatars.com/api/?name=Maria+Santos&background=0ea5e9&color=fff&size=200' },
-    { id: 2, name: 'Mr. John Dela Cruz', position: 'Vice Principal', image: 'https://ui-avatars.com/api/?name=John+Dela+Cruz&background=3b82f6&color=fff&size=200' },
-    { id: 3, name: 'Ms. Anna Garcia', position: 'Academic Coordinator', image: 'https://ui-avatars.com/api/?name=Anna+Garcia&background=6366f1&color=fff&size=200' },
-    { id: 4, name: 'Mr. Robert Torres', position: 'Student Affairs Director', image: 'https://ui-avatars.com/api/?name=Robert+Torres&background=8b5cf6&color=fff&size=200' }
-  ];
 
   if (loading) {
     return (
       <>
-        <SEO 
+        <SEO
           title="School Administrators - Holy Spirit Academy of Bangued"
           description="Meet the dedicated administrators leading Holy Spirit Academy of Bangued towards educational excellence."
           keywords="administrators, school leadership, principal, vice principal, Holy Spirit Academy"
@@ -48,7 +43,7 @@ const Administrators = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="School Administrators - Holy Spirit Academy of Bangued"
         description="Meet the dedicated administrators leading Holy Spirit Academy of Bangued towards educational excellence."
         keywords="administrators, school leadership, principal, vice principal, Holy Spirit Academy"
@@ -56,7 +51,7 @@ const Administrators = () => {
       <div className="min-h-screen bg-gradient-to-b from-white via-blue-50/30 to-white dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 pt-24 pb-16">
         {/* Hero Header */}
         <div className="text-white py-20 mb-20 relative overflow-hidden">
-          <div 
+          <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url(${hsabImage})` }}
           />
@@ -89,9 +84,9 @@ const Administrators = () => {
                   <div className="relative mb-6">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 dark:from-blue-500 dark:to-blue-700 rounded-full blur-xl opacity-0 group-hover:opacity-50 transition-opacity"></div>
                     <div className="relative w-44 h-44 mx-auto rounded-full overflow-hidden border-4 border-blue-100 dark:border-blue-900/50 shadow-xl group-hover:border-blue-400 dark:group-hover:border-blue-500 transition-all duration-300 group-hover:scale-105">
-                      <img 
-                        src={admin.image} 
-                        alt={admin.name} 
+                      <img
+                        src={admin.image}
+                        alt={admin.name}
                         className="w-full h-full object-cover"
                       />
                     </div>

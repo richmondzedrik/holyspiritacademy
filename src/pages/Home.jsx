@@ -24,6 +24,7 @@ import {
   Trophy,
   GraduationCap
 } from 'lucide-react';
+import { administrators } from '../data/administrators';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -336,18 +337,18 @@ const Home = () => {
             </FadeIn>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-              {[1, 2, 3, 4].map((item, index) => (
-                <FadeIn key={item} delay={index * 100}>
+              {administrators.slice(0, 4).map((admin, index) => (
+                <FadeIn key={admin.id} delay={index * 100}>
                   <div className="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 hover:-translate-y-2 text-center">
                     <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-blue-50 dark:border-blue-900/50 mb-6 group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors">
                       <img
-                        src={`https://ui-avatars.com/api/?name=Admin+${item}&background=random`}
-                        alt="Administrator"
+                        src={admin.image}
+                        alt={admin.name}
                         className="w-full h-full object-cover relative z-10"
                       />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Administrator Name</h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium text-sm bg-blue-50 dark:bg-blue-900/20 py-1 px-3 rounded-full inline-block">Position Title</p>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{admin.name}</h3>
+                    <p className="text-blue-600 dark:text-blue-400 font-medium text-sm bg-blue-50 dark:bg-blue-900/20 py-1 px-3 rounded-full inline-block">{admin.position}</p>
                   </div>
                 </FadeIn>
               ))}
