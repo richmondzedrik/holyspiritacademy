@@ -1,10 +1,9 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Sphere, RoundedBox } from '@react-three/drei';
+import { Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Smooth easing function for buttery animations
-const smoothstep = (t) => t * t * (3 - 2 * t);
+// Smooth easing functions
 const lerp = (a, b, t) => a + (b - a) * t;
 
 const MascotAvatar = ({ isChatOpen }) => {
@@ -18,31 +17,46 @@ const MascotAvatar = ({ isChatOpen }) => {
     const leftEyelid = useRef();
     const rightEyelid = useRef();
     const tail = useRef();
+    const leftFoot = useRef();
+    const rightFoot = useRef();
+    const leftBlush = useRef();
+    const rightBlush = useRef();
+    const smile = useRef();
+    const crest = useRef();
 
     // Persistent state for smooth animations
     const state = useRef({
         targetRotY: 0,
         currentRotY: 0,
         blinkTimer: 0,
-        blinkPhase: 0, // 0 = open, 1 = closing, 2 = opening
-        hoverAmount: 0,
+        blinkPhase: 0,
         eyeTargetX: 0,
         eyeTargetY: 0,
         eyeCurrentX: 0,
         eyeCurrentY: 0,
+        hopPhase: 0,
     });
 
-    // Premium gradient colors
+    // VIBRANT, JOLLY COLOR PALETTE
     const colors = useMemo(() => ({
-        primary: new THREE.Color('#3B82F6'),
-        primaryLight: new THREE.Color('#60A5FA'),
-        primaryDark: new THREE.Color('#1D4ED8'),
-        accent: new THREE.Color('#6366F1'),
-        beak: new THREE.Color('#F59E0B'),
-        beakDark: new THREE.Color('#D97706'),
+        // Bright sky blue - more cheerful
+        primary: new THREE.Color('#4DA6FF'),
+        primaryLight: new THREE.Color('#7DC4FF'),
+        primaryDark: new THREE.Color('#2B8AE8'),
+        accent: new THREE.Color('#818CF8'),
+        // Warm orange beak
+        beak: new THREE.Color('#FFB347'),
+        beakDark: new THREE.Color('#FF9500'),
         white: new THREE.Color('#FFFFFF'),
-        pupil: new THREE.Color('#0F172A'),
-        blush: new THREE.Color('#FDA4AF'),
+        // Bright eyes
+        pupil: new THREE.Color('#1E293B'),
+        eyeHighlight: new THREE.Color('#FFFFFF'),
+        // Rosy pink blush
+        blush: new THREE.Color('#FF8FAB'),
+        // Smile color
+        smileColor: new THREE.Color('#FF6B8A'),
+        // Belly cream
+        belly: new THREE.Color('#FFF8E7'),
     }), []);
 
     useFrame((frameState, delta) => {
@@ -50,93 +64,139 @@ const MascotAvatar = ({ isChatOpen }) => {
 
         const t = frameState.clock.getElapsedTime();
         const s = state.current;
-
-        // Clamp delta to prevent jumps on tab switch
         const dt = Math.min(delta, 0.1);
 
-        // ========== SMOOTH FLOATING ==========
-        // Multiple sine waves for organic movement
-        const floatY =
-            Math.sin(t * 1.2) * 0.08 +
-            Math.sin(t * 2.1) * 0.03 +
-            Math.sin(t * 0.7) * 0.04;
+        // ========== JOYFUL BOUNCING ==========
+        const bounceSpeed = isChatOpen ? 5.5 : 2.5;
+        const bounceAmp = isChatOpen ? 0.35 : 0.18;
 
-        const floatX = Math.sin(t * 0.9) * 0.02;
-        const floatZ = Math.cos(t * 0.8) * 0.015;
+        // Bouncy hop animation
+        let floatY = Math.sin(t * bounceSpeed) * bounceAmp;
+        floatY += Math.abs(Math.sin(t * bounceSpeed * 0.5)) * 0.08; // Extra "hop" feel
+        floatY += Math.sin(t * 4.2) * 0.03; // Micro-bounce
 
-        group.current.position.y = lerp(group.current.position.y, floatY, dt * 8);
-        group.current.position.x = lerp(group.current.position.x, floatX, dt * 6);
-        group.current.position.z = lerp(group.current.position.z, floatZ, dt * 6);
+        // Playful sway
+        const floatX = Math.sin(t * 1.5) * 0.12;
+        const floatZ = Math.cos(t * 1.1) * 0.04;
 
-        // Subtle rotation for liveliness
+        group.current.position.y = lerp(group.current.position.y, floatY, dt * 12);
+        group.current.position.x = lerp(group.current.position.x, floatX, dt * 10);
+        group.current.position.z = lerp(group.current.position.z, floatZ, dt * 10);
+
+        // ========== PLAYFUL TILT/WOBBLE ==========
+        const wobbleAmp = isChatOpen ? 0.18 : 0.1;
         group.current.rotation.z = lerp(
             group.current.rotation.z,
-            Math.sin(t * 0.6) * 0.03,
-            dt * 4
+            Math.sin(t * 2.5) * wobbleAmp,
+            dt * 8
         );
 
-        // ========== HEAD/BODY ROTATION ==========
-        s.targetRotY = isChatOpen ? 0 : Math.sin(t * 0.35) * 0.35;
-        s.currentRotY = lerp(s.currentRotY, s.targetRotY, dt * 3);
+        // Excited forward lean when chatting
+        const leanAmp = isChatOpen ? 0.12 : 0.05;
+        group.current.rotation.x = lerp(
+            group.current.rotation.x,
+            Math.sin(t * bounceSpeed + 0.5) * leanAmp,
+            dt * 8
+        );
+
+        // ========== CURIOUS HEAD MOVEMENTS ==========
+        const headTurnSpeed = isChatOpen ? 3 : 1;
+        const headTurnAmp = isChatOpen ? 0.25 : 0.5;
+        s.targetRotY = Math.sin(t * headTurnSpeed) * headTurnAmp;
+        s.currentRotY = lerp(s.currentRotY, s.targetRotY, dt * 5);
         group.current.rotation.y = s.currentRotY;
 
-        // Slight head tilt independent of body
         if (head.current) {
-            head.current.rotation.x = Math.sin(t * 0.8) * 0.04;
-            head.current.rotation.z = Math.sin(t * 1.1) * 0.03;
+            const headBobSpeed = isChatOpen ? 4 : 1.8;
+            const headBobAmp = isChatOpen ? 0.12 : 0.07;
+
+            // Happy nodding
+            head.current.rotation.x = lerp(
+                head.current.rotation.x,
+                Math.sin(t * headBobSpeed) * headBobAmp,
+                dt * 10
+            );
+
+            // Curious head tilt
+            head.current.rotation.z = lerp(
+                head.current.rotation.z,
+                Math.sin(t * (headBobSpeed * 0.6)) * 0.15,
+                dt * 8
+            );
         }
 
-        // ========== SMOOTH WING ANIMATION ==========
+        // ========== EXCITED WING FLAPPING ==========
         if (leftWing.current && rightWing.current) {
-            // Smooth wing flap using multiple frequencies
-            const wingBase = Math.sin(t * 2.5) * 0.12;
-            const wingDetail = Math.sin(t * 5) * 0.03;
-            const wingAmount = wingBase + wingDetail;
+            const flapSpeed = isChatOpen ? 22 : 5;
+            const flapAmp = isChatOpen ? 0.8 : 0.35;
 
-            // Apply with smooth interpolation
+            const wingPrimary = Math.sin(t * flapSpeed) * flapAmp;
+            const wingSecondary = Math.sin(t * flapSpeed * 1.5) * 0.12;
+            const wingAmount = wingPrimary + wingSecondary;
+
             leftWing.current.rotation.z = lerp(
                 leftWing.current.rotation.z,
-                -0.3 + wingAmount,
-                dt * 12
+                -0.5 + wingAmount,
+                dt * 18
             );
             rightWing.current.rotation.z = lerp(
                 rightWing.current.rotation.z,
-                0.3 - wingAmount,
-                dt * 12
+                0.5 - wingAmount,
+                dt * 18
             );
 
-            // Subtle wing breathing
-            const wingScale = 1 + Math.sin(t * 1.5) * 0.02;
-            leftWing.current.scale.y = lerp(leftWing.current.scale.y, wingScale, dt * 8);
-            rightWing.current.scale.y = lerp(rightWing.current.scale.y, wingScale, dt * 8);
+            // Wing breathing pulse
+            const wingPulse = 1 + Math.sin(t * 3) * 0.08;
+            leftWing.current.scale.y = lerp(leftWing.current.scale.y, wingPulse, dt * 12);
+            rightWing.current.scale.y = lerp(rightWing.current.scale.y, wingPulse, dt * 12);
+
+            // Forward/back wing motion when excited
+            if (isChatOpen) {
+                leftWing.current.rotation.y = lerp(
+                    leftWing.current.rotation.y,
+                    Math.sin(t * flapSpeed * 0.5) * 0.3,
+                    dt * 12
+                );
+                rightWing.current.rotation.y = lerp(
+                    rightWing.current.rotation.y,
+                    -Math.sin(t * flapSpeed * 0.5) * 0.3,
+                    dt * 12
+                );
+            }
         }
 
-        // ========== SMOOTH EYE TRACKING ==========
+        // ========== LIVELY EYE TRACKING ==========
         if (leftPupil.current && rightPupil.current) {
             if (isChatOpen) {
                 s.eyeTargetX = frameState.mouse.x * 0.06;
-                s.eyeTargetY = frameState.mouse.y * 0.04;
+                s.eyeTargetY = frameState.mouse.y * 0.05;
             } else {
-                s.eyeTargetX = Math.sin(t * 0.5) * 0.03;
-                s.eyeTargetY = Math.cos(t * 0.4) * 0.02;
+                // Curious wandering
+                const wanderSpeed1 = t * 1.5;
+                const wanderSpeed2 = t * 1.2;
+                s.eyeTargetX = Math.sin(wanderSpeed1) * 0.04 + Math.sin(t * 2.8) * 0.015;
+                s.eyeTargetY = Math.cos(wanderSpeed2) * 0.03 + Math.cos(t * 2.2) * 0.01;
             }
 
-            // Super smooth eye movement
-            s.eyeCurrentX = lerp(s.eyeCurrentX, s.eyeTargetX, dt * 6);
-            s.eyeCurrentY = lerp(s.eyeCurrentY, s.eyeTargetY, dt * 6);
+            s.eyeCurrentX = lerp(s.eyeCurrentX, s.eyeTargetX, dt * 12);
+            s.eyeCurrentY = lerp(s.eyeCurrentY, s.eyeTargetY, dt * 12);
 
-            leftPupil.current.position.x = -0.22 + s.eyeCurrentX;
-            leftPupil.current.position.y = 0.08 + s.eyeCurrentY;
+            const maxOffset = 0.04;
+            const clampedX = Math.max(-maxOffset, Math.min(maxOffset, s.eyeCurrentX));
+            const clampedY = Math.max(-maxOffset * 0.8, Math.min(maxOffset * 0.8, s.eyeCurrentY));
 
-            rightPupil.current.position.x = 0.22 + s.eyeCurrentX;
-            rightPupil.current.position.y = 0.08 + s.eyeCurrentY;
+            leftPupil.current.position.x = clampedX;
+            leftPupil.current.position.y = clampedY;
+            leftPupil.current.position.z = 0.08;
+
+            rightPupil.current.position.x = clampedX;
+            rightPupil.current.position.y = clampedY;
+            rightPupil.current.position.z = 0.08;
         }
 
         // ========== NATURAL BLINKING ==========
         s.blinkTimer += dt;
-
-        // Blink every 3-5 seconds with variation
-        const blinkInterval = 3.5 + Math.sin(t * 0.1) * 1.5;
+        const blinkInterval = isChatOpen ? 1.8 : 3;
 
         if (s.blinkTimer > blinkInterval && s.blinkPhase === 0) {
             s.blinkPhase = 1;
@@ -144,37 +204,90 @@ const MascotAvatar = ({ isChatOpen }) => {
         }
 
         if (leftEyelid.current && rightEyelid.current) {
-            let targetScale = 0.01; // Fully open (minimal eyelid)
+            let targetScale = 0.01;
 
             if (s.blinkPhase === 1) {
-                targetScale = 1; // Closing
+                targetScale = 1;
                 if (leftEyelid.current.scale.y > 0.9) {
                     s.blinkPhase = 2;
                 }
             } else if (s.blinkPhase === 2) {
-                targetScale = 0.01; // Opening
+                targetScale = 0.01;
                 if (leftEyelid.current.scale.y < 0.05) {
                     s.blinkPhase = 0;
                 }
             }
 
-            // Very fast, snappy blink
-            const blinkSpeed = dt * 25;
+            const blinkSpeed = dt * 35;
             leftEyelid.current.scale.y = lerp(leftEyelid.current.scale.y, targetScale, blinkSpeed);
             rightEyelid.current.scale.y = lerp(rightEyelid.current.scale.y, targetScale, blinkSpeed);
         }
 
-        // ========== BODY BREATHING ==========
+        // ========== BODY SQUASH & STRETCH ==========
         if (body.current) {
-            const breathe = 1 + Math.sin(t * 1.8) * 0.015;
-            body.current.scale.x = lerp(body.current.scale.x, breathe, dt * 8);
-            body.current.scale.z = lerp(body.current.scale.z, breathe, dt * 8);
+            const squashPhase = Math.sin(t * bounceSpeed);
+            const squashIntensity = isChatOpen ? 1.5 : 1;
+            const squashX = 1 + squashPhase * 0.06 * squashIntensity;
+            const squashY = 1 - squashPhase * 0.05 * squashIntensity;
+            const squashZ = 1 + squashPhase * 0.05 * squashIntensity;
+
+            body.current.scale.x = lerp(body.current.scale.x, squashX, dt * 15);
+            body.current.scale.y = lerp(body.current.scale.y, squashY, dt * 15);
+            body.current.scale.z = lerp(body.current.scale.z, squashZ, dt * 15);
         }
 
-        // ========== TAIL WAG ==========
+        // ========== HAPPY TAIL WAG ==========
         if (tail.current) {
-            tail.current.rotation.z = Math.sin(t * 3) * 0.2;
-            tail.current.rotation.x = Math.sin(t * 2) * 0.1 - 0.3;
+            const wagSpeed = isChatOpen ? 16 : 6;
+            const wagAmp = isChatOpen ? 0.7 : 0.4;
+
+            tail.current.rotation.z = Math.sin(t * wagSpeed) * wagAmp;
+            tail.current.rotation.x = Math.sin(t * 3) * 0.2 - 0.3;
+            tail.current.rotation.y = Math.cos(t * wagSpeed * 0.8) * 0.15;
+        }
+
+        // ========== HAPPY FEET HOPPING ==========
+        if (leftFoot.current && rightFoot.current) {
+            const hopSpeed = isChatOpen ? 8 : 4;
+            const hopAmp = isChatOpen ? 0.08 : 0.04;
+
+            // Alternating hop
+            leftFoot.current.position.y = Math.abs(Math.sin(t * hopSpeed)) * hopAmp;
+            rightFoot.current.position.y = Math.abs(Math.sin(t * hopSpeed + Math.PI)) * hopAmp;
+
+            // Little rotation
+            leftFoot.current.rotation.x = Math.sin(t * hopSpeed) * 0.2;
+            rightFoot.current.rotation.x = Math.sin(t * hopSpeed + Math.PI) * 0.2;
+        }
+
+        // ========== PULSING BLUSH (EXCITEMENT) ==========
+        if (leftBlush.current && rightBlush.current) {
+            const blushPulse = isChatOpen
+                ? 0.6 + Math.sin(t * 4) * 0.2
+                : 0.4 + Math.sin(t * 2) * 0.1;
+
+            leftBlush.current.material.opacity = blushPulse;
+            rightBlush.current.material.opacity = blushPulse;
+
+            // Scale pulse
+            const blushScale = 1 + Math.sin(t * 3) * 0.1;
+            leftBlush.current.scale.setScalar(blushScale);
+            rightBlush.current.scale.setScalar(blushScale);
+        }
+
+        // ========== ANIMATED CREST ==========
+        if (crest.current) {
+            const crestBounce = Math.sin(t * bounceSpeed) * 0.1;
+            crest.current.rotation.z = Math.sin(t * 3) * 0.15;
+            crest.current.position.y = 0.48 + crestBounce;
+        }
+
+        // ========== SMILE ANIMATION ==========
+        if (smile.current) {
+            const smileScale = isChatOpen
+                ? 1.2 + Math.sin(t * 3) * 0.1
+                : 1 + Math.sin(t * 1.5) * 0.05;
+            smile.current.scale.x = smileScale;
         }
     });
 
@@ -182,67 +295,75 @@ const MascotAvatar = ({ isChatOpen }) => {
         <group ref={group} dispose={null}>
             {/* ===== BODY ===== */}
             <group ref={body}>
-                {/* Main Body - Rounded for softness */}
-                <Sphere args={[0.9, 64, 64]} scale={[1, 0.85, 0.9]}>
+                {/* Main Body - Rounded and chubby */}
+                <Sphere args={[0.9, 64, 64]} scale={[1, 0.88, 0.92]}>
                     <meshStandardMaterial
                         color={colors.primary}
-                        roughness={0.35}
+                        roughness={0.3}
                         metalness={0.05}
                     />
                 </Sphere>
 
-                {/* Belly - Soft white patch */}
-                <Sphere args={[0.65, 48, 48]} position={[0, -0.1, 0.5]} scale={[0.8, 0.7, 0.5]}>
+                {/* Belly - Warm cream color */}
+                <Sphere args={[0.68, 48, 48]} position={[0, -0.08, 0.52]} scale={[0.82, 0.72, 0.52]}>
                     <meshStandardMaterial
-                        color={colors.white}
-                        roughness={0.5}
+                        color={colors.belly}
+                        roughness={0.45}
                     />
                 </Sphere>
             </group>
 
             {/* ===== HEAD ===== */}
-            <group ref={head} position={[0, 0.65, 0.15]}>
+            <group ref={head} position={[0, 0.68, 0.15]}>
                 {/* Head sphere */}
-                <Sphere args={[0.55, 64, 64]} scale={[1, 0.95, 0.95]}>
+                <Sphere args={[0.58, 64, 64]} scale={[1, 0.96, 0.96]}>
                     <meshStandardMaterial
                         color={colors.primary}
-                        roughness={0.35}
+                        roughness={0.3}
                         metalness={0.05}
                     />
                 </Sphere>
 
-                {/* Face area - slightly lighter */}
-                <Sphere args={[0.4, 48, 48]} position={[0, -0.05, 0.35]} scale={[0.9, 0.8, 0.5]}>
+                {/* Face area - lighter blue */}
+                <Sphere args={[0.42, 48, 48]} position={[0, -0.03, 0.36]} scale={[0.92, 0.82, 0.52]}>
                     <meshStandardMaterial
                         color={colors.primaryLight}
-                        roughness={0.4}
+                        roughness={0.35}
                     />
                 </Sphere>
 
-                {/* ===== EYES ===== */}
-                <group position={[0, 0.05, 0.4]}>
+                {/* ===== BIG EXPRESSIVE EYES ===== */}
+                <group position={[0, 0.06, 0.42]}>
                     {/* Left Eye Container */}
-                    <group position={[-0.22, 0, 0]}>
-                        {/* Sclera */}
-                        <Sphere args={[0.14, 32, 32]}>
-                            <meshStandardMaterial color={colors.white} roughness={0.2} />
+                    <group position={[-0.2, 0, 0]}>
+                        {/* Sclera - bigger eyes */}
+                        <Sphere args={[0.16, 32, 32]}>
+                            <meshStandardMaterial color={colors.white} roughness={0.15} />
                         </Sphere>
-                        {/* Pupil */}
-                        <Sphere ref={leftPupil} args={[0.07, 32, 32]} position={[0, 0.08, 0.1]}>
+                        {/* Pupil - larger, more visible */}
+                        <Sphere ref={leftPupil} args={[0.085, 32, 32]} position={[0, 0, 0.08]}>
                             <meshStandardMaterial color={colors.pupil} roughness={0.1} />
                         </Sphere>
-                        {/* Highlight */}
-                        <Sphere args={[0.025, 16, 16]} position={[0.03, 0.12, 0.12]}>
+                        {/* Eye shine - bigger highlight */}
+                        <Sphere args={[0.035, 16, 16]} position={[0.04, 0.05, 0.13]}>
                             <meshStandardMaterial
                                 color={colors.white}
                                 emissive={colors.white}
-                                emissiveIntensity={0.8}
+                                emissiveIntensity={1}
+                            />
+                        </Sphere>
+                        {/* Secondary highlight */}
+                        <Sphere args={[0.018, 16, 16]} position={[-0.03, -0.04, 0.13]}>
+                            <meshStandardMaterial
+                                color={colors.white}
+                                emissive={colors.white}
+                                emissiveIntensity={0.6}
                             />
                         </Sphere>
                         {/* Eyelid */}
                         <Sphere
                             ref={leftEyelid}
-                            args={[0.145, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]}
+                            args={[0.165, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]}
                             rotation={[0.1, 0, 0]}
                             scale={[1, 0.01, 1]}
                         >
@@ -251,27 +372,35 @@ const MascotAvatar = ({ isChatOpen }) => {
                     </group>
 
                     {/* Right Eye Container */}
-                    <group position={[0.22, 0, 0]}>
+                    <group position={[0.2, 0, 0]}>
                         {/* Sclera */}
-                        <Sphere args={[0.14, 32, 32]}>
-                            <meshStandardMaterial color={colors.white} roughness={0.2} />
+                        <Sphere args={[0.16, 32, 32]}>
+                            <meshStandardMaterial color={colors.white} roughness={0.15} />
                         </Sphere>
                         {/* Pupil */}
-                        <Sphere ref={rightPupil} args={[0.07, 32, 32]} position={[0, 0.08, 0.1]}>
+                        <Sphere ref={rightPupil} args={[0.085, 32, 32]} position={[0, 0, 0.08]}>
                             <meshStandardMaterial color={colors.pupil} roughness={0.1} />
                         </Sphere>
-                        {/* Highlight */}
-                        <Sphere args={[0.025, 16, 16]} position={[-0.03, 0.12, 0.12]}>
+                        {/* Eye shine */}
+                        <Sphere args={[0.035, 16, 16]} position={[-0.04, 0.05, 0.13]}>
                             <meshStandardMaterial
                                 color={colors.white}
                                 emissive={colors.white}
-                                emissiveIntensity={0.8}
+                                emissiveIntensity={1}
+                            />
+                        </Sphere>
+                        {/* Secondary highlight */}
+                        <Sphere args={[0.018, 16, 16]} position={[0.03, -0.04, 0.13]}>
+                            <meshStandardMaterial
+                                color={colors.white}
+                                emissive={colors.white}
+                                emissiveIntensity={0.6}
                             />
                         </Sphere>
                         {/* Eyelid */}
                         <Sphere
                             ref={rightEyelid}
-                            args={[0.145, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]}
+                            args={[0.165, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.5]}
                             rotation={[0.1, 0, 0]}
                             scale={[1, 0.01, 1]}
                         >
@@ -280,91 +409,105 @@ const MascotAvatar = ({ isChatOpen }) => {
                     </group>
                 </group>
 
-                {/* ===== BEAK ===== */}
-                <group position={[0, -0.12, 0.5]}>
+                {/* ===== CUTE BEAK ===== */}
+                <group position={[0, -0.1, 0.52]}>
                     {/* Upper beak */}
-                    <Sphere args={[0.08, 32, 32]} scale={[1.2, 0.6, 1.5]} position={[0, 0.02, 0]}>
-                        <meshStandardMaterial color={colors.beak} roughness={0.3} />
+                    <Sphere args={[0.09, 32, 32]} scale={[1.3, 0.65, 1.6]} position={[0, 0.025, 0]}>
+                        <meshStandardMaterial color={colors.beak} roughness={0.25} />
                     </Sphere>
                     {/* Lower beak */}
-                    <Sphere args={[0.06, 32, 32]} scale={[1, 0.4, 1.2]} position={[0, -0.04, 0]}>
-                        <meshStandardMaterial color={colors.beakDark} roughness={0.3} />
+                    <Sphere args={[0.065, 32, 32]} scale={[1.1, 0.45, 1.3]} position={[0, -0.045, 0]}>
+                        <meshStandardMaterial color={colors.beakDark} roughness={0.25} />
                     </Sphere>
                 </group>
 
-                {/* ===== BLUSH ===== */}
-                <Sphere args={[0.06, 16, 16]} position={[-0.32, -0.08, 0.3]}>
+                {/* ===== HAPPY SMILE ===== */}
+                <group ref={smile} position={[0, -0.18, 0.48]}>
+                    <Sphere args={[0.04, 24, 24]} scale={[2.5, 0.5, 0.8]}>
+                        <meshStandardMaterial
+                            color={colors.smileColor}
+                            roughness={0.3}
+                        />
+                    </Sphere>
+                </group>
+
+                {/* ===== ROSY BLUSH ===== */}
+                <Sphere ref={leftBlush} args={[0.08, 16, 16]} position={[-0.35, -0.06, 0.32]}>
                     <meshStandardMaterial
                         color={colors.blush}
                         transparent
                         opacity={0.5}
-                        roughness={0.8}
+                        roughness={0.7}
                     />
                 </Sphere>
-                <Sphere args={[0.06, 16, 16]} position={[0.32, -0.08, 0.3]}>
+                <Sphere ref={rightBlush} args={[0.08, 16, 16]} position={[0.35, -0.06, 0.32]}>
                     <meshStandardMaterial
                         color={colors.blush}
                         transparent
                         opacity={0.5}
-                        roughness={0.8}
+                        roughness={0.7}
                     />
                 </Sphere>
 
-                {/* ===== CREST/TUFT ===== */}
-                <group position={[0, 0.45, -0.1]}>
-                    <Sphere args={[0.08, 16, 16]} position={[0, 0, 0]} scale={[0.8, 1.5, 0.8]}>
-                        <meshStandardMaterial color={colors.primaryDark} roughness={0.4} />
+                {/* ===== BOUNCY CREST/TUFT ===== */}
+                <group ref={crest} position={[0, 0.48, -0.08]}>
+                    <Sphere args={[0.1, 16, 16]} position={[0, 0, 0]} scale={[0.85, 1.8, 0.85]}>
+                        <meshStandardMaterial color={colors.primaryDark} roughness={0.35} />
                     </Sphere>
-                    <Sphere args={[0.06, 16, 16]} position={[-0.08, -0.05, 0]} scale={[0.7, 1.2, 0.7]} rotation={[0, 0, 0.3]}>
-                        <meshStandardMaterial color={colors.primary} roughness={0.4} />
+                    <Sphere args={[0.07, 16, 16]} position={[-0.1, -0.06, 0]} scale={[0.75, 1.4, 0.75]} rotation={[0, 0, 0.35]}>
+                        <meshStandardMaterial color={colors.primary} roughness={0.35} />
                     </Sphere>
-                    <Sphere args={[0.06, 16, 16]} position={[0.08, -0.05, 0]} scale={[0.7, 1.2, 0.7]} rotation={[0, 0, -0.3]}>
-                        <meshStandardMaterial color={colors.primary} roughness={0.4} />
+                    <Sphere args={[0.07, 16, 16]} position={[0.1, -0.06, 0]} scale={[0.75, 1.4, 0.75]} rotation={[0, 0, -0.35]}>
+                        <meshStandardMaterial color={colors.primary} roughness={0.35} />
                     </Sphere>
                 </group>
             </group>
 
             {/* ===== WINGS ===== */}
             {/* Left Wing */}
-            <group ref={leftWing} position={[-0.75, 0.1, 0]}>
-                <Sphere args={[0.35, 32, 32]} scale={[0.3, 1, 0.6]} rotation={[0, 0, -0.3]}>
-                    <meshStandardMaterial color={colors.primary} roughness={0.35} />
+            <group ref={leftWing} position={[-0.78, 0.12, 0]}>
+                <Sphere args={[0.38, 32, 32]} scale={[0.32, 1.1, 0.65]} rotation={[0, 0, -0.35]}>
+                    <meshStandardMaterial color={colors.primary} roughness={0.3} />
                 </Sphere>
-                <Sphere args={[0.2, 24, 24]} scale={[0.25, 0.6, 0.5]} position={[-0.1, -0.35, 0]}>
-                    <meshStandardMaterial color={colors.primaryDark} roughness={0.35} />
+                <Sphere args={[0.22, 24, 24]} scale={[0.28, 0.65, 0.55]} position={[-0.12, -0.38, 0]}>
+                    <meshStandardMaterial color={colors.primaryDark} roughness={0.3} />
                 </Sphere>
             </group>
 
             {/* Right Wing */}
-            <group ref={rightWing} position={[0.75, 0.1, 0]}>
-                <Sphere args={[0.35, 32, 32]} scale={[0.3, 1, 0.6]} rotation={[0, 0, 0.3]}>
-                    <meshStandardMaterial color={colors.primary} roughness={0.35} />
+            <group ref={rightWing} position={[0.78, 0.12, 0]}>
+                <Sphere args={[0.38, 32, 32]} scale={[0.32, 1.1, 0.65]} rotation={[0, 0, 0.35]}>
+                    <meshStandardMaterial color={colors.primary} roughness={0.3} />
                 </Sphere>
-                <Sphere args={[0.2, 24, 24]} scale={[0.25, 0.6, 0.5]} position={[0.1, -0.35, 0]}>
-                    <meshStandardMaterial color={colors.primaryDark} roughness={0.35} />
+                <Sphere args={[0.22, 24, 24]} scale={[0.28, 0.65, 0.55]} position={[0.12, -0.38, 0]}>
+                    <meshStandardMaterial color={colors.primaryDark} roughness={0.3} />
                 </Sphere>
             </group>
 
             {/* ===== TAIL ===== */}
-            <group ref={tail} position={[0, -0.3, -0.7]}>
-                <Sphere args={[0.15, 24, 24]} scale={[0.8, 0.5, 1.2]}>
-                    <meshStandardMaterial color={colors.primaryDark} roughness={0.4} />
+            <group ref={tail} position={[0, -0.28, -0.72]}>
+                <Sphere args={[0.18, 24, 24]} scale={[0.85, 0.55, 1.3]}>
+                    <meshStandardMaterial color={colors.primaryDark} roughness={0.35} />
                 </Sphere>
-                <Sphere args={[0.1, 16, 16]} scale={[0.6, 0.4, 1]} position={[0, 0, -0.12]}>
-                    <meshStandardMaterial color={colors.primary} roughness={0.4} />
+                <Sphere args={[0.12, 16, 16]} scale={[0.65, 0.45, 1.1]} position={[0, 0, -0.14]}>
+                    <meshStandardMaterial color={colors.primary} roughness={0.35} />
                 </Sphere>
             </group>
 
-            {/* ===== FEET ===== */}
-            <group position={[0, -0.85, 0.2]}>
+            {/* ===== ANIMATED FEET ===== */}
+            <group position={[0, -0.88, 0.22]}>
                 {/* Left foot */}
-                <Sphere args={[0.1, 16, 16]} position={[-0.2, 0, 0]} scale={[1, 0.3, 1.3]}>
-                    <meshStandardMaterial color={colors.beak} roughness={0.4} />
-                </Sphere>
+                <group ref={leftFoot} position={[-0.22, 0, 0]}>
+                    <Sphere args={[0.11, 16, 16]} scale={[1.1, 0.35, 1.4]}>
+                        <meshStandardMaterial color={colors.beak} roughness={0.35} />
+                    </Sphere>
+                </group>
                 {/* Right foot */}
-                <Sphere args={[0.1, 16, 16]} position={[0.2, 0, 0]} scale={[1, 0.3, 1.3]}>
-                    <meshStandardMaterial color={colors.beak} roughness={0.4} />
-                </Sphere>
+                <group ref={rightFoot} position={[0.22, 0, 0]}>
+                    <Sphere args={[0.11, 16, 16]} scale={[1.1, 0.35, 1.4]}>
+                        <meshStandardMaterial color={colors.beak} roughness={0.35} />
+                    </Sphere>
+                </group>
             </group>
         </group>
     );

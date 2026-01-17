@@ -200,9 +200,11 @@ const Mascot = () => {
             {/* Floating Button (Toggle) */}
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className={`${isOpen ? 'translate-y-24 opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'} 
-                   cursor-pointer transition-all duration-700 ease-out absolute bottom-0 right-0
-                   w-24 h-24 md:w-28 md:h-28
+                className={`cursor-pointer transition-all duration-500 ease-out absolute
+                   ${isOpen
+                        ? 'bottom-[510px] sm:bottom-[510px] right-0 w-20 h-20 md:w-24 md:h-24'
+                        : 'bottom-0 right-0 w-24 h-24 md:w-28 md:h-28'
+                    }
                    flex items-center justify-center
                    hover:scale-110 active:scale-95`}
                 aria-label="Toggle Support Mascot"
