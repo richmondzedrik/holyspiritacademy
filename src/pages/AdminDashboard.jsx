@@ -21,8 +21,6 @@ const AdminDashboard = () => {
     posts: 0,
     users: 0,
     pendingComments: 0,
-    users: 0,
-    pendingComments: 0,
     messages: 0,
     events: 0
   });
@@ -30,13 +28,10 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      // Only fetch stats if we are on the main dashboard page to avoid unnecessary reads
-      // (Optional optimization, but good practice. For now, we'll just fetch)
       try {
-        const [postsData, usersData, commentsData, messagesData] = await Promise.all([
+        const [postsData, usersData, commentsData, messagesData, eventsData] = await Promise.all([
           getPosts(),
           getUsers(),
-          getAllComments(),
           getAllComments(),
           getMessages(),
           getEvents()
@@ -45,7 +40,6 @@ const AdminDashboard = () => {
         setStats({
           posts: postsData.length,
           users: usersData.length,
-          pendingComments: commentsData.filter(c => !c.isApproved).length,
           pendingComments: commentsData.filter(c => !c.isApproved).length,
           messages: messagesData.length,
           events: eventsData.length
@@ -78,17 +72,17 @@ const AdminDashboard = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pt-16">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-950 pt-16 transition-colors duration-300">
       {/* Mobile Sidebar Toggle */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden fixed bottom-4 right-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg border-2 border-white"
+        className="md:hidden fixed bottom-4 right-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg border-2 border-white dark:border-slate-800"
       >
         <LayoutDashboard size={24} />
       </button>
 
       {/* Sidebar */}
-      <aside className={`w-72 bg-gradient-to-b from-blue-600 to-blue-800 shadow-2xl flex flex-col fixed h-full top-16 left-0 z-40 transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+      <aside className={`w-72 bg-gradient-to-b from-blue-600 to-blue-800 dark:from-blue-900 dark:to-slate-900 shadow-2xl flex flex-col fixed h-full top-16 left-0 z-40 transition-transform duration-300 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}>
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -109,10 +103,10 @@ const AdminDashboard = () => {
               to={item.disabled ? '#' : item.path}
               onClick={() => setIsMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${item.disabled
-                  ? 'text-blue-200 cursor-not-allowed'
-                  : isActive(item.path)
-                    ? 'bg-white/20 backdrop-blur-sm text-white shadow-lg'
-                    : 'text-blue-100 hover:bg-white/10 hover:text-white'
+                ? 'text-blue-200 cursor-not-allowed'
+                : isActive(item.path)
+                  ? 'bg-white/20 backdrop-blur-sm text-white shadow-lg'
+                  : 'text-blue-100 hover:bg-white/10 hover:text-white'
                 }`}
             >
               {item.icon}
@@ -140,8 +134,8 @@ const AdminDashboard = () => {
             <Route path="/" element={
               <div className="space-y-8 animate-fade-in">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Overview</h1>
-                  <p className="text-gray-600">Welcome back! Here's what's happening with your school portal.</p>
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Dashboard Overview</h1>
+                  <p className="text-gray-600 dark:text-gray-400">Welcome back! Here's what's happening with your school portal.</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {loading ? (
@@ -153,90 +147,90 @@ const AdminDashboard = () => {
                     </>
                   ) : (
                     <>
-                      <div className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
+                      <div className="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-500/30 transform hover:-translate-y-1">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="bg-blue-100 p-3 rounded-xl">
-                            <FileText className="text-blue-600" size={24} />
+                          <div className="bg-blue-100 dark:bg-blue-900/40 p-3 rounded-xl">
+                            <FileText className="text-blue-600 dark:text-blue-400" size={24} />
                           </div>
-                          <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Total</span>
+                          <span className="text-xs font-semibold text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full">Total</span>
                         </div>
-                        <h3 className="text-gray-500 text-sm font-medium mb-1">Posts</h3>
-                        <p className="text-4xl font-bold text-gray-900 mb-4">
+                        <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Posts</h3>
+                        <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                           {stats.posts}
                         </p>
-                        <Link to="/admin/posts" className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        <Link to="/admin/posts" className="text-blue-600 dark:text-blue-400 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                           Manage Posts
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
                       </div>
-                      <div className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
+                      <div className="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-slate-700 hover:border-green-200 dark:hover:border-green-500/30 transform hover:-translate-y-1">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="bg-green-100 p-3 rounded-xl">
-                            <Users className="text-green-600" size={24} />
+                          <div className="bg-green-100 dark:bg-green-900/40 p-3 rounded-xl">
+                            <Users className="text-green-600 dark:text-green-400" size={24} />
                           </div>
-                          <span className="text-xs font-semibold text-green-600 bg-green-50 px-3 py-1 rounded-full">Total</span>
+                          <span className="text-xs font-semibold text-green-600 dark:text-green-300 bg-green-50 dark:bg-green-900/30 px-3 py-1 rounded-full">Total</span>
                         </div>
-                        <h3 className="text-gray-500 text-sm font-medium mb-1">Users</h3>
-                        <p className="text-4xl font-bold text-gray-900 mb-4">
+                        <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Users</h3>
+                        <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                           {stats.users}
                         </p>
-                        <Link to="/admin/users" className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        <Link to="/admin/users" className="text-blue-600 dark:text-blue-400 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                           Manage Users
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
                       </div>
-                      <div className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 hover:border-yellow-200 transform hover:-translate-y-1">
+                      <div className="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-slate-700 hover:border-yellow-200 dark:hover:border-yellow-500/30 transform hover:-translate-y-1">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="bg-yellow-100 p-3 rounded-xl">
-                            <MessageSquare className="text-yellow-600" size={24} />
+                          <div className="bg-yellow-100 dark:bg-yellow-900/40 p-3 rounded-xl">
+                            <MessageSquare className="text-yellow-600 dark:text-yellow-400" size={24} />
                           </div>
-                          <span className="text-xs font-semibold text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full">Pending</span>
+                          <span className="text-xs font-semibold text-yellow-600 dark:text-yellow-300 bg-yellow-50 dark:bg-yellow-900/30 px-3 py-1 rounded-full">Pending</span>
                         </div>
-                        <h3 className="text-gray-500 text-sm font-medium mb-1">Comments</h3>
-                        <p className="text-4xl font-bold text-gray-900 mb-4">
+                        <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Comments</h3>
+                        <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                           {stats.pendingComments}
                         </p>
-                        <Link to="/admin/comments" className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        <Link to="/admin/comments" className="text-blue-600 dark:text-blue-400 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                           Moderate
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
                       </div>
-                      <div className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 hover:border-purple-200 transform hover:-translate-y-1">
+                      <div className="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-500/30 transform hover:-translate-y-1">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="bg-purple-100 p-3 rounded-xl">
-                            <Mail className="text-purple-600" size={24} />
+                          <div className="bg-purple-100 dark:bg-purple-900/40 p-3 rounded-xl">
+                            <Mail className="text-purple-600 dark:text-purple-400" size={24} />
                           </div>
-                          <span className="text-xs font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Total</span>
+                          <span className="text-xs font-semibold text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/30 px-3 py-1 rounded-full">Total</span>
                         </div>
-                        <h3 className="text-gray-500 text-sm font-medium mb-1">Messages</h3>
-                        <p className="text-4xl font-bold text-gray-900 mb-4">
+                        <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Messages</h3>
+                        <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                           {stats.messages}
                         </p>
-                        <Link to="/admin/messages" className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        <Link to="/admin/messages" className="text-blue-600 dark:text-blue-400 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                           View Inbox
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         </Link>
                       </div>
-                      <div className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 hover:border-pink-200 transform hover:-translate-y-1">
+                      <div className="group bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all border border-gray-100 dark:border-slate-700 hover:border-pink-200 dark:hover:border-pink-500/30 transform hover:-translate-y-1">
                         <div className="flex items-center justify-between mb-4">
-                          <div className="bg-pink-100 p-3 rounded-xl">
-                            <Calendar className="text-pink-600" size={24} />
+                          <div className="bg-pink-100 dark:bg-pink-900/40 p-3 rounded-xl">
+                            <Calendar className="text-pink-600 dark:text-pink-400" size={24} />
                           </div>
-                          <span className="text-xs font-semibold text-pink-600 bg-pink-50 px-3 py-1 rounded-full">Total</span>
+                          <span className="text-xs font-semibold text-pink-600 dark:text-pink-300 bg-pink-50 dark:bg-pink-900/30 px-3 py-1 rounded-full">Total</span>
                         </div>
-                        <h3 className="text-gray-500 text-sm font-medium mb-1">Events</h3>
-                        <p className="text-4xl font-bold text-gray-900 mb-4">
+                        <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">Events</h3>
+                        <p className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                           {stats.events}
                         </p>
-                        <Link to="/admin/events" className="text-blue-600 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
+                        <Link to="/admin/events" className="text-blue-600 dark:text-blue-400 text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
                           Manage Events
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

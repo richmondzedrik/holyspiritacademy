@@ -16,18 +16,16 @@ import { db } from '../firebase/config';
 const eventsCollection = collection(db, 'events');
 
 // Create a new event
-export const addEvent = async (title, date, time, location, category, description = "") => {
+export const addEvent = async (title, date, time, location, category, description = "", imageUrl = null) => {
     try {
         await addDoc(eventsCollection, {
             title,
-            date, // Storing as string or timestamp? Based on UI it looks like string "Feb 14, 2026" but for sorting, Timestamp is better. 
-            // However, looking at the UI mock data, it was "Feb 14, 2026". 
-            // To allow proper sorting, we should probably store a date object too. 
-            // ex: dateString: "Feb 14, 2026", dateIso: "2026-02-14"
+            date,
             time,
             location,
             category,
             description,
+            imageUrl,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         });

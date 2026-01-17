@@ -58,10 +58,14 @@ const MyAccount = () => {
   const handleSendVerification = async () => {
     try {
       await sendVerificationEmail();
-      toast.success('Verification email sent!');
+      toast.success('Verification email sent! Please check your Inbox and Spam folders.');
     } catch (error) {
       console.error("Error sending verification email:", error);
-      toast.error('Failed to send verification email.');
+      if (error.code === 'auth/too-many-requests') {
+        toast.error('Too many attempts. Please wait a few minutes before trying again.');
+      } else {
+        toast.error('Failed to send verification email. Please try again later.');
+      }
     }
   };
 
@@ -70,27 +74,27 @@ const MyAccount = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white dark:from-slate-900 dark:to-slate-800 py-12 px-4 transition-colors">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 animate-fade-in">
+        <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-700 animate-fade-in transition-colors">
           {/* Header Section */}
           <div className="px-8 py-12 text-white relative overflow-hidden">
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: `url(${hsabImage})` }}
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50" />
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
               <div className="relative">
-                <img 
-                  src={userData?.profilePicture || `https://ui-avatars.com/api/?name=${userData?.fullName}&size=200&background=3b82f6&color=fff`} 
-                  alt="Profile" 
-                  className="w-32 h-32 rounded-full border-4 border-white shadow-xl"
+                <img
+                  src={userData?.profilePicture || `https://ui-avatars.com/api/?name=${userData?.fullName}&size=200&background=3b82f6&color=fff`}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full border-4 border-white dark:border-slate-700 shadow-xl"
                 />
                 {editing && (
-                  <button 
+                  <button
                     type="button"
-                    className="absolute bottom-0 right-0 bg-white text-blue-600 p-2 rounded-full shadow-lg hover:bg-blue-50 transition-colors"
+                    className="absolute bottom-0 right-0 bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 p-2 rounded-full shadow-lg hover:bg-blue-50 dark:hover:bg-slate-600 transition-colors"
                     title="Change photo"
                   >
                     <Camera size={20} />
@@ -124,14 +128,14 @@ const MyAccount = () => {
           {/* Content Section */}
           <div className="p-8">
             {!currentUser?.emailVerified && (
-              <div className="mb-8 bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-xl">
+              <div className="mb-8 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-6 rounded-xl">
                 <div className="flex items-start">
                   <div className="flex-shrink-0">
                     <XCircle className="h-6 w-6 text-yellow-400" />
                   </div>
                   <div className="ml-3 flex-1">
-                    <h3 className="text-sm font-bold text-yellow-800 mb-1">Email Not Verified</h3>
-                    <p className="text-sm text-yellow-700 mb-3">
+                    <h3 className="text-sm font-bold text-yellow-800 dark:text-yellow-200 mb-1">Email Not Verified</h3>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-300 mb-3">
                       Please verify your email address to access all features.
                     </p>
                     <button
@@ -146,7 +150,7 @@ const MyAccount = () => {
             )}
 
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Account Information</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Account Information</h2>
               {!editing && (
                 <button
                   onClick={() => setEditing(true)}
@@ -160,7 +164,7 @@ const MyAccount = () => {
             {editing ? (
               <form onSubmit={handleUpdate} className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <User className="h-5 w-5 text-gray-400" />
@@ -169,14 +173,14 @@ const MyAccount = () => {
                       type="text"
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
                       placeholder="Your full name"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Profile Picture URL</label>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Profile Picture URL</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                       <Camera className="h-5 w-5 text-gray-400" />
@@ -185,11 +189,11 @@ const MyAccount = () => {
                       type="url"
                       value={formData.profilePicture}
                       onChange={(e) => setFormData({ ...formData, profilePicture: e.target.value })}
-                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                      className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
                       placeholder="https://example.com/photo.jpg"
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-2">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                     Use a public image URL (e.g., from Unsplash or Gravatar)
                   </p>
                 </div>
@@ -212,7 +216,7 @@ const MyAccount = () => {
                         profilePicture: userData?.profilePicture || ''
                       });
                     }}
-                    className="px-6 py-3 border-2 border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 transition-colors"
+                    className="px-6 py-3 border-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
                   >
                     Cancel
                   </button>
@@ -221,50 +225,50 @@ const MyAccount = () => {
             ) : (
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="bg-gray-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-gray-100 dark:border-slate-700">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <User className="text-blue-600" size={20} />
+                      <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
+                        <User className="text-blue-600 dark:text-blue-400" size={20} />
                       </div>
-                      <label className="text-sm font-semibold text-gray-500">Full Name</label>
+                      <label className="text-sm font-semibold text-gray-500 dark:text-gray-400">Full Name</label>
                     </div>
-                    <p className="text-lg font-medium text-gray-900">{userData?.fullName || 'Not set'}</p>
+                    <p className="text-lg font-medium text-gray-900 dark:text-white">{userData?.fullName || 'Not set'}</p>
                   </div>
 
-                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="bg-gray-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-gray-100 dark:border-slate-700">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <Mail className="text-blue-600" size={20} />
+                      <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
+                        <Mail className="text-blue-600 dark:text-blue-400" size={20} />
                       </div>
-                      <label className="text-sm font-semibold text-gray-500">Email Address</label>
+                      <label className="text-sm font-semibold text-gray-500 dark:text-gray-400">Email Address</label>
                     </div>
-                    <p className="text-lg font-medium text-gray-900">{currentUser?.email}</p>
+                    <p className="text-lg font-medium text-gray-900 dark:text-white">{currentUser?.email}</p>
                   </div>
 
-                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="bg-gray-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-gray-100 dark:border-slate-700">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="bg-blue-100 p-2 rounded-lg">
-                        <Shield className="text-blue-600" size={20} />
+                      <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
+                        <Shield className="text-blue-600 dark:text-blue-400" size={20} />
                       </div>
-                      <label className="text-sm font-semibold text-gray-500">Account Role</label>
+                      <label className="text-sm font-semibold text-gray-500 dark:text-gray-400">Account Role</label>
                     </div>
-                    <p className="text-lg font-medium text-gray-900">
+                    <p className="text-lg font-medium text-gray-900 dark:text-white">
                       {userData?.role === 'admin' ? 'Administrator' : 'User'}
                     </p>
                   </div>
 
-                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <div className="bg-gray-50 dark:bg-slate-700/50 p-6 rounded-2xl border border-gray-100 dark:border-slate-700">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="bg-blue-100 p-2 rounded-lg">
+                      <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg">
                         {currentUser?.emailVerified ? (
-                          <CheckCircle className="text-green-600" size={20} />
+                          <CheckCircle className="text-green-600 dark:text-green-400" size={20} />
                         ) : (
-                          <XCircle className="text-yellow-600" size={20} />
+                          <XCircle className="text-yellow-600 dark:text-yellow-400" size={20} />
                         )}
                       </div>
-                      <label className="text-sm font-semibold text-gray-500">Verification Status</label>
+                      <label className="text-sm font-semibold text-gray-500 dark:text-gray-400">Verification Status</label>
                     </div>
-                    <p className="text-lg font-medium text-gray-900">
+                    <p className="text-lg font-medium text-gray-900 dark:text-white">
                       {currentUser?.emailVerified ? 'Verified' : 'Not Verified'}
                     </p>
                   </div>

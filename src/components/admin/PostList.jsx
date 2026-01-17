@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getPosts, deletePost } from '../../services/postService';
 import { Plus, Edit2, Trash2, Search, Calendar } from 'lucide-react';
 import PostForm from './PostForm';
+import { TableRowSkeleton } from '../common/Skeletons';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -48,29 +49,29 @@ const PostList = () => {
     setIsFormOpen(true);
   };
 
-  const filteredPosts = posts.filter(post => 
+  const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.content.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-        <h2 className="text-xl font-bold text-gray-800">Manage Announcements</h2>
-        
+      <div className="p-6 border-b border-gray-100 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white">Manage Announcements</h2>
+
         <div className="flex gap-4 w-full sm:w-auto">
           <div className="relative flex-grow sm:flex-grow-0">
             <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
-            <input 
-              type="text" 
-              placeholder="Search posts..." 
+            <input
+              type="text"
+              placeholder="Search posts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none w-full sm:w-64"
+              className="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none w-full sm:w-64 text-gray-900 dark:text-white placeholder-gray-400"
             />
           </div>
-          <button 
+          <button
             onClick={handleCreate}
             className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
           >
@@ -83,7 +84,7 @@ const PostList = () => {
       {/* List */}
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          <thead className="bg-gray-50 text-gray-600 font-semibold text-sm">
+          <thead className="bg-gray-50 dark:bg-slate-700/50 text-gray-600 dark:text-gray-400 font-semibold text-sm">
             <tr>
               <th className="px-6 py-4">Title</th>
               <th className="px-6 py-4">Date</th>
@@ -91,49 +92,50 @@ const PostList = () => {
               <th className="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-slate-700">
             {loading ? (
-              <tr>
-                <td colSpan="4" className="text-center py-8 text-gray-500">Loading posts...</td>
-              </tr>
+              [1, 2, 3, 4, 5].map((i) => (
+                <TableRowSkeleton key={i} />
+              ))
             ) : filteredPosts.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center py-8 text-gray-500">No posts found.</td>
+                <td colSpan="4" className="text-center py-8 text-gray-500 dark:text-gray-400">No posts found.</td>
               </tr>
             ) : (
               filteredPosts.map(post => (
-                <tr key={post.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={post.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                   <td className="px-6 py-4">
-                    <div className="font-medium text-gray-900">{post.title}</div>
-                    <div className="text-sm text-gray-500 truncate max-w-xs">{post.content}</div>
+                    <div className="font-medium text-gray-900 dark:text-white">{post.title}</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">{post.content}</div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
+                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                     <div className="flex items-center gap-2">
                       <Calendar size={14} />
-                      {post.createdAt?.seconds 
-                        ? new Date(post.createdAt.seconds * 1000).toLocaleDateString() 
+                      {post.createdAt?.seconds
+                        ? new Date(post.createdAt.seconds * 1000).toLocaleDateString()
                         : 'Just now'}
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      post.isApproved ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                    }`}>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${post.isApproved
+                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                      : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                      }`}>
                       {post.isApproved ? 'Published' : 'Pending'}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button 
+                      <button
                         onClick={() => handleEdit(post)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                         title="Edit"
                       >
                         <Edit2 size={18} />
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(post.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                         title="Delete"
                       >
                         <Trash2 size={18} />
@@ -148,10 +150,10 @@ const PostList = () => {
       </div>
 
       {isFormOpen && (
-        <PostForm 
-          postToEdit={editingPost} 
-          onClose={() => setIsFormOpen(false)} 
-          onSave={fetchPosts} 
+        <PostForm
+          postToEdit={editingPost}
+          onClose={() => setIsFormOpen(false)}
+          onSave={fetchPosts}
         />
       )}
     </div>
