@@ -299,6 +299,8 @@ const Home = () => {
                     <img
                       src={`https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=800&q=80`}
                       alt={item.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
@@ -398,6 +400,7 @@ const Home = () => {
                               <img
                                 src={admin.image}
                                 alt={admin.name}
+                                loading="lazy"
                                 className="w-full h-full object-cover"
                               />
                             ) : (

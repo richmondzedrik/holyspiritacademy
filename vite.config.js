@@ -8,4 +8,17 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore', 'firebase/storage'],
+          ui: ['lucide-react', 'react-hot-toast'],
+          three: ['three', '@react-three/fiber', '@react-three/drei']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
+  }
 })

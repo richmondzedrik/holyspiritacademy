@@ -15,12 +15,12 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       await sendMessage(
-        formData.name, 
-        formData.email, 
-        formData.subject, 
+        formData.name,
+        formData.email,
+        formData.subject,
         formData.message
       );
       toast.success('Message sent! We will get back to you soon.');
@@ -40,7 +40,7 @@ const ContactForm = () => {
   return (
     <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700">
       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a Message</h3>
-      
+
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
@@ -78,7 +78,7 @@ const ContactForm = () => {
             </div>
           </div>
         </div>
-        
+
         <div>
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Subject</label>
           <div className="relative">
@@ -98,7 +98,7 @@ const ContactForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Message</label>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Message <span className="text-red-500">*</span></label>
           <textarea
             name="message"
             required

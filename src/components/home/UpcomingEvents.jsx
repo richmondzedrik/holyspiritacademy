@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getEvents, getEvent } from '../../services/eventService';
 import FadeIn from '../common/FadeIn';
 import EventCard from '../common/EventCard';
+import { PostSkeleton } from '../common/Skeletons';
 import { Calendar, Search, ArrowLeft, Clock, MapPin, Tag, Share2 } from 'lucide-react';
 import schoolImage from '../../assets/hsab.jpg';
 import { Link, useParams } from 'react-router-dom';
@@ -237,7 +238,7 @@ const UpcomingEvents = () => {
                 {loading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {[1, 2, 3].map((i) => (
-                            <div key={i} className="h-96 bg-gray-200 dark:bg-slate-700 rounded-3xl animate-pulse"></div>
+                            <PostSkeleton key={i} />
                         ))}
                     </div>
                 ) : filteredEvents.length > 0 ? (

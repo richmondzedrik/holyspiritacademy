@@ -1,19 +1,21 @@
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  doc, 
-  deleteDoc, 
-  updateDoc, 
-  query, 
-  orderBy, 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  deleteDoc,
+  updateDoc,
+  query,
+  orderBy,
   serverTimestamp,
   getDoc
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { COLLECTIONS } from '../constants/collections';
+import { handleApiError } from '../utils/errorUtils';
 
 // Collection reference
-const postsCollection = collection(db, 'posts');
+const postsCollection = collection(db, COLLECTIONS.POSTS);
 
 // Create a new post
 export const createPost = async (title, content, imageUrl = null, authorId) => {
@@ -25,11 +27,10 @@ export const createPost = async (title, content, imageUrl = null, authorId) => {
       authorId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      isApproved: true // Admin posts are auto-approved usually, or if users post, false. Assuming Admin posts for now.
+      isApproved: true // Admin posts are auto-approved usually
     });
   } catch (error) {
-    console.error("Error creating post: ", error);
-    throw error;
+    handleApiError(error, 'Failed to create post');
   }
 };
 
@@ -43,17 +44,16 @@ export const getPosts = async () => {
       ...doc.data()
     }));
   } catch (error) {
-    console.error("Error fetching posts: ", error);
-    throw error;
+    handleApiError(error, 'Failed to fetch posts');
   }
 };
 
 // Get a single post by ID
 export const getPost = async (id) => {
   try {
-    const postDoc = doc(db, 'posts', id);
+    const postDoc = doc(db, COLLECTIONS.POSTS, id);
     const postSnapshot = await getDoc(postDoc);
-    
+
     if (postSnapshot.exists()) {
       return {
         id: postSnapshot.id,
@@ -63,32 +63,29 @@ export const getPost = async (id) => {
       throw new Error('Post not found');
     }
   } catch (error) {
-    console.error("Error fetching post: ", error);
-    throw error;
+    handleApiError(error, 'Failed to fetch post details');
   }
 };
 
 // Delete a post
 export const deletePost = async (id) => {
   try {
-    const postDoc = doc(db, 'posts', id);
+    const postDoc = doc(db, COLLECTIONS.POSTS, id);
     await deleteDoc(postDoc);
   } catch (error) {
-    console.error("Error deleting post: ", error);
-    throw error;
+    handleApiError(error, 'Failed to delete post');
   }
 };
 
 // Update a post
 export const updatePost = async (id, data) => {
   try {
-    const postDoc = doc(db, 'posts', id);
+    const postDoc = doc(db, COLLECTIONS.POSTS, id);
     await updateDoc(postDoc, {
       ...data,
       updatedAt: serverTimestamp()
     });
   } catch (error) {
-    console.error("Error updating post: ", error);
-    throw error;
+    handleApiError(error, 'Failed to update post');
   }
 };
