@@ -9,6 +9,7 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import ScrollToTop from './components/common/ScrollToTop';
 import { PostSkeleton } from './components/common/Skeletons';
 import { Toaster } from 'react-hot-toast';
+import Mascot from './components/common/Mascot';
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -121,6 +122,7 @@ const AppContent = () => {
           <Footer />
         </ErrorBoundary>
       )}
+      <Mascot />
     </div>
   );
 };
