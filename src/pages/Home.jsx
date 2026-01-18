@@ -244,7 +244,7 @@ const Home = () => {
                     </div>
                     <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Vision</h3>
                     <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                      To be a premier educational institution that cultivates globally competitive, socially responsible, and lifelong learners who contribute positively to society.
+                      The Holy Spirit Academy of Bangued, Abra, Inc. is an agent of the Diocese of Bangued in its educational apostolate for the integral formation of the young people of Abra as mature Christians and enlightened as well as empowered model citizens.
                     </p>
                   </div>
                 </div>
@@ -259,7 +259,7 @@ const Home = () => {
                     </div>
                     <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h3>
                     <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                      We are committed to providing quality education through innovative teaching, values formation, and community engagement, empowering students to achieve their full potential.
+                      The Holy Spirit Academy of Bangued commits itself to educate and influence the young people of Abra to become mature Christians and enlightened, empowered model citizens.
                     </p>
                   </div>
                 </div>
@@ -268,8 +268,8 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Facilities Section */}
-        <section id="facilities" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
+        {/* Gallery Section */}
+        <section id="gallery" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
           <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/5 dark:to-transparent -z-10 pointer-events-none" />
           <div className="max-w-7xl mx-auto">
             <FadeIn>
@@ -280,10 +280,10 @@ const Home = () => {
                   </div>
                 </div>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  Our Facilities
+                  Photo Gallery
                 </h2>
                 <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                  A conducive learning environment with modern amenities.
+                  Explore our campus through photos and memorable moments.
                 </p>
               </div>
             </FadeIn>
@@ -316,19 +316,19 @@ const Home = () => {
             <FadeIn delay={400}>
               <div className="text-center">
                 <Link
-                  to="/facilities"
+                  to="/gallery"
                   className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:gap-4 transition-all"
                 >
-                  <span>Explore All Facilities</span>
+                  <span>View Full Gallery</span>
                   <ArrowRight size={20} />
                 </Link>
               </div>
             </FadeIn>
           </div>
-        </section>
+        </section >
 
         {/* Administrators Section */}
-        <section id="administrators" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
+        < section id="administrators" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden" >
           <div className="max-w-7xl mx-auto relative group/section">
             <FadeIn>
               <div className="text-center mb-16">
@@ -433,10 +433,10 @@ const Home = () => {
               </div>
             </FadeIn>
           </div>
-        </section>
+        </section >
 
         {/* Contact Section */}
-        <section id="contact" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
+        < section id="contact" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden" >
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               <FadeIn direction="right">
@@ -489,10 +489,10 @@ const Home = () => {
               </FadeIn>
             </div>
           </div>
-        </section>
+        </section >
 
         {/* Location Map Section */}
-        <section id="location" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50">
+        < section id="location" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50" >
           <div className="max-w-7xl mx-auto">
             <FadeIn>
               <div className="text-center mb-16">
@@ -515,8 +515,8 @@ const Home = () => {
               </div>
             </FadeIn>
           </div>
-        </section>
-      </div>
+        </section >
+      </div >
     </>
   );
 };

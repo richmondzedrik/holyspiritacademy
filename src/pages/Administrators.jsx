@@ -97,7 +97,7 @@ const Administrators = () => {
   return (
     <>
       <SEO
-        title="School Administrators - Holy Spirit Academy of Bangued"
+        title="School Administrators and Faculties - Holy Spirit Academy of Bangued"
         description="Meet the dedicated administrators leading Holy Spirit Academy of Bangued towards educational excellence."
         keywords="administrators, school leadership, principal, vice principal, Holy Spirit Academy"
       />
@@ -119,7 +119,7 @@ const Administrators = () => {
                   </div>
                 </div>
                 <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                  School Administrators
+                  School Administrators and Faculties
                 </h1>
                 <p className="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto leading-relaxed">
                   Meet the dedicated leaders who guide our school towards excellence in education.
@@ -127,7 +127,7 @@ const Administrators = () => {
               </div>
             </FadeIn>
           </div>
-        </div>
+        </div >
 
         <div className="max-w-7xl mx-auto px-4">
           {/* Search and Filter Section */}
@@ -154,8 +154,8 @@ const Administrators = () => {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${activeTab === tab.id
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105'
-                        : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 scale-105'
+                      : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700'
                       }`}
                   >
                     <tab.icon size={18} />
@@ -233,7 +233,7 @@ const Administrators = () => {
             )}
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

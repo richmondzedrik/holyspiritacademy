@@ -140,7 +140,10 @@ const Contact = () => {
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-lg bg-white dark:bg-slate-800">
                       <span className="font-semibold">Saturday</span>
-                      <span className="text-blue-600 dark:text-blue-400 font-bold">9:00 AM - 12:00 PM</span>
+                      <div className="text-right">
+                        <span className="text-blue-600 dark:text-blue-400 font-bold">8:00 AM - 12:00 PM</span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">(No entrance allowed)</p>
+                      </div>
                     </div>
                     <div className="flex justify-between items-center p-3 rounded-lg bg-white dark:bg-slate-800">
                       <span className="font-semibold">Sunday</span>

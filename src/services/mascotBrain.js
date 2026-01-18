@@ -89,17 +89,17 @@ export const processMessage = async (message) => {
             link: "/vision-mission",
             linkText: "Read Vision & Mission",
             actions: [
-                { label: "🏫 Facilities", query: "facilities" }
+                { label: "🏫 Gallery", query: "gallery" }
             ]
         };
     }
 
-    // 8. Facilities
-    if (lowerMsg.match(/(facility|facilities|gym|library|lab|campus)/)) {
+    // 8. Gallery
+    if (lowerMsg.match(/(facility|facilities|gym|library|lab|campus|gallery|photos)/)) {
         return {
-            text: "We have state-of-the-art facilities including science labs, a library, and sports grounds.",
-            link: "/facilities",
-            linkText: "Tour Our Facilities",
+            text: "We have state-of-the-art facilities including science labs, a library, and sports grounds. Check out our gallery to see more!",
+            link: "/gallery",
+            linkText: "View Gallery",
             actions: [
                 { label: "📝 Apply Now", query: "admissions" }
             ]

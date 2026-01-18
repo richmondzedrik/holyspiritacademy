@@ -24,7 +24,7 @@ const UpcomingEvents = lazy(() => import('./pages/UpcomingEvents'));
 const Announcements = lazy(() => import('./pages/Announcements'));
 const SchoolProfile = lazy(() => import('./pages/SchoolProfile'));
 const VisionMission = lazy(() => import('./pages/VisionMission'));
-const Facilities = lazy(() => import('./pages/Facilities'));
+const Gallery = lazy(() => import('./pages/Gallery'));
 const Administrators = lazy(() => import('./pages/Administrators'));
 const Achievements = lazy(() => import('./pages/Achievements'));
 const Organizations = lazy(() => import('./pages/Organizations'));
@@ -78,7 +78,7 @@ const AppContent = () => {
               <Route path="/upcoming-events" element={<UpcomingEvents />} />
               <Route path="/school-profile" element={<SchoolProfile />} />
               <Route path="/vision-mission" element={<VisionMission />} />
-              <Route path="/facilities" element={<Facilities />} />
+              <Route path="/gallery" element={<Gallery />} />
               <Route path="/administrators" element={<Administrators />} />
               <Route path="/achievements" element={<Achievements />} />
               <Route path="/organizations" element={<Organizations />} />

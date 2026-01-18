@@ -54,8 +54,8 @@ const Navbar = () => {
       children: [
         { name: 'School Profile', path: '/school-profile' },
         { name: 'Vision & Mission', path: '/vision-mission' },
-        { name: 'Facilities', path: '/facilities' },
-        { name: 'Administrators', path: '/administrators' },
+        { name: 'Gallery', path: '/gallery' },
+        { name: 'School Administrators and Faculties', path: '/administrators' },
         { name: 'Achievements', path: '/achievements' },
         { name: 'Organizations & Clubs', path: '/organizations' },
       ]

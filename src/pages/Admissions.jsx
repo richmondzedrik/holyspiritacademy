@@ -212,15 +212,7 @@ const Admissions = () => {
                   ))}
                 </div>
 
-                <div className="mt-10 pt-8 border-t border-gray-200 dark:border-slate-700">
-                  <Link
-                    to="/signup"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold rounded-xl md:text-lg transition-all shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto"
-                  >
-                    Register Online Now
-                    <span className="ml-2">→</span>
-                  </Link>
-                </div>
+
               </section>
 
               {/* FAQs */}
