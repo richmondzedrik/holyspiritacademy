@@ -27,6 +27,7 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { administrators } from '../data/administrators';
+import { elementaryClubs, highSchoolClubs } from '../data/organizations';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -129,6 +130,87 @@ const Home = () => {
 
         {/* Student Life Highlights */}
         <StudentLifeHighlights />
+
+        {/* Organizations Preview Section */}
+        <section id="organizations" className="relative py-24 px-4 bg-gradient-to-b from-blue-50/50 to-white dark:from-slate-900 dark:to-slate-800/50 overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <FadeIn>
+              <div className="text-center mb-16">
+                <div className="inline-block mb-4">
+                  <div className="bg-orange-100 dark:bg-orange-900/30 p-4 rounded-3xl border border-orange-200 dark:border-orange-700/50 shadow-inner">
+                    <Users className="text-orange-600 dark:text-orange-400" size={32} />
+                  </div>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
+                  Student Organizations
+                </h2>
+                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                  Discover a vibrant community where passion meets purpose. From academic clubs to performing arts, there's a place for everyone.
+                </p>
+              </div>
+            </FadeIn>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {[
+                {
+                  title: 'Academic Clubs',
+                  icon: BookOpen,
+                  desc: 'Math, Science, English, & more',
+                  bgClass: 'bg-blue-100 dark:bg-blue-900/30',
+                  textClass: 'text-blue-600 dark:text-blue-400',
+                  hoverBg: 'group-hover:bg-blue-500'
+                },
+                {
+                  title: 'Religious Orgs',
+                  icon: Target,
+                  desc: 'Knights of the Altar, CWL',
+                  bgClass: 'bg-purple-100 dark:bg-purple-900/30',
+                  textClass: 'text-purple-600 dark:text-purple-400',
+                  hoverBg: 'group-hover:bg-purple-500'
+                },
+                {
+                  title: 'Performing Arts',
+                  icon: Trophy,
+                  desc: 'Drum & Lyre, Chorale, Dance',
+                  bgClass: 'bg-pink-100 dark:bg-pink-900/30',
+                  textClass: 'text-pink-600 dark:text-pink-400',
+                  hoverBg: 'group-hover:bg-pink-500'
+                },
+                {
+                  title: 'Service & Scouts',
+                  icon: ShieldCheck,
+                  desc: 'Boy Scouts, Red Cross',
+                  bgClass: 'bg-green-100 dark:bg-green-900/30',
+                  textClass: 'text-green-600 dark:text-green-400',
+                  hoverBg: 'group-hover:bg-green-500'
+                }
+              ].map((category, index) => (
+                <FadeIn key={index} delay={index * 100}>
+                  <div className="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-full">
+                    <div className={`w-14 h-14 rounded-2xl ${category.bgClass} flex items-center justify-center mb-6 ${category.textClass} group-hover:scale-110 transition-transform`}>
+                      <category.icon size={28} />
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{category.title}</h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-4">{category.desc}</p>
+                    <div className={`w-8 h-1 bg-gray-200 dark:bg-slate-700 rounded-full group-hover:w-full ${category.hoverBg} transition-all duration-500`}></div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+
+            <FadeIn delay={400}>
+              <div className="text-center">
+                <Link
+                  to="/organizations"
+                  className="inline-flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold hover:gap-4 transition-all"
+                >
+                  <span>Explore All Clubs & Organizations</span>
+                  <ArrowRight size={20} />
+                </Link>
+              </div>
+            </FadeIn>
+          </div>
+        </section>
 
         {/* About Section */}
         <section id="about" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
