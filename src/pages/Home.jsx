@@ -27,7 +27,6 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { administrators } from '../data/administrators';
-import { elementaryClubs, highSchoolClubs } from '../data/organizations';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -56,7 +55,7 @@ const Home = () => {
         keywords="Holy Spirit Academy, Bangued, Abra, Philippines, school, education, announcements, admissions"
       />
       <div className="flex flex-col min-h-screen">
-        {/* Hero Section - Slider (Untouched) */}
+        {/* Hero Section - Slider (Preserved) */}
         <section id="home">
           <HeroSlider />
         </section>
@@ -238,7 +237,7 @@ const Home = () => {
 
                   <div className="grid grid-cols-3 gap-6 mb-10">
                     {[
-                      { number: "20+", label: "Years Impact" },
+                      { number: "20+", label: "Years Imapct" },
                       { number: "100+", label: "Expert Faculty" },
                       { number: "1k+", label: "Graduates" }
                     ].map((stat, idx) => (
@@ -407,10 +406,10 @@ const Home = () => {
               </div>
             </FadeIn>
           </div>
-        </section >
+        </section>
 
         {/* Administrators Section */}
-        < section id="administrators" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden" >
+        <section id="administrators" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
           <div className="max-w-7xl mx-auto relative group/section">
             <FadeIn>
               <div className="text-center mb-16">
@@ -515,10 +514,10 @@ const Home = () => {
               </div>
             </FadeIn>
           </div>
-        </section >
+        </section>
 
         {/* Contact Section */}
-        < section id="contact" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden" >
+        <section id="contact" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
               <FadeIn direction="right">
@@ -571,10 +570,10 @@ const Home = () => {
               </FadeIn>
             </div>
           </div>
-        </section >
+        </section>
 
         {/* Location Map Section */}
-        < section id="location" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50" >
+        <section id="location" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50">
           <div className="max-w-7xl mx-auto">
             <FadeIn>
               <div className="text-center mb-16">
@@ -597,8 +596,8 @@ const Home = () => {
               </div>
             </FadeIn>
           </div>
-        </section >
-      </div >
+        </section>
+      </div>
     </>
   );
 };
