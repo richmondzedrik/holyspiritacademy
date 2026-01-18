@@ -44,8 +44,11 @@ const PageLoader = () => (
 
 const AppContent = () => {
   const location = useLocation();
-  const hideNavFooter = ['/login', '/signup', '/forgot-password', '/auth/action'];
-  const shouldHideNavFooter = hideNavFooter.includes(location.pathname);
+  const hideNavbarRoutes = ['/login', '/signup', '/forgot-password', '/auth/action'];
+  const hideFooterRoutes = ['/login', '/signup', '/forgot-password', '/auth/action', '/'];
+
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const shouldHideFooter = hideFooterRoutes.includes(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
@@ -60,7 +63,7 @@ const AppContent = () => {
           },
         }}
       />
-      {!shouldHideNavFooter && (
+      {!shouldHideNavbar && (
         <ErrorBoundary>
           <Navbar />
         </ErrorBoundary>
@@ -117,7 +120,7 @@ const AppContent = () => {
           </Suspense>
         </ErrorBoundary>
       </main>
-      {!shouldHideNavFooter && (
+      {!shouldHideFooter && (
         <ErrorBoundary>
           <Footer />
         </ErrorBoundary>

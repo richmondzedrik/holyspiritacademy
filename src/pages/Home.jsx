@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { getPosts } from '../services/postService';
-import AnnouncementCard from '../components/common/AnnouncementCard';
-import ContactForm from '../components/common/ContactForm';
 import HeroSlider from '../components/common/HeroSlider';
 import SchoolMap from '../components/common/SchoolMap';
-import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
-import { PostSkeleton } from '../components/common/Skeletons';
 import StudentLifeHighlights from '../components/home/StudentLifeHighlights';
 import HomeUpcomingEvents from '../components/home/HomeUpcomingEvents';
-import {
-  Bell,
-  BookOpen,
-  Users,
-  Building,
-  Target,
-  Phone,
-  Mail,
-  ArrowRight,
-  MapPin,
-  Star,
-  CheckCircle,
-  ShieldCheck,
-  Trophy,
-  GraduationCap
-} from 'lucide-react';
-import { administrators } from '../data/administrators';
+
+import FeatureSpotlight from '../components/home/FeatureSpotlight';
+import AcademicPrograms from '../components/home/AcademicPrograms';
+import AnnouncementCard from '../components/common/AnnouncementCard';
+// Footer import
+import Footer from '../components/layout/Footer';
+import FadeIn from '../components/common/FadeIn';
+import { PostSkeleton } from '../components/common/Skeletons';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Bell } from 'lucide-react';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -50,553 +38,85 @@ const Home = () => {
   return (
     <>
       <SEO
-        title="Holy Spirit Academy of Bangued - School Information Portal"
-        description="Official website of Holy Spirit Academy of Bangued. Stay updated with the latest announcements, events, and school information. Join our community of excellence in education."
-        keywords="Holy Spirit Academy, Bangued, Abra, Philippines, school, education, announcements, admissions"
+        title="Holy Spirit Academy of Bangued - Educational Excellence"
+        description="Official website of Holy Spirit Academy of Bangued. A premier institution deducated to holistic education and character formation."
+        keywords="Holy Spirit Academy, Bangued, Education, School, Private School, Abra"
       />
-      <div className="flex flex-col min-h-screen">
-        {/* Hero Section - Slider (Preserved) */}
-        <section id="home">
+      <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-slate-900 font-sans text-gray-900 dark:text-gray-100">
+
+        {/* 1. Hero Section - Preserved (First Part) */}
+        <section id="home" className="relative">
           <HeroSlider />
         </section>
 
-        {/* Announcements Section */}
-        <section id="announcements" className="relative py-24 px-4 bg-gradient-to-b from-white via-blue-50/30 to-white dark:from-slate-900 dark:via-slate-800/50 dark:to-slate-900 overflow-hidden">
-          {/* Grid Pattern Background */}
-          <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-white/[0.05] bg-[size:30px_30px] -z-10" />
 
-          <div className="max-w-7xl mx-auto relative z-10">
+
+        {/* 3. Feature Spotlight - Replaces Welcome Message */}
+        <FeatureSpotlight />
+
+        {/* 4. Academic Offerings */}
+        <AcademicPrograms />
+
+        {/* 5. Stats Strip */}
+
+
+        {/* 6. Upcoming Events */}
+        <div className="bg-white dark:bg-slate-900">
+          <HomeUpcomingEvents />
+        </div>
+
+        {/* 7. Latest Announcements */}
+        <section className="py-24 px-4 bg-gray-50 dark:bg-slate-800/50">
+          <div className="max-w-7xl mx-auto">
             <FadeIn>
-              <div className="text-center mb-16 md:mb-20">
-                <div className="inline-block mb-6">
-                  <div className="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-3xl border border-blue-200 dark:border-blue-700/50 shadow-inner">
-                    <Bell className="text-blue-600 dark:text-blue-400" size={32} />
-                  </div>
+              <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4 font-serif">Latest News & Updates</h2>
+                  <p className="text-gray-600 dark:text-gray-400 max-w-xl">Stay connected with the latest happenings at Holy Spirit Academy.</p>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  Latest Announcements
-                </h2>
-                <div className="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full mx-auto mb-6"></div>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                  Stay updated with the latest news, events, and important information from our school community.
-                </p>
+                <Link to="/announcements" className="group flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:gap-3 transition-all">
+                  <span>View All News</span>
+                  <ArrowRight size={20} />
+                </Link>
               </div>
             </FadeIn>
 
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-                {[1, 2, 3].map((i) => (
-                  <PostSkeleton key={i} />
-                ))}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map(i => <PostSkeleton key={i} />)}
               </div>
             ) : posts.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 mb-16">
-                  {posts.slice(0, 3).map((post, index) => (
-                    <FadeIn key={post.id} delay={index * 100}>
-                      <AnnouncementCard post={post} />
-                    </FadeIn>
-                  ))}
-                </div>
-                <FadeIn delay={400}>
-                  <div className="text-center">
-                    <Link
-                      to="/announcements"
-                      className="group inline-flex items-center gap-3 px-8 py-4 bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold rounded-2xl border-2 border-blue-100 dark:border-blue-900 hover:border-blue-600 dark:hover:border-blue-400 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-                    >
-                      <span>View All Announcements</span>
-                      <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </div>
-                </FadeIn>
-              </>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.slice(0, 3).map((post, index) => (
+                  <FadeIn key={post.id} delay={index * 100}>
+                    <AnnouncementCard post={post} />
+                  </FadeIn>
+                ))}
+              </div>
             ) : (
-              <FadeIn>
-                <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-gray-100 dark:border-slate-700 max-w-2xl mx-auto">
-                  <div className="bg-gray-50 dark:bg-slate-700 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Bell size={40} className="text-gray-400" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">No announcements yet</h3>
-                  <p className="text-gray-500 dark:text-gray-400">Check back later for school updates.</p>
-                </div>
-              </FadeIn>
+              <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-3xl border border-dashed border-gray-300 dark:border-slate-700">
+                <Bell className="mx-auto text-gray-400 mb-4" size={48} />
+                <p className="text-gray-500">No recent announcements.</p>
+              </div>
             )}
           </div>
         </section>
 
-        {/* Upcoming Events Section - Preview */}
-        <HomeUpcomingEvents />
-
-        {/* Student Life Highlights */}
+        {/* 8. Student Life */}
         <StudentLifeHighlights />
 
-        {/* Organizations Preview Section */}
-        <section id="organizations" className="relative py-24 px-4 bg-gradient-to-b from-blue-50/50 to-white dark:from-slate-900 dark:to-slate-800/50 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <FadeIn>
-              <div className="text-center mb-16">
-                <div className="inline-block mb-4">
-                  <div className="bg-orange-100 dark:bg-orange-900/30 p-4 rounded-3xl border border-orange-200 dark:border-orange-700/50 shadow-inner">
-                    <Users className="text-orange-600 dark:text-orange-400" size={32} />
-                  </div>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  Student Organizations
-                </h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
-                  Discover a vibrant community where passion meets purpose. From academic clubs to performing arts, there's a place for everyone.
-                </p>
-              </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {[
-                {
-                  title: 'Academic Clubs',
-                  icon: BookOpen,
-                  desc: 'Math, Science, English, & more',
-                  bgClass: 'bg-blue-100 dark:bg-blue-900/30',
-                  textClass: 'text-blue-600 dark:text-blue-400',
-                  hoverBg: 'group-hover:bg-blue-500'
-                },
-                {
-                  title: 'Religious Orgs',
-                  icon: Target,
-                  desc: 'Knights of the Altar, CWL',
-                  bgClass: 'bg-purple-100 dark:bg-purple-900/30',
-                  textClass: 'text-purple-600 dark:text-purple-400',
-                  hoverBg: 'group-hover:bg-purple-500'
-                },
-                {
-                  title: 'Performing Arts',
-                  icon: Trophy,
-                  desc: 'Drum & Lyre, Chorale, Dance',
-                  bgClass: 'bg-pink-100 dark:bg-pink-900/30',
-                  textClass: 'text-pink-600 dark:text-pink-400',
-                  hoverBg: 'group-hover:bg-pink-500'
-                },
-                {
-                  title: 'Service & Scouts',
-                  icon: ShieldCheck,
-                  desc: 'Boy Scouts, Red Cross',
-                  bgClass: 'bg-green-100 dark:bg-green-900/30',
-                  textClass: 'text-green-600 dark:text-green-400',
-                  hoverBg: 'group-hover:bg-green-500'
-                }
-              ].map((category, index) => (
-                <FadeIn key={index} delay={index * 100}>
-                  <div className="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-slate-700 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 h-full">
-                    <div className={`w-14 h-14 rounded-2xl ${category.bgClass} flex items-center justify-center mb-6 ${category.textClass} group-hover:scale-110 transition-transform`}>
-                      <category.icon size={28} />
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{category.title}</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">{category.desc}</p>
-                    <div className={`w-8 h-1 bg-gray-200 dark:bg-slate-700 rounded-full group-hover:w-full ${category.hoverBg} transition-all duration-500`}></div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-
-            <FadeIn delay={400}>
-              <div className="text-center">
-                <Link
-                  to="/organizations"
-                  className="inline-flex items-center gap-2 text-orange-600 dark:text-orange-400 font-bold hover:gap-4 transition-all"
-                >
-                  <span>Explore All Clubs & Organizations</span>
-                  <ArrowRight size={20} />
-                </Link>
-              </div>
-            </FadeIn>
+        {/* 9. Location & Contact - Cleaned, Map Accessible */}
+        <section className="py-0 relative z-10">
+          <div className="w-full relative grayscale hover:grayscale-0 transition-all duration-700">
+            <SchoolMap
+              googleMapsLink="https://maps.app.goo.gl/1kAoUXMiy6RfpJoP6"
+              address="School Street, Bangued, Abra"
+              schoolName="Holy Spirit Academy"
+            />
           </div>
         </section>
 
-        {/* About Section */}
-        <section id="about" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <FadeIn direction="right">
-                <div className="relative">
-                  <div className="inline-block mb-6">
-                    <span className="py-2 px-4 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold text-sm tracking-wide uppercase">
-                      About Us
-                    </span>
-                  </div>
-                  <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-8 leading-tight">
-                    Shaping Futures Through <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400">Excellence</span>
-                  </h2>
-
-                  <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-10">
-                    <p>
-                      Founded with a vision to nurture young minds, <span className="font-bold text-gray-900 dark:text-white">Holy Spirit Academy of Bangued</span> has been a beacon of educational excellence for over two decades.
-                    </p>
-                    <p>
-                      We believe in a holistic approach to education that fosters intellectual growth, creativity, and moral character. Our dedicated faculty ensures every student thrives in a rapidly changing world.
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-6 mb-10">
-                    {[
-                      { number: "20+", label: "Years Imapct" },
-                      { number: "100+", label: "Expert Faculty" },
-                      { number: "1k+", label: "Graduates" }
-                    ].map((stat, idx) => (
-                      <div key={idx} className="bg-gray-50 dark:bg-slate-800 p-4 rounded-2xl border border-gray-100 dark:border-slate-700 text-center">
-                        <div className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 mb-1">{stat.number}</div>
-                        <div className="text-sm font-semibold text-gray-500 dark:text-gray-400">{stat.label}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link
-                    to="/school-profile"
-                    className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1"
-                  >
-                    <span>Learn More About Us</span>
-                    <ArrowRight size={20} />
-                  </Link>
-                </div>
-              </FadeIn>
-
-              <FadeIn direction="left" delay={200}>
-                <div className="relative">
-                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 to-blue-400 rounded-[2rem] opacity-20 blur-2xl animate-pulse"></div>
-                  <div className="relative bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-2xl border border-gray-100 dark:border-slate-700">
-                    <div className="flex items-center gap-4 mb-8">
-                      <div className="p-3 bg-blue-600 rounded-xl text-white">
-                        <Star size={24} fill="currentColor" />
-                      </div>
-                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Why Choose Us?</h3>
-                    </div>
-
-                    <ul className="space-y-6">
-                      {[
-                        { icon: ShieldCheck, title: "Values-Based Education", desc: "Instilling moral character alongside academic rigor." },
-                        { icon: Users, title: "Dedicated Faculty", desc: "Expert teachers committed to student success." },
-                        { icon: Trophy, title: "Proven Excellence", desc: "Consistently recognized for academic achievement." },
-                        { icon: GraduationCap, title: "Future Ready", desc: "Curriculum designed for the challenges of tomorrow." }
-                      ].map((item, idx) => (
-                        <li key={idx} className="flex items-start gap-4">
-                          <div className="flex-shrink-0 mt-1">
-                            <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                              <item.icon size={20} />
-                            </div>
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-gray-900 dark:text-white text-lg">{item.title}</h4>
-                            <p className="text-gray-600 dark:text-gray-400">{item.desc}</p>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* Vision & Mission Section */}
-        <section id="vision-mission" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <FadeIn>
-              <div className="text-center mb-16">
-                <div className="inline-block mb-4">
-                  <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-md">
-                    <Target className="text-blue-600 dark:text-blue-400" size={32} />
-                  </div>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  Vision & Mission
-                </h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                  Our guiding principles that drive educational excellence.
-                </p>
-              </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-12">
-              <FadeIn direction="right" delay={100} className="h-full">
-                <div className="h-full bg-white dark:bg-slate-800 p-10 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300 group overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 dark:bg-blue-900/10 rounded-bl-[10rem] -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-8 text-blue-600 dark:text-blue-400">
-                      <Target size={32} />
-                    </div>
-                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Vision</h3>
-                    <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                      The Holy Spirit Academy of Bangued, Abra, Inc. is an agent of the Diocese of Bangued in its educational apostolate for the integral formation of the young people of Abra as mature Christians and enlightened as well as empowered model citizens.
-                    </p>
-                  </div>
-                </div>
-              </FadeIn>
-
-              <FadeIn direction="left" delay={200} className="h-full">
-                <div className="h-full bg-white dark:bg-slate-800 p-10 rounded-[2.5rem] shadow-xl border border-gray-100 dark:border-slate-700 hover:shadow-2xl transition-all duration-300 group overflow-hidden relative">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 dark:bg-indigo-900/10 rounded-bl-[10rem] -mr-10 -mt-10 transition-transform group-hover:scale-110 duration-700"></div>
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center mb-8 text-indigo-600 dark:text-indigo-400">
-                      <BookOpen size={32} />
-                    </div>
-                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Our Mission</h3>
-                    <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                      The Holy Spirit Academy of Bangued commits itself to educate and influence the young people of Abra to become mature Christians and enlightened, empowered model citizens.
-                    </p>
-                  </div>
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* Gallery Section */}
-        <section id="gallery" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/5 dark:to-transparent -z-10 pointer-events-none" />
-          <div className="max-w-7xl mx-auto">
-            <FadeIn>
-              <div className="text-center mb-16">
-                <div className="inline-block mb-4">
-                  <div className="bg-blue-50 dark:bg-slate-800 p-3 rounded-2xl">
-                    <Building className="text-blue-600 dark:text-blue-400" size={32} />
-                  </div>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  Photo Gallery
-                </h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                  Explore our campus through photos and memorable moments.
-                </p>
-              </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-              {[
-                { img: "1580582932707-520aed937b7b", title: "Modern Classrooms" },
-                { img: "1503676260728-1c00da094a0b", title: "Science Labs" },
-                { img: "1509062522246-3755977927d7", title: "Library & Study Areas" }
-              ].map((item, index) => (
-                <FadeIn key={index} delay={index * 100}>
-                  <div className="group relative rounded-3xl overflow-hidden h-80 shadow-lg cursor-pointer">
-                    <img
-                      src={`https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=800&q=80`}
-                      alt={item.title}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-                    <div className="absolute bottom-0 left-0 p-8 w-full transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                      <h3 className="text-white text-2xl font-bold mb-2">{item.title}</h3>
-                      <div className="h-1 w-12 bg-blue-500 rounded-full"></div>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-
-            <FadeIn delay={400}>
-              <div className="text-center">
-                <Link
-                  to="/gallery"
-                  className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:gap-4 transition-all"
-                >
-                  <span>View Full Gallery</span>
-                  <ArrowRight size={20} />
-                </Link>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
-
-        {/* Administrators Section */}
-        <section id="administrators" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50 overflow-hidden">
-          <div className="max-w-7xl mx-auto relative group/section">
-            <FadeIn>
-              <div className="text-center mb-16">
-                <div className="inline-block mb-4">
-                  <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-sm">
-                    <Users className="text-blue-600 dark:text-blue-400" size={32} />
-                  </div>
-                </div>
-                <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  School Administrators & Faculty
-                </h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                  Meet the dedicated leaders and teachers guiding our institution.
-                </p>
-              </div>
-            </FadeIn>
-
-            {/* Slider Container */}
-            <div className="relative px-4 md:px-20">
-              {/* Navigation Arrows */}
-              <button
-                onClick={() => document.getElementById('admin-slider').scrollBy({ left: -320, behavior: 'smooth' })}
-                className="absolute left-0 md:left-4 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg border border-gray-100 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 hover:scale-110 transition-all focus:outline-none hidden md:flex items-center justify-center cursor-pointer"
-                aria-label="Previous"
-                type="button"
-              >
-                <ArrowRight size={24} className="rotate-180" />
-              </button>
-
-              <button
-                onClick={() => document.getElementById('admin-slider').scrollBy({ left: 320, behavior: 'smooth' })}
-                className="absolute right-0 md:right-4 top-1/2 -translate-y-1/2 z-20 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg border border-gray-100 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-700 hover:scale-110 transition-all focus:outline-none hidden md:flex items-center justify-center cursor-pointer"
-                aria-label="Next"
-                type="button"
-              >
-                <ArrowRight size={24} />
-              </button>
-
-              <div
-                id="admin-slider"
-                className="flex overflow-x-auto gap-6 pb-12 snap-x snap-mandatory hide-scrollbar scroll-smooth"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {[
-                  // Key Admins
-                  { ...administrators[1].members[0], role: 'Superintendent', color: 'from-indigo-500 to-indigo-600' },
-                  { ...administrators[2].members[0], role: 'Director', color: 'from-blue-500 to-blue-600' },
-                  { ...administrators[2].members[1], role: 'Principal (GS)', color: 'from-green-500 to-green-600' },
-                  { ...administrators[4].members[1], role: 'Principal (HS)', color: 'from-blue-600 to-cyan-600' },
-                  // Faculty Samples
-                  { ...administrators[3].members[0], role: 'Kindergarten Adviser', color: 'from-orange-400 to-orange-500' },
-                  { ...administrators[3].members[1], role: 'Grade 1 Adviser', color: 'from-teal-400 to-teal-500' },
-                  { ...administrators[5].members[0], role: 'HS Teacher', color: 'from-purple-500 to-purple-600' },
-                  { ...administrators[5].members[2], role: 'HS Teacher', color: 'from-pink-500 to-pink-600' },
-                ].map((admin, index) => {
-                  const initials = admin.name
-                    .split(' ')
-                    .map(n => n[0])
-                    .join('')
-                    .substring(0, 2)
-                    .toUpperCase();
-
-                  return (
-                    <div key={admin.id} className="min-w-[280px] md:min-w-[300px] snap-center">
-                      <FadeIn delay={index * 100} className="h-full">
-                        <div className="group bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-gray-100 dark:border-slate-700 hover:border-blue-200 dark:hover:border-blue-800 transition-all duration-300 hover:-translate-y-2 text-center h-full flex flex-col items-center">
-                          <div className={`w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-blue-50 dark:border-blue-900/50 mb-6 group-hover:border-blue-200 dark:group-hover:border-blue-700 transition-colors flex items-center justify-center bg-gradient-to-br ${admin.color}`}>
-                            {admin.image ? (
-                              <img
-                                src={admin.image}
-                                alt={admin.name}
-                                loading="lazy"
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <span className="text-3xl font-bold text-white tracking-widest">{initials}</span>
-                            )}
-                          </div>
-                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 leading-tight min-h-[3.5rem] flex items-center justify-center">
-                            {admin.name}
-                          </h3>
-                          <p className="text-blue-600 dark:text-blue-400 font-medium text-xs bg-blue-50 dark:bg-blue-900/20 py-1.5 px-3 rounded-full inline-block max-w-full truncate">
-                            {admin.role || admin.position}
-                          </p>
-                        </div>
-                      </FadeIn>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <FadeIn delay={400}>
-              <div className="text-center mt-4">
-                <Link
-                  to="/administrators"
-                  className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold hover:gap-4 transition-all"
-                >
-                  <span>View All Administrators & Faculty</span>
-                  <ArrowRight size={20} />
-                </Link>
-              </div>
-            </FadeIn>
-          </div>
-        </section>
-
-        {/* Contact Section */}
-        <section id="contact" className="relative py-24 px-4 bg-white dark:bg-slate-900 overflow-hidden">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-              <FadeIn direction="right">
-                <div className="sticky top-24">
-                  <div className="inline-block mb-6">
-                    <span className="py-2 px-4 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-bold text-sm tracking-wide uppercase">
-                      Contact Us
-                    </span>
-                  </div>
-                  <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
-                    Get in Touch With Us
-                  </h2>
-                  <p className="text-xl text-gray-600 dark:text-gray-300 mb-10 leading-relaxed">
-                    Have questions? We'd love to hear from you. Reach out to us through any of the following channels.
-                  </p>
-
-                  <div className="space-y-6 mb-10">
-                    {[
-                      { icon: MapPin, title: "Visit Us", text: "School Street, Bangued, Abra" },
-                      { icon: Phone, title: "Call Us", text: "(123) 456-7890" },
-                      { icon: Mail, title: "Email Us", text: "info@holyspiritacademy.edu.ph" }
-                    ].map((contact, idx) => (
-                      <div key={idx} className="flex items-start gap-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
-                        <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                          <contact.icon size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 dark:text-white text-lg">{contact.title}</h3>
-                          <p className="text-gray-600 dark:text-gray-400">{contact.text}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link
-                    to="/contact"
-                    className="group inline-flex items-center gap-3 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:shadow-xl transition-all transform hover:-translate-y-1"
-                  >
-                    <span>Visit Contact Page</span>
-                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </div>
-              </FadeIn>
-
-              <FadeIn direction="left" delay={200}>
-                <div className="bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-slate-700 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-                  <ContactForm />
-                </div>
-              </FadeIn>
-            </div>
-          </div>
-        </section>
-
-        {/* Location Map Section */}
-        <section id="location" className="relative py-24 px-4 bg-slate-50 dark:bg-slate-900/50">
-          <div className="max-w-7xl mx-auto">
-            <FadeIn>
-              <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">
-                  Visit Our Campus
-                </h2>
-                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                  We look forward to welcoming you to Holy Spirit Academy of Bangued.
-                </p>
-              </div>
-            </FadeIn>
-
-            <FadeIn delay={200}>
-              <div className="rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white dark:border-slate-700">
-                <SchoolMap
-                  googleMapsLink="https://maps.app.goo.gl/1kAoUXMiy6RfpJoP6"
-                  address="School Street, Bangued, Abra, Philippines"
-                  schoolName="Holy Spirit Academy of Bangued"
-                />
-              </div>
-            </FadeIn>
-          </div>
-        </section>
+        <Footer />
       </div>
     </>
   );
