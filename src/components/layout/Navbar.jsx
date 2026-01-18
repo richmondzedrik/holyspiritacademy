@@ -66,8 +66,6 @@ const Navbar = () => {
       children: [
         { name: 'Admission Process', path: '/admissions' },
         { name: 'Tuition & Fees', path: '/fees' },
-        { name: 'Apply Now', path: '/signup' },
-        { name: 'Student Portal', path: '/login' },
       ]
     },
     { name: 'Announcements', path: '/announcements' },
@@ -162,8 +160,8 @@ const Navbar = () => {
             <button
               onClick={toggleTheme}
               className={`p-2 rounded-lg transition-all ${isHome && !isScrolled
-                  ? 'text-white hover:bg-white/10'
-                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700'
+                ? 'text-white hover:bg-white/10'
+                : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700'
                 }`}
               aria-label="Toggle theme"
             >
@@ -175,8 +173,8 @@ const Navbar = () => {
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all border shadow-sm ${isHome && !isScrolled
-                      ? 'border-white/20 hover:bg-white/10 text-white'
-                      : 'border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 hover:border-blue-300 dark:hover:border-blue-500'
+                    ? 'border-white/20 hover:bg-white/10 text-white'
+                    : 'border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700 text-gray-700 dark:text-gray-200 hover:border-blue-300 dark:hover:border-blue-500'
                     }`}
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center overflow-hidden border-2 border-white shadow-sm">
@@ -230,8 +228,8 @@ const Navbar = () => {
                 <Link
                   to="/login"
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${isHome && !isScrolled
-                      ? 'text-white hover:text-blue-200 hover:bg-white/10'
-                      : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'
+                    ? 'text-white hover:text-blue-200 hover:bg-white/10'
+                    : 'text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400'
                     }`}
                 >
                   Login
