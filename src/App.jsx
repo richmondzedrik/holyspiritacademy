@@ -10,6 +10,7 @@ import ScrollToTop from './components/common/ScrollToTop';
 import { PostSkeleton } from './components/common/Skeletons';
 import { Toaster } from 'react-hot-toast';
 import Mascot from './components/common/Mascot';
+import { Analytics } from '@vercel/analytics/react';
 
 // Lazy load pages for code splitting
 const Home = lazy(() => import('./pages/Home'));
@@ -141,6 +142,7 @@ function App() {
           </Router>
         </AuthProvider>
       </ThemeProvider>
+      <Analytics />
     </ErrorBoundary>
   );
 }
