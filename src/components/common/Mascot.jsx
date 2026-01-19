@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import MascotAvatar from './MascotAvatar';
 import Chatbox from './Chatbox';
-import { processMessage, INITIAL_MESSAGE } from '../../services/mascotBrain';
+import { processMessage, INITIAL_MESSAGE, resetConversation } from '../../services/mascotBrain';
 
 const STORAGE_KEY = 'mascotPosition';
 
@@ -99,9 +99,12 @@ const Mascot = () => {
         }
     }, [MASCOT_SIZE]);
 
-    // Persist position
+    // Persist position (debounced for performance)
     useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(position));
+        const timeout = setTimeout(() => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(position));
+        }, 300); // Save after 300ms of no changes
+        return () => clearTimeout(timeout);
     }, [position]);
 
     // Snap logic
@@ -346,7 +349,10 @@ const Mascot = () => {
         <>
             <Chatbox
                 isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
+                onClose={() => {
+                    setIsOpen(false);
+                    resetConversation(); // Reset conversation context for fresh start
+                }}
                 messages={messages}
                 onSendMessage={handleSendMessage}
                 inputValue={inputValue}
@@ -362,12 +368,13 @@ const Mascot = () => {
                 ref={mascotRef}
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleTouchStart}
-                className={`fixed z-50 touch-none select-none will-change-transform
+                className={`fixed z-50 touch-none select-none
                     ${isMobile ? 'w-[100px] h-[100px]' : 'w-[140px] h-[140px]'}`}
                 style={{
                     transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
                     cursor: isDragging.current ? 'grabbing' : 'grab',
                     transition: 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)',
+                    willChange: isDragging.current ? 'transform' : 'auto', // Only during drag for performance
                 }}
                 aria-label="Toggle Support Mascot"
             >
@@ -383,11 +390,15 @@ const Mascot = () => {
                             camera={{ position: [0, 0.3, 3.5], fov: 50 }}
                             className="!w-full !h-full pointer-events-none"
                             gl={{
-                                antialias: true,
+                                antialias: window.devicePixelRatio < 2, // Disable on high-DPI for performance
                                 alpha: true,
-                                premultipliedAlpha: false,
-                                preserveDrawingBuffer: true
+                                powerPreference: "high-performance",
+                                stencil: false,
+                                depth: true,
                             }}
+                            dpr={[1, 1.5]} // Limit pixel ratio for better performance
+                            frameloop="always"
+                            performance={{ min: 0.5 }} // Adaptive performance
                             style={{ background: 'transparent' }}
                         >
                             <ambientLight intensity={0.6} color="#E0E7FF" />

@@ -37,6 +37,9 @@ const MascotAvatar = ({ isChatOpen }) => {
         hopPhase: 0,
     });
 
+    // Frame counter for performance optimization
+    const frameCount = useRef(0);
+
     // VIBRANT, JOLLY COLOR PALETTE
     const colors = useMemo(() => ({
         // Bright sky blue - more cheerful
@@ -65,6 +68,10 @@ const MascotAvatar = ({ isChatOpen }) => {
         const t = frameState.clock.getElapsedTime();
         const s = state.current;
         const dt = Math.min(delta, 0.1);
+
+        // Frame skipping for performance - run non-critical animations at 30fps
+        frameCount.current++;
+        const skipFrame = frameCount.current % 2 === 0;
 
         // ========== JOYFUL BOUNCING ==========
         const bounceSpeed = isChatOpen ? 5.5 : 2.5;
@@ -127,7 +134,7 @@ const MascotAvatar = ({ isChatOpen }) => {
 
         // ========== EXCITED WING FLAPPING ==========
         if (leftWing.current && rightWing.current) {
-            const flapSpeed = isChatOpen ? 22 : 5;
+            const flapSpeed = isChatOpen ? 14 : 5; // Reduced from 22 to 14 for better performance
             const flapAmp = isChatOpen ? 0.8 : 0.35;
 
             const wingPrimary = Math.sin(t * flapSpeed) * flapAmp;
@@ -260,8 +267,8 @@ const MascotAvatar = ({ isChatOpen }) => {
             rightFoot.current.rotation.x = Math.sin(t * hopSpeed + Math.PI) * 0.2;
         }
 
-        // ========== PULSING BLUSH (EXCITEMENT) ==========
-        if (leftBlush.current && rightBlush.current) {
+        // ========== PULSING BLUSH (EXCITEMENT) ========== (Throttled)
+        if (!skipFrame && leftBlush.current && rightBlush.current) {
             const blushPulse = isChatOpen
                 ? 0.6 + Math.sin(t * 4) * 0.2
                 : 0.4 + Math.sin(t * 2) * 0.1;
@@ -275,15 +282,15 @@ const MascotAvatar = ({ isChatOpen }) => {
             rightBlush.current.scale.setScalar(blushScale);
         }
 
-        // ========== ANIMATED CREST ==========
-        if (crest.current) {
+        // ========== ANIMATED CREST ========== (Throttled)
+        if (!skipFrame && crest.current) {
             const crestBounce = Math.sin(t * bounceSpeed) * 0.1;
             crest.current.rotation.z = Math.sin(t * 3) * 0.15;
             crest.current.position.y = 0.48 + crestBounce;
         }
 
-        // ========== SMILE ANIMATION ==========
-        if (smile.current) {
+        // ========== SMILE ANIMATION ========== (Throttled)
+        if (!skipFrame && smile.current) {
             const smileScale = isChatOpen
                 ? 1.2 + Math.sin(t * 3) * 0.1
                 : 1 + Math.sin(t * 1.5) * 0.05;
@@ -296,7 +303,7 @@ const MascotAvatar = ({ isChatOpen }) => {
             {/* ===== BODY ===== */}
             <group ref={body}>
                 {/* Main Body - Rounded and chubby */}
-                <Sphere args={[0.9, 64, 64]} scale={[1, 0.88, 0.92]}>
+                <Sphere args={[0.9, 32, 32]} scale={[1, 0.88, 0.92]}>
                     <meshStandardMaterial
                         color={colors.primary}
                         roughness={0.3}
@@ -316,7 +323,7 @@ const MascotAvatar = ({ isChatOpen }) => {
             {/* ===== HEAD ===== */}
             <group ref={head} position={[0, 0.68, 0.15]}>
                 {/* Head sphere */}
-                <Sphere args={[0.58, 64, 64]} scale={[1, 0.96, 0.96]}>
+                <Sphere args={[0.58, 32, 32]} scale={[1, 0.96, 0.96]}>
                     <meshStandardMaterial
                         color={colors.primary}
                         roughness={0.3}
