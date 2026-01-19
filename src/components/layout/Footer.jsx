@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
+import { Facebook, Mail, Phone, MapPin, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 
@@ -24,12 +24,6 @@ const Footer = () => {
             <div className="flex items-center gap-4 pt-2">
               <a href="#" className="bg-gray-800 dark:bg-slate-800 p-2 rounded-full hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-1">
                 <Facebook size={18} />
-              </a>
-              <a href="#" className="bg-gray-800 dark:bg-slate-800 p-2 rounded-full hover:bg-blue-400 hover:text-white transition-all transform hover:-translate-y-1">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="bg-gray-800 dark:bg-slate-800 p-2 rounded-full hover:bg-pink-600 hover:text-white transition-all transform hover:-translate-y-1">
-                <Instagram size={18} />
               </a>
             </div>
           </div>
