@@ -67,7 +67,8 @@ const CommentList = () => {
       </div>
 
       {/* List */}
-      <div className="overflow-x-auto">
+      {/* Desktop View */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left">
           <thead className="bg-gray-50 dark:bg-slate-700/50 text-gray-600 dark:text-gray-400 font-semibold text-sm">
             <tr>
@@ -102,8 +103,8 @@ const CommentList = () => {
                   </td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${comment.isApproved
-                        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                      : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
                       }`}>
                       {comment.isApproved ? 'Approved' : 'Pending'}
                     </span>
@@ -133,6 +134,59 @@ const CommentList = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4 p-4">
+        {loading ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading comments...</div>
+        ) : filteredComments.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">No comments found.</div>
+        ) : (
+          filteredComments.map(comment => (
+            <div key={comment.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col gap-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">{comment.userName}</h3>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 text-xs">
+                    {comment.createdAt?.seconds
+                      ? new Date(comment.createdAt.seconds * 1000).toLocaleDateString()
+                      : 'Just now'}
+                  </div>
+                </div>
+                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${comment.isApproved
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                  : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                  }`}>
+                  {comment.isApproved ? 'Approved' : 'Pending'}
+                </span>
+              </div>
+
+              <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-slate-900/50 p-3 rounded-lg border border-gray-100 dark:border-slate-700/50">
+                {comment.content}
+              </p>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100 dark:border-slate-700 mt-auto">
+                {!comment.isApproved && (
+                  <button
+                    onClick={() => handleApprove(comment.id)}
+                    className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 rounded-lg transition-colors"
+                  >
+                    <CheckCircle size={14} />
+                    Approve
+                  </button>
+                )}
+                <button
+                  onClick={() => handleDelete(comment.id)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 rounded-lg transition-colors"
+                >
+                  <XCircle size={14} />
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

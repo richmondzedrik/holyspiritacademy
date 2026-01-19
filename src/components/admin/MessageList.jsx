@@ -53,7 +53,7 @@ const MessageList = () => {
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="p-4 md:p-6 border-b border-gray-100 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white">User Feedback & Messages</h2>
 
         <div className="relative w-full sm:w-auto">

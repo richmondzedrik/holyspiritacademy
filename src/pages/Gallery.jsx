@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FadeIn from '../components/common/FadeIn';
+import OptimizedImage from '../components/common/OptimizedImage';
 import SEO from '../components/common/SEO';
 import { Images, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PageHeaderSkeleton, FacilityCardSkeleton } from '../components/common/Skeletons';
@@ -111,10 +112,10 @@ const Gallery = () => {
                                     onClick={() => openLightbox(index)}
                                     className="group relative overflow-hidden rounded-2xl h-72 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-200 dark:border-slate-700"
                                 >
-                                    <img
+                                    <OptimizedImage
                                         src={item.image}
                                         alt={`Gallery image ${index + 1}`}
-                                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                        className="w-full h-full transform group-hover:scale-110 transition-transform duration-700"
                                     />
                                     {/* Hover overlay with zoom icon */}
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-all duration-300">

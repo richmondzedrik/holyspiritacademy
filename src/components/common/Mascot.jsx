@@ -73,16 +73,102 @@ const Mascot = () => {
     const hideOnRoutes = ['/login', '/signup', '/forgot-password'];
     if (hideOnRoutes.includes(location.pathname)) return null;
 
+    // Dragging Logic
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const isDragging = useRef(false);
+    const dragStartPos = useRef({ x: 0, y: 0 });
+    const dragStartTime = useRef(0);
+
+    const handleDragStart = (clientX, clientY) => {
+        isDragging.current = false;
+        dragStartPos.current = {
+            x: clientX - position.x,
+            y: clientY - position.y
+        };
+        dragStartTime.current = Date.now();
+    };
+
+    const handleMouseDown = (e) => {
+        // Prevent default to avoid text selection etc
+        // e.preventDefault(); // Commented out as it might block input focus elsewhere if careless, but fine here
+        if (e.button !== 0) return; // Only left click
+        handleDragStart(e.clientX, e.clientY);
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    };
+
+    const handleMouseMove = (e) => {
+        const newX = e.clientX - dragStartPos.current.x;
+        const newY = e.clientY - dragStartPos.current.y;
+
+        // Only mark as dragging if moved significantly (prevent jitter clicks)
+        if (Math.abs(newX - position.x) > 5 || Math.abs(newY - position.y) > 5) {
+            isDragging.current = true;
+        }
+
+        setPosition({ x: newX, y: newY });
+    };
+
+    const handleMouseUp = (e) => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+
+        // Handle click (toggle) only if it wasn't a drag
+        const dragDuration = Date.now() - dragStartTime.current;
+        if (!isDragging.current && dragDuration < 200) {
+            setIsOpen(prev => !prev);
+        }
+        // Reset dragging flag shortly after to be safe
+        setTimeout(() => { isDragging.current = false; }, 0);
+    };
+
+    // Touch Support
+    const handleTouchStart = (e) => {
+        const touch = e.touches[0];
+        handleDragStart(touch.clientX, touch.clientY);
+
+        document.addEventListener('touchmove', handleTouchMove, { passive: false });
+        document.addEventListener('touchend', handleTouchEnd);
+    };
+
+    const handleTouchMove = (e) => {
+        // Prevent scrolling while dragging the bird
+        e.preventDefault();
+        const touch = e.touches[0];
+        const newX = touch.clientX - dragStartPos.current.x;
+        const newY = touch.clientY - dragStartPos.current.y;
+
+        if (Math.abs(newX - position.x) > 5 || Math.abs(newY - position.y) > 5) {
+            isDragging.current = true;
+        }
+
+        setPosition({ x: newX, y: newY });
+    };
+
+    const handleTouchEnd = (e) => {
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+
+        const dragDuration = Date.now() - dragStartTime.current;
+        if (!isDragging.current && dragDuration < 300) {
+            setIsOpen(prev => !prev);
+        }
+    };
+
     return (
-        <div className="fixed bottom-4 right-4 z-50 font-sans">
-            {/* Chat Window */}
+        <>
+            {/* Chat Window - Detached & Fixed */}
             {isOpen && (
                 <div
-                    className="absolute bottom-16 right-0 w-[90vw] sm:w-[350px] md:w-[400px] 
-                     h-[500px] max-h-[80vh] bg-white dark:bg-slate-800 
+                    className="fixed bottom-24 right-4 z-[60] w-[90vw] sm:w-[350px] md:w-[400px] 
+                     h-[500px] max-h-[70vh] bg-white dark:bg-slate-800 
                      rounded-2xl shadow-2xl flex flex-col overflow-hidden
                      border border-gray-200 dark:border-slate-700
-                     animate-in slide-in-from-bottom-5 fade-in duration-300 origin-bottom-right"
+                     animate-in zoom-in-0 fade-in slide-in-from-bottom-10 duration-300 ease-out origin-bottom-right"
+                    // Ensure chat window handles its own touches normally
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
                 >
                     {/* Header */}
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex items-center justify-between text-white shrink-0">
@@ -197,59 +283,56 @@ const Mascot = () => {
                 </div>
             )}
 
-            {/* Floating Button (Toggle) */}
+            {/* Floating Button (Toggle & Drag Handle) */}
             <div
-                onClick={() => setIsOpen(!isOpen)}
-                className={`cursor-pointer transition-all duration-500 ease-out absolute
-                   ${isOpen
-                        ? 'bottom-[510px] sm:bottom-[510px] right-0 w-20 h-20 md:w-24 md:h-24'
-                        : 'bottom-0 right-0 w-24 h-24 md:w-28 md:h-28'
-                    }
-                   flex items-center justify-center
-                   hover:scale-110 active:scale-95`}
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
+                className={`fixed z-50 bottom-4 right-4 w-20 h-20 md:w-28 md:h-28 touch-none select-none`}
+                style={{
+                    transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
+                    cursor: isDragging.current ? 'grabbing' : 'grab',
+                }}
                 aria-label="Toggle Support Mascot"
             >
-                {/* 3D Scene */}
-                <Suspense fallback={
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl border-4 border-white animate-pulse">
-                        🐦
-                    </div>
-                }>
-                    <Canvas
-                        camera={{ position: [0, 0.2, 3.2], fov: 50 }}
-                        className="!w-full !h-full pointer-events-none"
-                        gl={{ antialias: true, alpha: true }}
-                    >
-                        {/* Soft ambient for base illumination */}
-                        <ambientLight intensity={0.6} color="#E0E7FF" />
+                {/* Inner Container for Visuals & Hover Effects (Separated from Drag Transform) */}
+                <div className={`w-full h-full flex items-center justify-center transition-transform duration-200 ease-out hover:scale-110 active:scale-95`}>
+                    {/* 3D Scene */}
+                    <Suspense fallback={
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl border-4 border-white animate-pulse">
+                            🐦
+                        </div>
+                    }>
+                        <Canvas
+                            camera={{ position: [0, 0.2, 3.2], fov: 50 }}
+                            className="!w-full !h-full pointer-events-none"
+                            gl={{ antialias: true, alpha: true }}
+                        >
+                            {/* Soft ambient for base illumination */}
+                            <ambientLight intensity={0.6} color="#E0E7FF" />
 
-                        {/* Key light - warm from top-right */}
-                        <pointLight position={[3, 4, 4]} intensity={1.2} color="#FFFFFF" />
+                            {/* Key light - warm from top-right */}
+                            <pointLight position={[3, 4, 4]} intensity={1.2} color="#FFFFFF" />
 
-                        {/* Fill light - cool from left */}
-                        <pointLight position={[-3, 1, 2]} intensity={0.4} color="#93C5FD" />
+                            {/* Fill light - cool from left */}
+                            <pointLight position={[-3, 1, 2]} intensity={0.4} color="#93C5FD" />
 
-                        {/* Rim light - subtle back glow */}
-                        <pointLight position={[0, -2, -3]} intensity={0.3} color="#A5B4FC" />
+                            {/* Rim light - subtle back glow */}
+                            <pointLight position={[0, -2, -3]} intensity={0.3} color="#A5B4FC" />
 
-                        <MascotAvatar isChatOpen={isOpen} />
-                    </Canvas>
-                </Suspense>
+                            <MascotAvatar isChatOpen={isOpen} />
+                        </Canvas>
+                    </Suspense>
 
-                {/* Notification Badge */}
-                {!isOpen && (
-                    <span className="absolute top-1 right-1 flex h-4 w-4 z-10">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white dark:border-slate-800"></span>
-                    </span>
-                )}
+                    {/* Notification Badge */}
+                    {!isOpen && (
+                        <span className="absolute top-1 right-1 flex h-4 w-4 z-10">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white dark:border-slate-800"></span>
+                        </span>
+                    )}
+                </div>
             </div>
-
-            {/* Close button that appears when open, replacing the FAB visual effectively 
-          (Actually, I just hid the FAB above when open, but on mobile it's nice to have a way to close quickly if the header is high up.
-           The header has a close button. Let's keep it simple.)
-      */}
-        </div>
+        </>
     );
 };
 

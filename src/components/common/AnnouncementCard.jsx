@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, MessageSquare, ArrowRight, Clock } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 import CommentSection from './CommentSection';
 import DOMPurify from 'dompurify';
 
@@ -46,11 +47,11 @@ const AnnouncementCard = ({ post }) => {
     <article className="group bg-white dark:bg-slate-800 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-600 flex flex-col h-full animate-fade-in transform hover:-translate-y-2">
       {post.imageUrl && (
         <div className="h-64 overflow-hidden relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-700 dark:to-slate-800">
-          <img
+          <OptimizedImage
             src={post.imageUrl}
             alt={post.title}
-            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-            loading="lazy"
+            className="w-full h-full transform group-hover:scale-110 transition-transform duration-700"
+            placeholder="blur"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
           <div className="absolute top-4 left-4">

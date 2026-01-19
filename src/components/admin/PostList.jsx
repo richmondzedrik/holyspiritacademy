@@ -82,7 +82,8 @@ const PostList = () => {
       </div>
 
       {/* List */}
-      <div className="overflow-x-auto">
+      {/* Desktop Table View */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left">
           <thead className="bg-gray-50 dark:bg-slate-700/50 text-gray-600 dark:text-gray-400 font-semibold text-sm">
             <tr>
@@ -147,6 +148,56 @@ const PostList = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4 p-4">
+        {loading ? (
+          [1, 2, 3].map((i) => <div key={i} className="h-32 bg-gray-100 dark:bg-slate-800 animate-pulse rounded-xl" />)
+        ) : filteredPosts.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">No posts found.</div>
+        ) : (
+          filteredPosts.map(post => (
+            <div key={post.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col gap-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white line-clamp-1">{post.title}</h3>
+                  <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2 mt-1">
+                    <Calendar size={14} />
+                    {post.createdAt?.seconds
+                      ? new Date(post.createdAt.seconds * 1000).toLocaleDateString()
+                      : 'Just now'}
+                  </div>
+                </div>
+                <span className={`px-2 py-0.5 text-xs font-semibold rounded-full ${post.isApproved
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                  : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                  }`}>
+                  {post.isApproved ? 'Published' : 'Pending'}
+                </span>
+              </div>
+
+              <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{post.content}</p>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-gray-100 dark:border-slate-700 mt-auto">
+                <button
+                  onClick={() => handleEdit(post)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg transition-colors"
+                >
+                  <Edit2 size={14} />
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(post.id)}
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors"
+                >
+                  <Trash2 size={14} />
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {isFormOpen && (

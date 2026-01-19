@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, FileText, Users, MessageSquare, LogOut, Settings, Mail, Calendar } from 'lucide-react';
+import { LayoutDashboard, FileText, Users, MessageSquare, LogOut, Settings, Mail, Calendar, X } from 'lucide-react';
 import PostList from '../components/admin/PostList';
 import AdminEvents from '../components/admin/AdminEvents';
 import UserList from '../components/admin/UserList';
@@ -74,11 +74,20 @@ const AdminDashboard = () => {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-950 pt-16 transition-colors duration-300">
       {/* Mobile Sidebar Toggle */}
+      {/* Mobile Sidebar Backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden backdrop-blur-sm transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar Toggle */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden fixed bottom-4 right-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg border-2 border-white dark:border-slate-800"
+        className="md:hidden fixed bottom-6 right-6 z-50 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg border-2 border-white dark:border-slate-800 transition-all hover:scale-110 active:scale-95"
       >
-        <LayoutDashboard size={24} />
+        {isMobileMenuOpen ? <X size={24} /> : <LayoutDashboard size={24} />}
       </button>
 
       {/* Sidebar */}
@@ -128,7 +137,7 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-grow md:ml-72 p-8">
+      <main className="flex-grow md:ml-72 p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
           <Routes>
             <Route path="/" element={

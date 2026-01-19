@@ -57,7 +57,7 @@ const PostForm = ({ postToEdit, onClose, onSave }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto flex-grow">
+        <form onSubmit={handleSubmit} className="p-6 space-y-6 overflow-y-auto flex-grow max-h-[60vh] md:max-h-none">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
             <input
