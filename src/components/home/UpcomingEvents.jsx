@@ -195,7 +195,7 @@ const UpcomingEvents = () => {
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                     style={{ backgroundImage: `url(${schoolImage})` }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 via-blue-900/80 to-blue-900/70" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
                 <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]" />
                 <div className="max-w-7xl mx-auto px-4 relative z-10">
                     <FadeIn>
@@ -205,10 +205,10 @@ const UpcomingEvents = () => {
                                     <Calendar className="text-white" size={40} />
                                 </div>
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
+                            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 text-white drop-shadow-lg">
                                 Upcoming Events
                             </h1>
-                            <p className="text-xl md:text-2xl text-blue-50 max-w-3xl mx-auto leading-relaxed">
+                            <p className="text-xl md:text-2xl text-gray-100 max-w-3xl mx-auto leading-relaxed drop-shadow-md">
                                 Don't miss out on what's happening at Holy Spirit Academy. Join us for these upcoming activities.
                             </p>
                         </div>

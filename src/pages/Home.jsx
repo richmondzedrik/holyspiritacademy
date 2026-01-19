@@ -106,14 +106,12 @@ const Home = () => {
         <StudentLifeHighlights />
 
         {/* 9. Location & Contact - Cleaned, Map Accessible */}
-        <section className="py-0 relative z-10">
-          <div className="w-full relative grayscale hover:grayscale-0 transition-all duration-700">
-            <SchoolMap
-              googleMapsLink="https://maps.app.goo.gl/1kAoUXMiy6RfpJoP6"
-              address="School Street, Bangued, Abra"
-              schoolName="Holy Spirit Academy"
-            />
-          </div>
+        <section className="relative z-10">
+          <SchoolMap
+            googleMapsLink="https://maps.app.goo.gl/1kAoUXMiy6RfpJoP6"
+            address="School Street, Bangued, Abra"
+            schoolName="Holy Spirit Academy"
+          />
         </section>
 
         <Footer />

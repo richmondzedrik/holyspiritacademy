@@ -68,14 +68,23 @@ const Navbar = () => {
         { name: 'Tuition & Fees', path: '/fees' },
       ]
     },
-    { name: 'Announcements', path: '/announcements' },
-    { name: 'Upcoming Events', path: '/upcoming-events' },
+    {
+      name: 'Updates',
+      path: '/announcements',
+      children: [
+        { name: 'Announcements', path: '/announcements' },
+        { name: 'Upcoming Events', path: '/upcoming-events' },
+      ]
+    },
     { name: 'Contact', path: '/contact' },
   ];
 
   // Helper to handle navigation
   const handleNavClick = (path) => {
     setIsOpen(false);
+    if (path === '/' && location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     navigate(path);
   };
 

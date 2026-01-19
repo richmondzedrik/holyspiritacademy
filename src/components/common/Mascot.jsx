@@ -47,7 +47,7 @@ const Mascot = () => {
     const lastDragPos = useRef({ x: 0, y: 0 });
     const lastDragTime = useRef(0);
 
-    const MASCOT_SIZE = isMobile ? 80 : 112;
+    const MASCOT_SIZE = isMobile ? 100 : 140; // Optimized size for better appearance
     const EDGE_MARGIN = 16;
     const DRAG_THRESHOLD = isMobile ? 3 : 5;
     const TAP_TIME_THRESHOLD = isMobile ? 300 : 200;
@@ -363,11 +363,11 @@ const Mascot = () => {
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleTouchStart}
                 className={`fixed z-50 touch-none select-none will-change-transform
-                    ${isMobile ? 'w-20 h-20' : 'w-24 h-24 md:w-28 md:h-28'}`}
+                    ${isMobile ? 'w-[100px] h-[100px]' : 'w-[140px] h-[140px]'}`}
                 style={{
                     transform: `translate3d(${position.x}px, ${position.y}px, 0)`,
                     cursor: isDragging.current ? 'grabbing' : 'grab',
-                    transition: 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)', // Init transition
+                    transition: 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)',
                 }}
                 aria-label="Toggle Support Mascot"
             >
@@ -375,14 +375,20 @@ const Mascot = () => {
                     ${isDragging.current ? 'scale-90 rotate-3' : 'hover:scale-105 active:scale-95'}`}>
 
                     <Suspense fallback={
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-4xl shadow-xl border-4 border-white animate-pulse">
+                        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-3xl shadow-xl border-4 border-white animate-pulse">
                             🐦
                         </div>
                     }>
                         <Canvas
-                            camera={{ position: [0, 0.2, 3.2], fov: 50 }}
+                            camera={{ position: [0, 0.3, 3.5], fov: 50 }}
                             className="!w-full !h-full pointer-events-none"
-                            gl={{ antialias: true, alpha: true }}
+                            gl={{
+                                antialias: true,
+                                alpha: true,
+                                premultipliedAlpha: false,
+                                preserveDrawingBuffer: true
+                            }}
+                            style={{ background: 'transparent' }}
                         >
                             <ambientLight intensity={0.6} color="#E0E7FF" />
                             <pointLight position={[3, 4, 4]} intensity={1.2} color="#FFFFFF" />
