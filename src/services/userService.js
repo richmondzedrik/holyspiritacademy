@@ -1,5 +1,10 @@
 import { collection, getDocs, doc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { deleteUserComments } from './commentService';
+import { deleteUserMessages } from './feedbackService';
+import { deleteUserPosts } from './postService';
+
+
 
 // Collection reference
 const usersCollection = collection(db, 'users');
@@ -59,12 +64,20 @@ export const updateUserRole = async (userId, newRole) => {
   }
 };
 
-// Delete user (Note: This only deletes from Firestore, deleting from Auth requires Cloud Functions or Admin SDK)
+// Delete user (Firestore deletion triggers Cloud Function to delete from Auth)
 export const deleteUser = async (userId) => {
   try {
+    // Delete related data first
+    await Promise.all([
+      deleteUserComments(userId),
+      deleteUserMessages(userId),
+      deleteUserPosts(userId)
+    ]);
+
     const userDoc = doc(db, 'users', userId);
     await deleteDoc(userDoc);
-    // Note: In a real production app, you'd also want to trigger an Auth deletion
+    // Note: Deleting the Firestore document triggers the Cloud Function 
+    // 'deleteAuthUserOnProfileDelete' which automatically deletes the user from Firebase Auth
   } catch (error) {
     console.error("Error deleting user: ", error);
     throw error;

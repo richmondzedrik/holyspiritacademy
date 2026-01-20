@@ -8,7 +8,8 @@ import {
   query,
   orderBy,
   serverTimestamp,
-  getDoc
+  getDoc,
+  where
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { COLLECTIONS } from '../constants/collections';
@@ -87,5 +88,18 @@ export const updatePost = async (id, data) => {
     });
   } catch (error) {
     handleApiError(error, 'Failed to update post');
+  }
+};
+
+// Delete all posts by a specific user
+export const deleteUserPosts = async (userId) => {
+  try {
+    const q = query(postsCollection, where("authorId", "==", userId));
+    const snapshot = await getDocs(q);
+
+    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+  } catch (error) {
+    handleApiError(error, 'Failed to delete user posts');
   }
 };

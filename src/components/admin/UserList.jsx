@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { getUsers, updateUserRole, deleteUser } from '../../services/userService';
-import { Search, Trash2, Shield, User, UserCheck } from 'lucide-react';
+import { cleanOrphanedData } from '../../services/adminService';
+import { Search, Trash2, Shield, User, UserCheck, RefreshCw } from 'lucide-react';
 import { TableRowSkeleton } from '../common/Skeletons';
+import toast from 'react-hot-toast';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [actionLoading, setActionLoading] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -15,6 +18,7 @@ const UserList = () => {
       setUsers(data);
     } catch (error) {
       console.error("Error fetching users:", error);
+      toast.error("Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -28,21 +32,62 @@ const UserList = () => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
     if (window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) {
       try {
+        setActionLoading(true);
         await updateUserRole(userId, newRole);
-        setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
+        toast.success(`User role updated to ${newRole}`);
+        // Refresh list to ensure consistency
+        fetchUsers();
       } catch (error) {
-        alert("Failed to update role");
+        console.error("Role update failed:", error);
+        toast.error("Failed to update role");
+      } finally {
+        setActionLoading(false);
       }
     }
   };
 
   const handleDelete = async (userId) => {
-    if (window.confirm('Are you sure you want to delete this user profile? Note: This does not delete their login credentials (requires Admin SDK).')) {
+    if (window.confirm(
+      'Are you sure you want to delete this user?\n\n' +
+      'WARNING: This will permanently delete:\n' +
+      '• Their Firebase Authentication account\n' +
+      '• Their profile from the database\n' +
+      '• All their posts, comments, and messages\n\n' +
+      'This action CANNOT be undone!'
+    )) {
       try {
-        await deleteUser(userId);
+        setActionLoading(true);
+        // Optimistic update for immediate feedback
         setUsers(users.filter(u => u.id !== userId));
+
+        await deleteUser(userId);
+        toast.success("User profile and data deleted");
+
+        // Fetch fresh data to ensure dashboard stats and list are synced
+        await fetchUsers();
       } catch (error) {
-        alert("Failed to delete user");
+        console.error("Delete failed:", error);
+        toast.error("Failed to delete user data");
+        // Revert optimistic update on failure
+        fetchUsers();
+      } finally {
+        setActionLoading(false);
+      }
+    }
+  };
+
+  const handleCleanData = async () => {
+    if (window.confirm('This will scan for and remove all comments, posts, and messages from users who no longer exist. Continue?')) {
+      try {
+        setActionLoading(true);
+        const stats = await cleanOrphanedData();
+        toast.success(`Cleanup complete: ${stats.comments} comments, ${stats.posts} posts, ${stats.messages} messages removed`);
+        await fetchUsers();
+      } catch (error) {
+        console.error("Cleanup failed:", error);
+        toast.error("Failed to clean data");
+      } finally {
+        setActionLoading(false);
       }
     }
   };
@@ -53,7 +98,13 @@ const UserList = () => {
   );
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden relative">
+      {actionLoading && (
+        <div className="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm z-10 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="p-6 border-b border-gray-100 dark:border-slate-700 flex flex-col sm:flex-row justify-between items-center gap-4">
         <h2 className="text-xl font-bold text-gray-800 dark:text-white">Manage Users</h2>
@@ -68,6 +119,15 @@ const UserList = () => {
             className="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none w-full sm:w-64 text-gray-900 dark:text-white placeholder-gray-400"
           />
         </div>
+
+        <button
+          onClick={handleCleanData}
+          className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-sm font-medium"
+          title="Remove data from deleted users"
+        >
+          <RefreshCw size={18} />
+          <span className="hidden sm:inline">Clean Data</span>
+        </button>
       </div>
 
       {/* List */}
@@ -96,9 +156,9 @@ const UserList = () => {
                 <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold overflow-hidden">
                         {user.photoURL ? (
-                          <img src={user.photoURL} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
+                          <img src={user.photoURL} alt={user.fullName} className="w-full h-full object-cover" />
                         ) : (
                           user.fullName?.charAt(0).toUpperCase() || 'U'
                         )}
@@ -156,9 +216,9 @@ const UserList = () => {
           filteredUsers.map(user => (
             <div key={user.id} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 flex flex-col gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold flex-shrink-0">
+                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 font-bold flex-shrink-0 overflow-hidden">
                   {user.photoURL ? (
-                    <img src={user.photoURL} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
+                    <img src={user.photoURL} alt={user.fullName} className="w-full h-full object-cover" />
                   ) : (
                     user.fullName?.charAt(0).toUpperCase() || 'U'
                   )}

@@ -99,3 +99,16 @@ export const deleteComment = async (commentId) => {
     handleApiError(error, 'Failed to delete comment');
   }
 };
+
+// Delete all comments by a specific user
+export const deleteUserComments = async (userId) => {
+  try {
+    const q = query(commentsCollection, where("userId", "==", userId));
+    const snapshot = await getDocs(q);
+
+    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+  } catch (error) {
+    handleApiError(error, 'Failed to delete user comments');
+  }
+};

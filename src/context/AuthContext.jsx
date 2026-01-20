@@ -77,6 +77,22 @@ export const AuthProvider = ({ children }) => {
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if (userDoc.exists()) {
           setUserData(userDoc.data());
+        } else {
+          // CRITICAL: If user exists in Auth but not in Firestore (deleted), force logout
+          // Allow a grace period for new signups (time to create the doc)
+          const creationTime = new Date(user.metadata.creationTime).getTime();
+          const now = new Date().getTime();
+          const gracePeriod = 5 * 60 * 1000; // 5 minutes
+
+          if (now - creationTime > gracePeriod) {
+            console.warn("User authenticated but no Firestore profile found. Logging out.");
+            await signOut(auth);
+            setCurrentUser(null);
+            setUserData(null);
+            setLoading(false);
+            return;
+          }
+          setUserData(null);
         }
       } else {
         setUserData(null);

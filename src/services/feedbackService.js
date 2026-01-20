@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, orderBy, query, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, orderBy, query, serverTimestamp, where, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 const messagesCollection = collection(db, 'messages');
@@ -32,6 +32,20 @@ export const getMessages = async () => {
     }));
   } catch (error) {
     console.error("Error fetching messages: ", error);
+    throw error;
+  }
+};
+
+// Delete all messages by a specific user
+export const deleteUserMessages = async (userId) => {
+  try {
+    const q = query(messagesCollection, where("userId", "==", userId));
+    const snapshot = await getDocs(q);
+
+    const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
+    await Promise.all(deletePromises);
+  } catch (error) {
+    console.error("Error deleting user messages: ", error);
     throw error;
   }
 };
