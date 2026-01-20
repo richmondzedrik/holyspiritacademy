@@ -35,9 +35,20 @@ const EventCard = ({ event }) => {
     return (
         <div className="group relative flex flex-col bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg border border-gray-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 hover:border-blue-400 dark:hover:border-blue-500">
             {/* Top accent line */}
-            <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 to-indigo-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+            <div className="h-1.5 w-full bg-gradient-to-r from-blue-500 to-indigo-600 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-10 relative"></div>
 
-            <div className="p-6 md:p-8 flex flex-col h-full relative">
+            {event.imageUrl && (
+                <div className="relative h-52 overflow-hidden">
+                    <img
+                        src={event.imageUrl}
+                        alt={event.title}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+            )}
+
+            <div className={`p-6 md:p-8 flex flex-col relative ${event.imageUrl ? 'flex-grow' : 'h-full'}`}>
                 {/* Background Decoration */}
                 <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none">
                     <Calendar size={120} className="text-blue-600" />

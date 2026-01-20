@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { LogIn, Mail, Lock, Eye, EyeOff, ArrowRight, ArrowLeft } from 'lucide-react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
 import toast from 'react-hot-toast';
 import SEO from '../components/common/SEO';
 import hsabImage from '../assets/hsab.jpg';
@@ -18,12 +20,38 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await login(email, password);
+      const userCredential = await login(email, password);
+
+      // Check user role from Firestore
+      const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+      const userData = userDoc.exists() ? userDoc.data() : null;
+      const isAdmin = userData?.role === 'admin';
+
+      // Check if email is verified (skip for admins)
+      if (!userCredential.user.emailVerified && !isAdmin) {
+        // Log out immediately
+        await userCredential.user.auth.signOut();
+        toast.error('Please verify your email before logging in.');
+        navigate('/verify-email', {
+          state: {
+            email: email,
+            fromLogin: true
+          }
+        });
+        return;
+      }
+
       toast.success('Successfully logged in!');
       navigate('/');
     } catch (err) {
       console.error(err);
-      toast.error('Failed to log in. Please check your credentials.');
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        toast.error('Invalid email or password.');
+      } else if (err.code === 'auth/too-many-requests') {
+        toast.error('Too many failed attempts. Please try again later.');
+      } else {
+        toast.error('Failed to log in. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }

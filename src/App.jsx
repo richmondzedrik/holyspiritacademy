@@ -31,6 +31,7 @@ const Achievements = lazy(() => import('./pages/Achievements'));
 const Organizations = lazy(() => import('./pages/Organizations'));
 const Fees = lazy(() => import('./pages/Fees'));
 const Contact = lazy(() => import('./pages/Contact'));
+const VerifyEmail = lazy(() => import('./pages/VerifyEmail'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Loading fallback component
@@ -91,6 +92,7 @@ const AppContent = () => {
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
 
               {/* Firebase Auth Actions (Verify Email, Reset Password) */}
               <Route path="/auth/action" element={<AuthAction />} />

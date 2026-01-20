@@ -5,7 +5,7 @@ import FadeIn from '../components/common/FadeIn';
 import SEO from '../components/common/SEO';
 import { PostSkeleton, SinglePostSkeleton, PageHeaderSkeleton } from '../components/common/Skeletons';
 import CommentSection from '../components/common/CommentSection';
-import { Bell, Search, Calendar, Clock, Share2, FileText, ArrowLeft, Megaphone } from 'lucide-react';
+import { Bell, Search, Calendar, Clock, Share2, FileText, ArrowLeft, Megaphone, X, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import toast from 'react-hot-toast';
 import hsabImage from '../assets/hsab.jpg';
@@ -16,6 +16,27 @@ const Announcements = () => {
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
+
+    const openLightbox = () => {
+        if (post?.imageUrl) {
+            setLightboxOpen(true);
+            setZoomLevel(1);
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    const closeLightbox = () => {
+        setLightboxOpen(false);
+        setZoomLevel(1);
+        document.body.style.overflow = 'auto';
+    };
+
+    const toggleZoom = (e) => {
+        e.stopPropagation();
+        setZoomLevel(prev => prev === 1 ? 2 : 1);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -115,13 +136,22 @@ const Announcements = () => {
                                     <article className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-slate-700">
                                         {/* Banner Image */}
                                         {post.imageUrl && (
-                                            <div className="relative h-64 md:h-96 w-full">
+                                            <div
+                                                className="relative h-64 md:h-96 w-full cursor-zoom-in group"
+                                                onClick={openLightbox}
+                                            >
                                                 <img
                                                     src={post.imageUrl}
                                                     alt={post.title}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                                 />
                                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+
+                                                <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0 z-10">
+                                                    <div className="bg-white/20 backdrop-blur-md p-3 rounded-full hover:bg-white/30 transition-colors">
+                                                        <Maximize2 className="text-white" size={24} />
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
 
@@ -180,6 +210,68 @@ const Announcements = () => {
                                     </div>
                                 </FadeIn>
                             </div>
+
+                            {/* Lightbox Modal */}
+                            {lightboxOpen && post?.imageUrl && (
+                                <div
+                                    className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center animate-fade-in"
+                                    onClick={closeLightbox}
+                                >
+                                    <button
+                                        onClick={closeLightbox}
+                                        className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300"
+                                    >
+                                        <X size={28} />
+                                    </button>
+
+                                    <div
+                                        className="relative w-full h-full flex items-center justify-center p-4"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <div
+                                            className="relative overflow-hidden cursor-zoom-in"
+                                            style={{
+                                                cursor: zoomLevel > 1 ? 'zoom-out' : 'zoom-in',
+                                                maxHeight: '90vh',
+                                                maxWidth: '90vw'
+                                            }}
+                                            onClick={toggleZoom}
+                                        >
+                                            <img
+                                                src={post.imageUrl}
+                                                alt={post.title}
+                                                className="object-contain transition-transform duration-300 ease-out"
+                                                style={{
+                                                    transform: `scale(${zoomLevel})`,
+                                                    maxHeight: '85vh',
+                                                    maxWidth: '100%',
+                                                }}
+                                            />
+                                        </div>
+
+                                        {/* Zoom Controls */}
+                                        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-50">
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setZoomLevel(prev => Math.max(1, prev - 0.5)); }}
+                                                className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 rounded-full transition-all disabled:opacity-50"
+                                                disabled={zoomLevel <= 1}
+                                            >
+                                                <ZoomOut size={24} />
+                                            </button>
+                                            <span className="bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-full font-mono flex items-center">
+                                                {Math.round(zoomLevel * 100)}%
+                                            </span>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setZoomLevel(prev => Math.min(3, prev + 0.5)); }}
+                                                className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 rounded-full transition-all disabled:opacity-50"
+                                                disabled={zoomLevel >= 3}
+                                            >
+                                                <ZoomIn size={24} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </>
                     ) : (
                         <div className="max-w-4xl mx-auto px-4 text-center py-20">

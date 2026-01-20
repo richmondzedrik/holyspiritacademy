@@ -3,7 +3,7 @@ import { getEvents, getEvent } from '../../services/eventService';
 import FadeIn from '../common/FadeIn';
 import EventCard from '../common/EventCard';
 import { PostSkeleton } from '../common/Skeletons';
-import { Calendar, Search, ArrowLeft, Clock, MapPin, Tag, Share2 } from 'lucide-react';
+import { Calendar, Search, ArrowLeft, Clock, MapPin, Tag, Share2, X, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import schoolImage from '../../assets/hsab.jpg';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
@@ -16,6 +16,27 @@ const UpcomingEvents = () => {
     const [singleEvent, setSingleEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(1);
+
+    const openLightbox = () => {
+        if (singleEvent?.imageUrl) {
+            setLightboxOpen(true);
+            setZoomLevel(1);
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    const closeLightbox = () => {
+        setLightboxOpen(false);
+        setZoomLevel(1);
+        document.body.style.overflow = 'auto';
+    };
+
+    const toggleZoom = (e) => {
+        e.stopPropagation();
+        setZoomLevel(prev => prev === 1 ? 2 : 1);
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -117,13 +138,33 @@ const UpcomingEvents = () => {
                         </Link>
 
                         <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-700">
-                            {/* Header Gradient */}
-                            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 h-32 md:h-48 relative overflow-hidden">
-                                <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:20px_20px]"></div>
-                                <div className="absolute bottom-0 left-0 p-8 text-white opacity-20">
-                                    <Calendar size={120} />
+                            {/* Header Image or Gradient */}
+                            {singleEvent.imageUrl ? (
+                                <div
+                                    className="h-64 md:h-96 relative overflow-hidden group cursor-pointer"
+                                    onClick={openLightbox}
+                                >
+                                    <img
+                                        src={singleEvent.imageUrl}
+                                        alt={singleEvent.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+                                    <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                                        <div className="bg-white/20 backdrop-blur-md p-3 rounded-full hover:bg-white/30 transition-colors">
+                                            <Maximize2 className="text-white" size={24} />
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 h-32 md:h-48 relative overflow-hidden">
+                                    <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:20px_20px]"></div>
+                                    <div className="absolute bottom-0 left-0 p-8 text-white opacity-20">
+                                        <Calendar size={120} />
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="px-8 md:px-12 py-10 -mt-20 relative z-10">
                                 <div className="flex flex-col md:flex-row gap-8 items-start">
@@ -183,6 +224,68 @@ const UpcomingEvents = () => {
                         </div>
                     </FadeIn>
                 </div>
+
+                {/* Lightbox Modal */}
+                {lightboxOpen && singleEvent?.imageUrl && (
+                    <div
+                        className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center animate-fade-in"
+                        onClick={closeLightbox}
+                    >
+                        <button
+                            onClick={closeLightbox}
+                            className="absolute top-4 right-4 z-50 bg-white/10 hover:bg-white/20 text-white p-3 rounded-full transition-all duration-300"
+                        >
+                            <X size={28} />
+                        </button>
+
+                        <div
+                            className="relative w-full h-full flex items-center justify-center p-4"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div
+                                className="relative overflow-hidden cursor-zoom-in"
+                                style={{
+                                    cursor: zoomLevel > 1 ? 'zoom-out' : 'zoom-in',
+                                    maxHeight: '90vh',
+                                    maxWidth: '90vw'
+                                }}
+                                onClick={toggleZoom}
+                            >
+                                <img
+                                    src={singleEvent.imageUrl}
+                                    alt={singleEvent.title}
+                                    className="object-contain transition-transform duration-300 ease-out"
+                                    style={{
+                                        transform: `scale(${zoomLevel})`,
+                                        maxHeight: '85vh',
+                                        maxWidth: '100%',
+                                    }}
+                                />
+                            </div>
+
+                            {/* Zoom Controls */}
+                            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-50">
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); setZoomLevel(prev => Math.max(1, prev - 0.5)); }}
+                                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 rounded-full transition-all disabled:opacity-50"
+                                    disabled={zoomLevel <= 1}
+                                >
+                                    <ZoomOut size={24} />
+                                </button>
+                                <span className="bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-full font-mono flex items-center">
+                                    {Math.round(zoomLevel * 100)}%
+                                </span>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); setZoomLevel(prev => Math.min(3, prev + 0.5)); }}
+                                    className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 rounded-full transition-all disabled:opacity-50"
+                                    disabled={zoomLevel >= 3}
+                                >
+                                    <ZoomIn size={24} />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

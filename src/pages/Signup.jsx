@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus, Mail, Lock, User, Eye, EyeOff, ArrowRight, ArrowLeft } from 'lucide-react';
 import { doc, setDoc } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db, auth } from '../firebase/config';
 import toast from 'react-hot-toast';
 import SEO from '../components/common/SEO';
 import hsabImage from '../assets/hsab.jpg';
@@ -73,11 +73,20 @@ const Signup = () => {
         email: formData.email,
         role: 'user', // Default role
         createdAt: new Date().toISOString(),
-        isVerified: false
+        emailVerified: false
       });
 
-      toast.success('Account created! Please check your email to verify your account.');
-      navigate('/');
+      // 3. Log out immediately to prevent access before verification
+      await auth.signOut();
+
+      // 4. Show success message and redirect to verification page
+      toast.success('Account created! Please verify your email to continue.');
+      navigate('/verify-email', {
+        state: {
+          email: formData.email,
+          fromSignup: true
+        }
+      });
     } catch (err) {
       console.error("Signup Error:", err);
       if (err.code === 'auth/email-already-in-use') {

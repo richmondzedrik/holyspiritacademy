@@ -29,10 +29,10 @@ const useStorage = () => {
             return null;
         }
 
-        // 25MB limit
-        const MAX_SIZE = 25 * 1024 * 1024; // 25MB in bytes
+        // 50MB limit
+        const MAX_SIZE = 50 * 1024 * 1024; // 50MB in bytes
         if (file.size > MAX_SIZE) {
-            const msg = 'File size must be less than 25MB';
+            const msg = 'File size must be less than 50MB';
             setError(msg);
             toast.error(msg);
             setIsUploading(false);
