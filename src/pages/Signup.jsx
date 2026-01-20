@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { isValidPassword, validatePasswordRequirements } from '../utils/formUtils';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { UserPlus, Mail, Lock, User, Eye, EyeOff, ArrowRight, ArrowLeft } from 'lucide-react';
+import { UserPlus, Mail, Lock, User, Eye, EyeOff, ArrowRight, ArrowLeft, Check, X } from 'lucide-react';
 import { doc, setDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase/config';
 import toast from 'react-hot-toast';
@@ -50,8 +51,9 @@ const Signup = () => {
       return setError('Passwords do not match');
     }
 
-    if (formData.password.length < 6) {
-      return setError('Password must be at least 6 characters');
+    const passwordValidation = isValidPassword(formData.password);
+    if (!passwordValidation.isValid) {
+      return setError(passwordValidation.message);
     }
 
     try {
@@ -275,6 +277,30 @@ const Signup = () => {
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
+                  </div>
+
+                  {/* Password Requirements Checklist */}
+                  <div className="mt-2 p-3 bg-gray-50 dark:bg-slate-800/50 rounded-lg border border-gray-100 dark:border-slate-700">
+                    <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">Password Requirements:</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(() => {
+                        const reqs = validatePasswordRequirements(formData.password);
+                        const Requirement = ({ met, text }) => (
+                          <div className={`flex items-center gap-1.5 text-xs ${met ? 'text-green-600 dark:text-green-400' : 'text-gray-400 dark:text-gray-500'}`}>
+                            {met ? <Check size={12} className="stroke-[3]" /> : <div className="w-3 h-3 rounded-full border border-current" />}
+                            <span>{text}</span>
+                          </div>
+                        );
+                        return (
+                          <>
+                            <Requirement met={reqs.length} text="8-16 Characters" />
+                            <Requirement met={reqs.uppercase} text="At least 1 Uppercase" />
+                            <Requirement met={reqs.number} text="At least 1 Number" />
+                            <Requirement met={reqs.symbol} text="At least 1 Symbol" />
+                          </>
+                        );
+                      })()}
+                    </div>
                   </div>
                 </div>
 
