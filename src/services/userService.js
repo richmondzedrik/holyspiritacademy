@@ -9,16 +9,33 @@ import { deleteUserPosts } from './postService';
 // Collection reference
 const usersCollection = collection(db, 'users');
 
-// Get all users
+// Get all users from Firestore
+// Note: This fetches user profile data from Firestore, not directly from Firebase Auth
+// Users are stored in Firestore when they register, with their Auth UID as the document ID
 export const getUsers = async () => {
   try {
+    console.log("Fetching users from Firestore...");
     const snapshot = await getDocs(usersCollection);
-    return snapshot.docs.map(doc => ({
+
+    if (snapshot.empty) {
+      console.warn("No users found in Firestore 'users' collection");
+      return [];
+    }
+
+    const users = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
+
+    console.log(`Successfully fetched ${users.length} users from Firestore`);
+    return users;
   } catch (error) {
-    console.error("Error fetching users: ", error);
+    console.error("Error fetching users from Firestore:", error);
+    console.error("Error details:", {
+      code: error.code,
+      message: error.message,
+      name: error.name
+    });
     throw error;
   }
 };

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getUsers, updateUserRole, deleteUser } from '../../services/userService';
-import { cleanOrphanedData } from '../../services/adminService';
-import { Search, Trash2, Shield, User, UserCheck, RefreshCw } from 'lucide-react';
+import { Search, Trash2, Shield, User, UserCheck } from 'lucide-react';
 import { TableRowSkeleton } from '../common/Skeletons';
 import toast from 'react-hot-toast';
 
@@ -76,21 +75,7 @@ const UserList = () => {
     }
   };
 
-  const handleCleanData = async () => {
-    if (window.confirm('This will scan for and remove all comments, posts, and messages from users who no longer exist. Continue?')) {
-      try {
-        setActionLoading(true);
-        const stats = await cleanOrphanedData();
-        toast.success(`Cleanup complete: ${stats.comments} comments, ${stats.posts} posts, ${stats.messages} messages removed`);
-        await fetchUsers();
-      } catch (error) {
-        console.error("Cleanup failed:", error);
-        toast.error("Failed to clean data");
-      } finally {
-        setActionLoading(false);
-      }
-    }
-  };
+
 
   const filteredUsers = users.filter(user =>
     user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -119,15 +104,6 @@ const UserList = () => {
             className="pl-10 pr-4 py-2 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none w-full sm:w-64 text-gray-900 dark:text-white placeholder-gray-400"
           />
         </div>
-
-        <button
-          onClick={handleCleanData}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors text-sm font-medium"
-          title="Remove data from deleted users"
-        >
-          <RefreshCw size={18} />
-          <span className="hidden sm:inline">Clean Data</span>
-        </button>
       </div>
 
       {/* List */}

@@ -134,27 +134,6 @@ const Announcements = () => {
                                     </Link>
 
                                     <article className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-slate-700">
-                                        {/* Banner Image */}
-                                        {post.imageUrl && (
-                                            <div
-                                                className="relative h-64 md:h-96 w-full cursor-zoom-in group"
-                                                onClick={openLightbox}
-                                            >
-                                                <img
-                                                    src={post.imageUrl}
-                                                    alt={post.title}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-
-                                                <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0 z-10">
-                                                    <div className="bg-white/20 backdrop-blur-md p-3 rounded-full hover:bg-white/30 transition-colors">
-                                                        <Maximize2 className="text-white" size={24} />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
                                         <div className="p-8 md:p-12">
                                             {/* Metadata */}
                                             <div className="flex flex-wrap items-center gap-6 mb-8 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-100 dark:border-slate-700 pb-8">
@@ -183,12 +162,35 @@ const Announcements = () => {
 
                                             {/* Content */}
                                             <div
-                                                className="prose prose-lg md:prose-xl dark:prose-invert max-w-none mb-12 text-gray-700 dark:text-gray-300 leading-relaxed font-sans"
+                                                className="prose prose-lg md:prose-xl dark:prose-invert max-w-none mb-8 text-gray-700 dark:text-gray-300 leading-relaxed font-sans"
                                                 dangerouslySetInnerHTML={{ __html: cleanContent }}
                                             />
+                                        </div>
 
-                                            {/* Tags and Share */}
-                                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-8 border-t border-gray-100 dark:border-slate-700">
+                                        {/* Image Section - Facebook style (after content) */}
+                                        {post.imageUrl && (
+                                            <div
+                                                className="relative w-full cursor-zoom-in group"
+                                                onClick={openLightbox}
+                                            >
+                                                <img
+                                                    src={post.imageUrl}
+                                                    alt={post.title}
+                                                    className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+                                                />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                                                <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0 z-10">
+                                                    <div className="bg-white/20 backdrop-blur-md p-3 rounded-full hover:bg-white/30 transition-colors">
+                                                        <Maximize2 className="text-white" size={24} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Tags and Share */}
+                                        <div className="p-8 md:p-12 border-t border-gray-100 dark:border-slate-700">
+                                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
                                                 <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-full border border-blue-100 dark:border-blue-800/50">
                                                     <Megaphone size={18} className="text-blue-600 dark:text-blue-400" />
                                                     <span className="font-bold text-blue-700 dark:text-blue-300 text-sm">Official Announcement</span>
@@ -375,48 +377,55 @@ const Announcements = () => {
                                             to={`/announcements/${post.id}`}
                                             className="block bg-white dark:bg-slate-800 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-slate-700 group hover:-translate-y-1"
                                         >
-                                            <div className="flex flex-col md:flex-row h-full">
-                                                {post.imageUrl && (
-                                                    <div className="md:w-2/5 h-64 md:h-auto overflow-hidden relative">
-                                                        <img
-                                                            src={post.imageUrl}
-                                                            alt={post.title}
-                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                                        />
-                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent md:bg-gradient-to-r" />
-                                                    </div>
-                                                )}
-                                                <div className={`p-8 md:p-10 flex flex-col ${post.imageUrl ? 'md:w-3/5' : 'w-full'}`}>
-                                                    <div className="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-500 dark:text-gray-400">
-                                                        <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-slate-700/50 px-3 py-1 rounded-lg text-blue-600 dark:text-blue-400 font-semibold">
-                                                            <Calendar size={14} />
-                                                            {dateTime.date}
-                                                        </span>
-                                                        <span className="flex items-center gap-1.5">
-                                                            <Clock size={14} />
-                                                            {dateTime.time}
-                                                        </span>
-                                                    </div>
+                                            {/* Content Section - Always at top */}
+                                            <div className="p-8 md:p-10">
+                                                {/* Date and Time */}
+                                                <div className="flex flex-wrap items-center gap-4 mb-4 text-sm text-gray-500 dark:text-gray-400">
+                                                    <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-slate-700/50 px-3 py-1 rounded-lg text-blue-600 dark:text-blue-400 font-semibold">
+                                                        <Calendar size={14} />
+                                                        {dateTime.date}
+                                                    </span>
+                                                    <span className="flex items-center gap-1.5">
+                                                        <Clock size={14} />
+                                                        {dateTime.time}
+                                                    </span>
+                                                </div>
 
-                                                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
-                                                        {post.title}
-                                                    </h2>
+                                                {/* Title */}
+                                                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-tight">
+                                                    {post.title}
+                                                </h2>
 
-                                                    <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed line-clamp-3 flex-grow">
-                                                        {preview}
-                                                    </p>
+                                                {/* Preview Text */}
+                                                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed line-clamp-3">
+                                                    {preview}
+                                                </p>
+                                            </div>
 
-                                                    <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-slate-700 mt-auto">
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">
-                                                                <FileText size={14} className="text-gray-500 dark:text-gray-400" />
-                                                            </div>
-                                                            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Read more</span>
+                                            {/* Image Section - Facebook style (after content) */}
+                                            {post.imageUrl && (
+                                                <div className="w-full overflow-hidden relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-700 dark:to-slate-800">
+                                                    <img
+                                                        src={post.imageUrl}
+                                                        alt={post.title}
+                                                        className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700"
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                </div>
+                                            )}
+
+                                            {/* Read More Section */}
+                                            <div className="p-6 border-t border-gray-100 dark:border-slate-700">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-slate-700 flex items-center justify-center">
+                                                            <FileText size={14} className="text-gray-500 dark:text-gray-400" />
                                                         </div>
-                                                        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:rotate-45">
-                                                            <ArrowLeft size={20} className="rotate-[135deg]" />
-                                                        </span>
+                                                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Read more</span>
                                                     </div>
+                                                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all transform group-hover:rotate-45">
+                                                        <ArrowLeft size={20} className="rotate-[135deg]" />
+                                                    </span>
                                                 </div>
                                             </div>
                                         </Link>
