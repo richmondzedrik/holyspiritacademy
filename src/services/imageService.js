@@ -84,3 +84,48 @@ export const deleteProfileImage = async (imageUrl) => {
         // Don't throw error - deletion failure shouldn't block other operations
     }
 };
+
+/**
+ * Upload a generic image to Firebase Storage
+ * @param {string} folder - The folder path in storage (e.g., 'admin-images')
+ * @param {File} file - The image file to upload
+ * @param {string} oldImageUrl - The old image URL to delete (optional)
+ * @returns {Promise<string>} The download URL of the uploaded image
+ */
+export const uploadImage = async (folder, file, oldImageUrl = null) => {
+    try {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(file.type)) {
+            throw new Error('Invalid file type. Please upload a JPG, PNG, GIF, or WebP image.');
+        }
+
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            throw new Error('File size exceeds 5MB.');
+        }
+
+        // Optimize image
+        const optimizedFile = await optimizeImage(file, {
+            maxWidth: 800, // Larger generic images
+            maxHeight: 800,
+            quality: 0.85
+        });
+
+        // Delete old image if exists
+        if (oldImageUrl) {
+            await deleteProfileImage(oldImageUrl); // Reusing the delete logic as it just parses the URL
+        }
+
+        const timestamp = Date.now();
+        const filename = `${timestamp}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+        const storageRef = ref(storage, `${folder}/${filename}`);
+
+        const snapshot = await uploadBytes(storageRef, optimizedFile);
+        return await getDownloadURL(snapshot.ref);
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        throw error;
+    }
+};
