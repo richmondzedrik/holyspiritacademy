@@ -17,13 +17,13 @@ import { handleApiError } from '../utils/errorUtils';
 const commentsCollection = collection(db, COLLECTIONS.COMMENTS);
 
 // Add a new comment (pending approval)
-export const addComment = async (postId, userId, userName, userPhoto, content) => {
+export const addComment = async (postId, userId, userName, userPhotoURL, content) => {
   try {
     await addDoc(commentsCollection, {
       postId,
       userId,
       userName,
-      userPhoto,
+      userPhotoURL,
       content,
       isApproved: false, // Default to pending
       createdAt: serverTimestamp()
@@ -32,6 +32,7 @@ export const addComment = async (postId, userId, userName, userPhoto, content) =
     handleApiError(error, 'Failed to add comment');
   }
 };
+
 
 // Get approved comments for a specific post
 export const getCommentsByPost = async (postId) => {

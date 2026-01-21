@@ -31,7 +31,7 @@ const CommentSection = ({ postId }) => {
       toast.error('Please log in to comment');
       return;
     }
-    
+
     if (!newComment.trim()) {
       toast.error('Please enter a comment');
       return;
@@ -40,19 +40,20 @@ const CommentSection = ({ postId }) => {
     try {
       setLoading(true);
       await addComment(
-        postId, 
-        currentUser.uid, 
-        userData?.fullName || 'User', 
-        userData?.photoURL || null, 
+        postId,
+        currentUser.uid,
+        userData?.fullName || 'User',
+        userData?.photoURL || null,
         newComment
       );
       toast.success('Comment submitted! Awaiting approval.');
       setNewComment('');
-      
+
       // Optionally refetch comments (but pending comments won't show yet)
       const data = await getCommentsByPost(postId);
       setComments(data);
     } catch (error) {
+
       console.error("Error adding comment:", error);
       toast.error('Failed to submit comment.');
     } finally {
@@ -67,7 +68,7 @@ const CommentSection = ({ postId }) => {
           <MessageCircle className="text-blue-600 dark:text-blue-400" size={22} />
           Comments ({comments.length})
         </h4>
-        
+
         {/* Comment Form */}
         {currentUser ? (
           <form onSubmit={handleSubmit} className="mb-8">
@@ -124,22 +125,22 @@ const CommentSection = ({ postId }) => {
             comments.map((comment) => (
               <div key={comment.id} className="bg-white dark:bg-slate-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-shadow">
                 <div className="flex items-start gap-3">
-                  <img 
-                    src={comment.userProfilePicture || `https://ui-avatars.com/api/?name=${comment.userName}&size=80&background=3b82f6&color=fff`}
+                  <img
+                    src={comment.userPhotoURL || `https://ui-avatars.com/api/?name=${comment.userName}&size=80&background=3b82f6&color=fff`}
                     alt={comment.userName}
-                    className="w-10 h-10 rounded-full border-2 border-blue-100 dark:border-blue-900"
+                    className="w-10 h-10 rounded-full border-2 border-blue-100 dark:border-blue-900 object-cover"
                   />
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h5 className="font-semibold text-gray-900 dark:text-white">{comment.userName}</h5>
                       <span className="text-xs text-gray-400 dark:text-gray-500">•</span>
                       <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {comment.createdAt?.seconds 
+                        {comment.createdAt?.seconds
                           ? new Date(comment.createdAt.seconds * 1000).toLocaleDateString('en-US', {
-                              month: 'short',
-                              day: 'numeric',
-                              year: 'numeric'
-                            })
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })
                           : 'Just now'}
                       </span>
                     </div>
