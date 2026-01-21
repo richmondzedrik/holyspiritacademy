@@ -7,6 +7,7 @@ import { PageHeaderSkeleton, FacilityCardSkeleton } from '../components/common/S
 import hsabImage from '../assets/hsab.jpg';
 import { usePageLoader } from '../hooks/usePageLoader';
 import { gallery } from '../data/gallery';
+import GallerySlider from '../components/common/GallerySlider';
 
 const Gallery = () => {
     const loading = usePageLoader(800);
@@ -104,23 +105,51 @@ const Gallery = () => {
                     </div>
                 </div>
 
+                {/* Featured Slider Section */}
+                <div className="max-w-7xl mx-auto px-4 mb-20">
+                    <FadeIn delay={200}>
+                        <GallerySlider items={gallery} />
+                    </FadeIn>
+                </div>
+
+                {/* All Photos Grid Header */}
+                <div className="max-w-7xl mx-auto px-4 mb-8 border-b border-gray-200 dark:border-slate-700 pb-4">
+                    <FadeIn delay={300}>
+                        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                            <Images size={24} className="text-blue-500" />
+                            All Photos
+                        </h2>
+                    </FadeIn>
+                </div>
+
+                {/* Gallery Grid */}
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                         {gallery.map((item, index) => (
                             <FadeIn key={item.id} delay={index * 50}>
                                 <div
                                     onClick={() => openLightbox(index)}
-                                    className="group relative overflow-hidden rounded-2xl h-72 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-gray-200 dark:border-slate-700"
+                                    className="group relative overflow-hidden rounded-2xl h-72 shadow-lg hover:shadow-2xl hover:shadow-blue-500/10 transition-all duration-500 cursor-pointer border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800"
                                 >
                                     <OptimizedImage
                                         src={item.image}
-                                        alt={`Gallery image ${index + 1}`}
-                                        className="w-full h-full transform group-hover:scale-110 transition-transform duration-700"
+                                        alt={item.title || `Gallery image ${index + 1}`}
+                                        className="w-full h-full transform group-hover:scale-110 transition-transform duration-700 object-cover"
                                     />
-                                    {/* Hover overlay with zoom icon */}
-                                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-all duration-300">
-                                        <div className="bg-white/90 dark:bg-slate-800/90 p-3 rounded-full opacity-0 group-hover:opacity-100 transform scale-50 group-hover:scale-100 transition-all duration-300">
-                                            <Images className="text-blue-600 dark:text-blue-400" size={24} />
+                                    {/* Hover overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-6">
+                                        <h3 className="text-white font-bold text-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-gray-200 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 line-clamp-2">
+                                            {item.description}
+                                        </p>
+                                    </div>
+
+                                    {/* Zoom Icon - Top Right */}
+                                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 delay-75">
+                                        <div className="bg-white/20 backdrop-blur-md p-2 rounded-full border border-white/30 text-white">
+                                            <Images size={20} />
                                         </div>
                                     </div>
                                 </div>

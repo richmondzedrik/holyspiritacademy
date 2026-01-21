@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { Send, ChevronRight, Minimize2, X, ArrowLeft } from 'lucide-react';
+import { Send, ChevronRight, X, ArrowLeft, Sparkles, MessageCircle } from 'lucide-react';
 
 const Chatbox = ({
     isOpen,
@@ -26,59 +26,75 @@ const Chatbox = ({
 
     return (
         <div
-            className={`fixed z-[60] flex flex-col overflow-hidden
+            className={`fixed z-[60] flex flex-col overflow-hidden font-sans
                 ${isMobile
-                    ? 'inset-0 w-full h-full bg-white dark:bg-slate-800'
-                    : 'bottom-24 right-4 w-[350px] md:w-[400px] h-[500px] max-h-[70vh] bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700'
+                    ? 'inset-0 w-full h-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md'
+                    : 'bottom-24 right-6 w-[380px] h-[600px] max-h-[75vh] rounded-3xl border border-white/20 shadow-2xl backdrop-blur-xl bg-white/80 dark:bg-slate-900/80'
                 }
-                animate-in slide-in-from-bottom-5 duration-300 ease-out`}
+                animate-in slide-in-from-bottom-5 fade-in duration-300 ease-out ring-1 ring-black/5 dark:ring-white/10`}
             onMouseDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
         >
+            {/* Ambient Background Gradient */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10"></div>
+            </div>
+
             {/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 flex items-center justify-between text-white shrink-0">
+            <div className="relative pt-4 px-4 pb-3 flex items-center justify-between shrink-0 border-b border-gray-100/50 dark:border-slate-700/50 backdrop-blur-md z-10">
                 <div className="flex items-center gap-3">
                     {isMobile && (
                         <button
                             onClick={onClose}
-                            className="p-1.5 hover:bg-white/20 rounded-full transition-colors mr-1"
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-colors text-gray-600 dark:text-gray-300"
                             aria-label="Go back"
                         >
                             <ArrowLeft size={20} />
                         </button>
                     )}
-                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center border-2 border-white/50">
-                        <span className="text-2xl" role="img" aria-label="mascot">🐦</span>
+
+                    <div className="relative">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <span className="text-xl animate-bounce-slow">🐦</span>
+                        </div>
+                        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full">
+                            <span className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-75"></span>
+                        </span>
                     </div>
+
                     <div>
-                        <h3 className="font-bold text-base leading-tight">Spirit Assistant</h3>
-                        <p className="text-xs text-blue-100 flex items-center gap-1">
-                            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                            Online
+                        <h3 className="font-bold text-gray-800 dark:text-white leading-tight flex items-center gap-1.5">
+                            Spirit Assistant
+                            <Sparkles size={14} className="text-yellow-500 fill-yellow-500" />
+                        </h3>
+                        <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                            Always here to help
                         </p>
                     </div>
                 </div>
+
                 <button
                     onClick={onClose}
-                    className="p-1.5 hover:bg-white/20 rounded-full transition-colors"
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-full transition-all duration-200 text-gray-500 dark:text-gray-400 group"
                     aria-label="Close chat"
                 >
-                    {isMobile ? <X size={22} /> : <Minimize2 size={18} />}
+                    <X size={20} className="group-hover:rotate-90 transition-transform duration-200" />
                 </button>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-slate-900/50 scroll-smooth">
+            <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 scroll-smooth custom-scrollbar">
                 {messages.map((msg, idx) => (
                     <div
                         key={idx}
-                        className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300 fill-mode-backwards`}
+                        style={{ animationDelay: `${idx * 50}ms` }}
                     >
                         <div
-                            className={`max-w-[85%] rounded-2xl p-3 text-sm shadow-sm relative group
+                            className={`max-w-[85%] p-3.5 text-sm relative group transition-all duration-200 hover:shadow-md
                                 ${msg.sender === 'user'
-                                    ? 'bg-blue-600 text-white rounded-tr-sm'
-                                    : 'bg-white dark:bg-slate-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-slate-700 rounded-tl-sm'
+                                    ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white rounded-2xl rounded-tr-sm shadow-blue-500/20 shadow-lg'
+                                    : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 rounded-2xl rounded-tl-sm shadow-sm border border-gray-100 dark:border-slate-700'
                                 }`}
                         >
                             <p className="whitespace-pre-wrap leading-relaxed">{msg.text}</p>
@@ -87,72 +103,86 @@ const Chatbox = ({
                             {msg.link && (
                                 <button
                                     onClick={() => handleLinkClick(msg.link)}
-                                    className="mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider 
-                                        text-blue-600 dark:text-blue-400 hover:underline bg-blue-50 dark:bg-blue-900/20 
-                                        px-3 py-2 rounded-lg w-full transition-colors"
+                                    className={`mt-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider 
+                                        w-full p-2.5 rounded-xl transition-all duration-200 group-hover:translate-x-1 border
+                                        ${msg.sender === 'user'
+                                            ? 'bg-white/20 hover:bg-white/30 text-white border-white/20'
+                                            : 'bg-blue-50 hover:bg-blue-100 text-blue-600 border-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-300 dark:border-blue-800'
+                                        }`}
                                 >
-                                    {msg.linkText || "View Details"}
+                                    <span className="flex-1 text-left truncate">{msg.linkText || "View Details"}</span>
                                     <ChevronRight size={14} />
                                 </button>
                             )}
-
-                            {/* Quick Reply Chips */}
-                            {msg.actions && msg.actions.length > 0 && (
-                                <div className="mt-3 flex flex-wrap gap-2">
-                                    {msg.actions.map((action, i) => (
-                                        <button
-                                            key={i}
-                                            onClick={() => handleActionClick(action.query)}
-                                            className="text-xs bg-gray-100 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-blue-900/40 
-                                                text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-300
-                                                px-2.5 py-1.5 rounded-full transition-colors border border-gray-200 dark:border-slate-600"
-                                        >
-                                            {action.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-
-                            <span className="text-[10px] opacity-50 mt-1 block text-right">
-                                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </span>
                         </div>
                     </div>
                 ))}
 
+                {/* Typing Indicator */}
                 {isTyping && (
-                    <div className="flex justify-start w-full">
-                        <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl rounded-tl-sm p-4 shadow-sm flex items-center gap-1">
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                            <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
+                    <div className="flex justify-start w-full animate-in fade-in zoom-in duration-300">
+                        <div className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                            <span className="w-1.5 h-1.5 bg-blue-600 rounded-full animate-bounce"></span>
                         </div>
                     </div>
                 )}
+
+                {/* Last Message Chips */}
+                {messages.length > 0 && messages[messages.length - 1].actions && (
+                    <div className="flex flex-wrap gap-2 mt-2 px-1 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                        {messages[messages.length - 1].actions.map((action, i) => (
+                            <button
+                                key={i}
+                                onClick={() => handleActionClick(action.query)}
+                                className="text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-200 
+                                    bg-white dark:bg-slate-800 border border-blue-100 dark:border-slate-700 
+                                    text-blue-600 dark:text-blue-400 shadow-sm hover:shadow-md
+                                    hover:bg-blue-50 dark:hover:bg-slate-700 hover:border-blue-300 dark:hover:border-blue-500
+                                    active:scale-95 transform whitespace-nowrap"
+                            >
+                                {action.label}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
                 <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
-            <div className={`p-3 bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 shrink-0 ${isMobile ? 'pb-6' : ''}`}>
+            <div className="p-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md border-t border-white/20 dark:border-slate-700/50 shrink-0">
                 <form
                     onSubmit={(e) => { e.preventDefault(); onSendMessage(inputValue); }}
-                    className="flex items-center gap-2 bg-gray-100 dark:bg-slate-900 rounded-full px-4 py-2 border border-transparent focus-within:border-blue-400 transition-all"
+                    className="relative group"
                 >
                     <input
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Ask a question..."
-                        className="flex-1 bg-transparent border-none outline-none text-sm text-gray-800 dark:text-white placeholder:text-gray-400"
+                        placeholder="Ask me anything..."
+                        className="w-full bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 
+                            text-gray-800 dark:text-white placeholder:text-gray-400 text-sm rounded-full 
+                            pl-4 pr-12 py-3 shadow-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 
+                            transition-all duration-200 outline-none"
                     />
                     <button
                         type="submit"
                         disabled={!inputValue.trim()}
-                        className="p-1.5 text-blue-600 disabled:text-gray-400 disabled:cursor-not-allowed hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition-colors"
+                        className="absolute right-1.5 top-1.5 p-1.5 rounded-full bg-blue-600 text-white 
+                            disabled:bg-gray-200 dark:disabled:bg-slate-700 disabled:text-gray-400 disabled:cursor-not-allowed
+                            hover:bg-blue-700 hover:scale-105 active:scale-95 transition-all duration-200 shadow-lg shadow-blue-500/30"
                     >
-                        <Send size={18} />
+                        <Send size={16} className={inputValue.trim() ? 'ml-0.5' : ''} />
                     </button>
                 </form>
+                <div className="text-center mt-2">
+                    <p className="text-[10px] text-gray-400 dark:text-slate-500 flex items-center justify-center gap-1">
+                        <MessageCircle size={10} />
+                        Powered by Spirit AI
+                    </p>
+                </div>
             </div>
         </div>
     );

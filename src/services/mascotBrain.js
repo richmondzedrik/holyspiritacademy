@@ -34,21 +34,27 @@ const extractIntents = (message) => {
     const intents = [];
     const lowerMsg = message.toLowerCase();
 
-    if (lowerMsg.match(/\b(hi|hello|hey|good morning|afternoon|evening|greetings)\b/)) intents.push('greeting');
-    if (lowerMsg.match(/\b(admission|apply|enroll|register|sign up|application|join|entrance)\b/)) intents.push('admissions');
-    if (lowerMsg.match(/\b(fee|tuition|cost|price|payment|pay|money|expensive|cheap|scholarship)\b/)) intents.push('fees');
-    if (lowerMsg.match(/\b(event|calendar|schedule|upcoming|happening|activity|activities)\b/)) intents.push('events');
-    if (lowerMsg.match(/\b(announcement|news|update|notice|latest)\b/)) intents.push('announcements');
-    if (lowerMsg.match(/\b(contact|phone|email|address|location|where|map|find|reach)\b/)) intents.push('contact');
-    if (lowerMsg.match(/\b(about|profile|mission|vision|history|who are you|what is|tell me about)\b/)) intents.push('about');
-    if (lowerMsg.match(/\b(facility|facilities|gym|library|lab|campus|gallery|photos|pictures|building)\b/)) intents.push('facilities');
-    if (lowerMsg.match(/\b(program|course|curriculum|subject|class|grade|level)\b/)) intents.push('programs');
-    if (lowerMsg.match(/\b(teacher|faculty|staff|instructor|principal|administrator)\b/)) intents.push('faculty');
-    if (lowerMsg.match(/\b(student|pupil|learner|achievement|award|winner)\b/)) intents.push('students');
-    if (lowerMsg.match(/\b(help|assist|support|guide|what can you|how do)\b/)) intents.push('help');
-    if (lowerMsg.match(/\b(thank|thanks|appreciate|grateful)\b/)) intents.push('thanks');
-    if (lowerMsg.match(/\b(yes|yeah|yep|sure|okay|ok|correct|right)\b/)) intents.push('affirmative');
-    if (lowerMsg.match(/\b(no|nope|not|never|wrong)\b/)) intents.push('negative');
+    // Helper for word boundary regex with plurals support
+    const match = (keywords) => {
+        const pattern = new RegExp(`\\b(${keywords.join('|')})\\b`, 'i');
+        return pattern.test(lowerMsg);
+    };
+
+    if (match(['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening', 'greetings', 'yo', 'sup'])) intents.push('greeting');
+    if (match(['admission', 'admissions', 'apply', 'applying', 'enroll', 'enrollment', 'register', 'registration', 'sign up', 'application', 'join', 'entrance', 'requirement', 'requirements'])) intents.push('admissions');
+    if (match(['fee', 'fees', 'tuition', 'cost', 'costs', 'price', 'prices', 'payment', 'payments', 'pay', 'money', 'expensive', 'cheap', 'scholarship', 'scholarships', 'financial aid'])) intents.push('fees');
+    if (match(['event', 'events', 'calendar', 'schedule', 'upcoming', 'happening', 'activity', 'activities', 'date', 'dates', 'when'])) intents.push('events');
+    if (match(['announcement', 'announcements', 'news', 'update', 'updates', 'notice', 'notices', 'latest'])) intents.push('announcements');
+    if (match(['contact', 'contacts', 'phone', 'call', 'email', 'address', 'location', 'where', 'map', 'find', 'reach', 'office'])) intents.push('contact');
+    if (match(['about', 'profile', 'mission', 'vision', 'history', 'who are you', 'what is', 'tell me about', 'overview'])) intents.push('about');
+    if (match(['facility', 'facilities', 'gym', 'library', 'lab', 'labs', 'campus', 'gallery', 'photo', 'photos', 'picture', 'pictures', 'building', 'buildings'])) intents.push('facilities');
+    if (match(['program', 'programs', 'course', 'courses', 'curriculum', 'subject', 'subjects', 'class', 'classes', 'grade', 'level', 'levels', 'strand', 'strands', 'track', 'tracks'])) intents.push('programs');
+    if (match(['teacher', 'teachers', 'faculty', 'staff', 'instructor', 'instructors', 'principal', 'admin', 'administrator', 'administrators'])) intents.push('faculty');
+    if (match(['student', 'students', 'pupil', 'pupils', 'learner', 'learners', 'achievement', 'achievements', 'award', 'awards', 'winner', 'winners'])) intents.push('students');
+    if (match(['help', 'assist', 'assistance', 'support', 'guide', 'what can you', 'how do', 'options', 'menu'])) intents.push('help');
+    if (match(['thank', 'thanks', 'appreciate', 'grateful', 'good job', 'cool', 'nice'])) intents.push('thanks');
+    if (match(['yes', 'yeah', 'yep', 'sure', 'okay', 'ok', 'correct', 'right', 'please'])) intents.push('affirmative');
+    if (match(['no', 'nope', 'nah', 'not', 'never', 'wrong', 'cancel'])) intents.push('negative');
 
     return intents;
 };
