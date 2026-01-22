@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { isValidPassword, validatePasswordRequirements } from '../utils/formUtils';
+import { validateUserRegistration } from '../utils/nameValidation';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { UserPlus, Mail, Lock, User, Eye, EyeOff, ArrowRight, ArrowLeft, Check, X } from 'lucide-react';
@@ -38,13 +39,15 @@ const Signup = () => {
       return setError('First Name and Last Name are required.');
     }
 
-    // Check if Middle Name is filled if you strictly require it, otherwise optional
-    // User asked "without them you can't create account", suggesting strictness.
-    // However, technically many people don't have middle names. 
-    // I will make it required based on the specific request to "separate them... make sure without them you can't".
-    if (!formData.middleName.trim()) {
-      // Uncomment if Middle Name is strictly required
-      // return setError('Middle Name is required. If none, put N/A.');
+    // Validate name and email for restricted terms (admin, root, etc.)
+    const nameEmailValidation = validateUserRegistration(
+      formData.firstName,
+      formData.middleName,
+      formData.lastName,
+      formData.email
+    );
+    if (!nameEmailValidation.isValid) {
+      return setError(nameEmailValidation.message);
     }
 
     if (formData.password !== formData.confirmPassword) {
